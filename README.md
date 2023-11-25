@@ -1,5 +1,7 @@
 # Iteration-3
 
+git clone https://github.com/Bandrailian/Iteration-3.git
+
 Jaimie Marchuk - 30112841
 
 Wyatt Deichert - 30174611
