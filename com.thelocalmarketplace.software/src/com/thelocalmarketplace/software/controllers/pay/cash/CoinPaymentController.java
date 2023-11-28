@@ -22,17 +22,28 @@ import ca.ucalgary.seng300.simulation.SimulationException;
  * Uses CurrencyLogic to calculate necessary change requirements
  * Then interacts with hardware to carry out change operations
  * 
- * @author Connell Reffo (10186960)
- * --------------------------------
- * @author Tara Strickland (10105877)
- * @author Angelina Rochon (30087177)
- * @author Julian Fan (30235289)
- * @author Braden Beler (30084941)
- * @author Samyog Dahal (30194624)
- * @author Maheen Nizmani (30172615)
- * @author Phuong Le (30175125)
- * @author Daniel Yakimenka (10185055)
- * @author Merick Parkinson (30196225)
+ * Adapted from Project Iteration 2 - Group 5
+ * @author Jaimie Marchuk - 30112841
+ * @author Wyatt Deichert - 30174611
+ * @author Jane Magai - 30180119
+ * @author Enzo Mutiso - 30182555
+ * @author Mauricio Murillo - 30180713
+ * @author Ahmed Ibrahim Mohamed Seifeldin Hassan - 30174024
+ * @author Aryaman Sandhu - 30017164
+ * @author Nikki Kim - 30189188
+ * @author Jayden Ma - 30184996
+ * @author Braden Beler - 30084941
+ * @author Danish Sharma - 30172600
+ * @author Angelina Rochon - 30087177
+ * @author Amira Wishah - 30182579
+ * @author Walija Ihsan - 30172565
+ * @author Hannah Pohl - 30173027
+ * @author Akashdeep Grewal - 30179657
+ * @author Rhett Bramfield - 30170520
+ * @author Arthur Huan - 30197354
+ * @author Jaden Myers - 30152504
+ * @author Jincheng Li - 30172907
+ * @author Anandita Mahika - 30097559
  */
 public class CoinPaymentController extends AbstractLogicDependant implements CoinValidatorObserver {
 	
@@ -44,7 +55,7 @@ public class CoinPaymentController extends AbstractLogicDependant implements Coi
 	public CoinPaymentController(CentralStationLogic logic) throws NullPointerException {
 		super(logic);
 	
-		this.logic.hardware.coinValidator.attach(this);
+		this.logic.hardware.getCoinValidator().attach(this);
 	}
 	
 	/**
@@ -82,7 +93,7 @@ public class CoinPaymentController extends AbstractLogicDependant implements Coi
 				try {
 					
 					// Attempt to emit a coin from specific coin dispenser				
-					this.logic.hardware.coinDispensers.get(denomination).emit();
+					this.logic.hardware.getCoinDispensers().get(denomination).emit();
 				} catch (Exception e) {
 					missed = missed.add(denomination);
 					

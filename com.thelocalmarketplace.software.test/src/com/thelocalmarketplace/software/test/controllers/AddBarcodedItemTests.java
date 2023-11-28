@@ -25,17 +25,29 @@ import powerutility.PowerGrid;
 
 /**
  * Tests for adding a barcoded item to the cart
- * @author Angelina Rochon (30087177)
- * @author Connell Reffo (10186960)
- * @author Tara Strickland (10105877)
- * @author Julian Fan (30235289)
- * @author Braden Beler (30084941)
- * @author Samyog Dahal (30194624)
- * @author Maheen Nizmani (30172615)
- * @author Phuong Le (30175125)
- * @author Daniel Yakimenka (10185055)
- * @author Merick Parkinson (30196225)
- * @author Farida Elogueil (30171114)
+ * 
+ * Adapted from Project Iteration 2 - Group 5
+ * @author Jaimie Marchuk - 30112841
+ * @author Wyatt Deichert - 30174611
+ * @author Jane Magai - 30180119
+ * @author Enzo Mutiso - 30182555
+ * @author Mauricio Murillo - 30180713
+ * @author Ahmed Ibrahim Mohamed Seifeldin Hassan - 30174024
+ * @author Aryaman Sandhu - 30017164
+ * @author Nikki Kim - 30189188
+ * @author Jayden Ma - 30184996
+ * @author Braden Beler - 30084941
+ * @author Danish Sharma - 30172600
+ * @author Angelina Rochon - 30087177
+ * @author Amira Wishah - 30182579
+ * @author Walija Ihsan - 30172565
+ * @author Hannah Pohl - 30173027
+ * @author Akashdeep Grewal - 30179657
+ * @author Rhett Bramfield - 30170520
+ * @author Arthur Huan - 30197354
+ * @author Jaden Myers - 30152504
+ * @author Jincheng Li - 30172907
+ * @author Anandita Mahika - 30097559
  */
 public class AddBarcodedItemTests {
 	
@@ -119,7 +131,7 @@ public class AddBarcodedItemTests {
 		int cnt = 0;
 		
 		while(cnt< 10000 && !session.cartLogic.getCart().containsKey(p)) {
-			station.handheldScanner.scan(b);
+			station.getHandheldScanner().scan(b);
 			cnt++;
 		}
 	}
@@ -166,7 +178,7 @@ public class AddBarcodedItemTests {
 		session = new CentralStationLogic(station);
 		session.startSession();
 		this.scanUntilAdded(product2, bitem5);
-		station.baggingArea.addAnItem(bitem5);
+		station.getBaggingArea().addAnItem(bitem5);
 		this.scanUntilAdded(product, bitem3);
 		//long s = session.cart.getLastItem().getPrice();
 		

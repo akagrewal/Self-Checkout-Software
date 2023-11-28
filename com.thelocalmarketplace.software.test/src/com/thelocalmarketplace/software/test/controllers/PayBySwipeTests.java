@@ -21,18 +21,28 @@ import java.util.Calendar;
 import static org.junit.Assert.assertEquals;
 
 /**
- * @author Maheen Nizmani (30172615)
- * ---------------------------------
- * @author Angelina Rochon (30087177)
- * @author Connell Reffo (10186960)
- * @author Tara Strickland (10105877)
- * @author Julian Fan (30235289)
- * @author Braden Beler (30084941)
- * @author Samyog Dahal (30194624)
- * @author Phuong Le (30175125)
- * @author Daniel Yakimenka (10185055)
- * @author Merick Parkinson (30196225)
- * @author Farida Elogueil (30171114)
+ * Adapted from Project Iteration 2 - Group 5
+ * @author Jaimie Marchuk - 30112841
+ * @author Wyatt Deichert - 30174611
+ * @author Jane Magai - 30180119
+ * @author Enzo Mutiso - 30182555
+ * @author Mauricio Murillo - 30180713
+ * @author Ahmed Ibrahim Mohamed Seifeldin Hassan - 30174024
+ * @author Aryaman Sandhu - 30017164
+ * @author Nikki Kim - 30189188
+ * @author Jayden Ma - 30184996
+ * @author Braden Beler - 30084941
+ * @author Danish Sharma - 30172600
+ * @author Angelina Rochon - 30087177
+ * @author Amira Wishah - 30182579
+ * @author Walija Ihsan - 30172565
+ * @author Hannah Pohl - 30173027
+ * @author Akashdeep Grewal - 30179657
+ * @author Rhett Bramfield - 30170520
+ * @author Arthur Huan - 30197354
+ * @author Jaden Myers - 30152504
+ * @author Jincheng Li - 30172907
+ * @author Anandita Mahika - 30097559
  */
 public class PayBySwipeTests {
 
@@ -48,7 +58,7 @@ public class PayBySwipeTests {
     public void swipeUntilCardAccepted() throws IOException {
 
         do{
-            session.hardware.cardReader.swipe(this.card);
+            session.hardware.getCardReader().swipe(this.card);
         } while(!session.cardLogic.isDataRead());
 
     }
@@ -88,7 +98,7 @@ public class PayBySwipeTests {
     @Test(expected=SimulationException.class)
     public void testInValidState() throws IOException {
         session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
-        session.hardware.cardReader.enable();
+        session.hardware.getCardReader().enable();
         swipeUntilCardAccepted();
 
     }
@@ -96,7 +106,7 @@ public class PayBySwipeTests {
     @Test
     public void testValidTransaction() throws IOException {
         session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
-        session.hardware.cardReader.enable();
+        session.hardware.getCardReader().enable();
         session.stateLogic.gotoState(States.CHECKOUT);
         swipeUntilCardAccepted();
         assertEquals(BigDecimal.valueOf(0.0),session.cartLogic.getBalanceOwed());
@@ -106,7 +116,7 @@ public class PayBySwipeTests {
     @Test(expected=SimulationException.class)
     public void testSessionNotStartedSwipe() throws IOException{
         session.stopSession();
-        session.hardware.cardReader.enable();
+        session.hardware.getCardReader().enable();
         session.stateLogic.gotoState(States.CHECKOUT);
         swipeUntilCardAccepted();
     }
@@ -114,7 +124,7 @@ public class PayBySwipeTests {
     @Test
     public void testDeclinedTransaction() throws IOException {
         session.cartLogic.updateBalance(BigDecimal.valueOf(50.00));
-        session.hardware.cardReader.enable();
+        session.hardware.getCardReader().enable();
         session.stateLogic.gotoState(States.CHECKOUT);
         swipeUntilCardAccepted();
         assertEquals(BigDecimal.valueOf(50.0),session.cartLogic.getBalanceOwed());
@@ -124,7 +134,7 @@ public class PayBySwipeTests {
     public void testWrongSwipeMethodSelected() throws IOException {
         this.session.selectPaymentMethod(PaymentMethods.CREDIT);
         session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
-        session.hardware.cardReader.enable();
+        session.hardware.getCardReader().enable();
         session.stateLogic.gotoState(States.CHECKOUT);
         swipeUntilCardAccepted();
     }
@@ -133,14 +143,14 @@ public class PayBySwipeTests {
     public void testStationBlockedSwipe()throws IOException{
         session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
         session.stateLogic.gotoState(States.BLOCKED);
-        session.hardware.cardReader.enable();
+        session.hardware.getCardReader().enable();
         swipeUntilCardAccepted();
     }
 
     @Test(expected=SimulationException.class)
     public void tesSessionNotStartedSwipe() throws IOException {
         session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
-        session.hardware.cardReader.enable();
+        session.hardware.getCardReader().enable();
         swipeUntilCardAccepted();
 
     }

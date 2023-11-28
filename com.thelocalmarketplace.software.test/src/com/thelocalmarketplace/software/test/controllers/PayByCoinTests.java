@@ -35,18 +35,28 @@ import ca.ucalgary.seng300.simulation.SimulationException;
 import powerutility.PowerGrid;
 
 /**
- * @author Connell Reffo (10186960)
- * --------------------------------
- * @author Angelina Rochon (30087177)
- * @author Tara Strickland (10105877)
- * @author Julian Fan (30235289)
- * @author Braden Beler (30084941)
- * @author Samyog Dahal (30194624)
- * @author Maheen Nizmani (30172615)
- * @author Phuong Le (30175125)
- * @author Daniel Yakimenka (10185055)
- * @author Merick Parkinson (30196225)
- * @author Farida Elogueil (30171114)
+ * Adapted from Project Iteration 2 - Group 5
+ * @author Jaimie Marchuk - 30112841
+ * @author Wyatt Deichert - 30174611
+ * @author Jane Magai - 30180119
+ * @author Enzo Mutiso - 30182555
+ * @author Mauricio Murillo - 30180713
+ * @author Ahmed Ibrahim Mohamed Seifeldin Hassan - 30174024
+ * @author Aryaman Sandhu - 30017164
+ * @author Nikki Kim - 30189188
+ * @author Jayden Ma - 30184996
+ * @author Braden Beler - 30084941
+ * @author Danish Sharma - 30172600
+ * @author Angelina Rochon - 30087177
+ * @author Amira Wishah - 30182579
+ * @author Walija Ihsan - 30172565
+ * @author Hannah Pohl - 30173027
+ * @author Akashdeep Grewal - 30179657
+ * @author Rhett Bramfield - 30170520
+ * @author Arthur Huan - 30197354
+ * @author Jaden Myers - 30152504
+ * @author Jincheng Li - 30172907
+ * @author Anandita Mahika - 30097559
  */
 public class PayByCoinTests {
 	
@@ -94,7 +104,7 @@ public class PayByCoinTests {
 	public static void initCoinDispensers(AbstractSelfCheckoutStation hardware, Map<BigDecimal, Integer> coinAmounts) throws SimulationException, CashOverloadException {
 		for (Entry<BigDecimal, Integer> c : coinAmounts.entrySet()) {
 			for (int j = 0; j < c.getValue(); j++) {					
-				hardware.coinDispensers.get(c.getKey()).load(new Coin(Currency.getInstance("CAD"), c.getKey()));;
+				hardware.getCoinDispensers().get(c.getKey()).load(new Coin(Currency.getInstance("CAD"), c.getKey()));;
 			}
 		}
 	}
@@ -137,8 +147,8 @@ public class PayByCoinTests {
 		this.hardware.plugIn(PowerGrid.instance());
 		this.hardware.turnOn();
 		
-		this.hardware.printer.addPaper(100);
-		this.hardware.printer.addInk(1000);
+		this.hardware.getPrinter().addPaper(100);
+		this.hardware.getPrinter().addInk(1000);
 		
 		this.logic = new CentralStationLogic(hardware);
 		this.logic.selectPaymentMethod(PaymentMethods.CASH);
@@ -161,7 +171,7 @@ public class PayByCoinTests {
 		
 		do {
 			try {
-				this.hardware.coinSlot.sink.receive(oneDollarCoin);
+				this.hardware.getCoinSlot().sink.receive(oneDollarCoin);
 			}
 			catch (Exception e) {}
 		}
@@ -182,16 +192,16 @@ public class PayByCoinTests {
 			this.itemMass = new Mass((double) 3.0);
 			this.bitem = new BarcodedItem(this.barcode, this.itemMass);
 			
-			this.hardware.handheldScanner.scan(this.bitem);
-			this.hardware.baggingArea.addAnItem(this.bitem);
+			this.hardware.getHandheldScanner().scan(this.bitem);
+			this.hardware.getBaggingArea().addAnItem(this.bitem);
 			
 			// Bypass weight discrepancy
-			this.hardware.coinSlot.enable();
-			this.hardware.coinValidator.enable();
+			this.hardware.getCoinSlot().enable();
+			this.hardware.getCoinValidator().enable();
 			
 			try {				
 				// Nothing should really happen here
-				this.hardware.coinSlot.sink.receive(this.invalidCoin);
+				this.hardware.getCoinSlot().sink.receive(this.invalidCoin);
 				canStop = true;
 			}
 			catch (Exception e) {
@@ -208,7 +218,7 @@ public class PayByCoinTests {
 		this.itemMass = new Mass((double) 3.0);
 		this.bitem = new BarcodedItem(this.barcode, this.itemMass);
 		
-		this.hardware.coinSlot.sink.receive(this.oneDollarCoin);
+		this.hardware.getCoinSlot().sink.receive(this.oneDollarCoin);
 	}
 	
 	@Test(expected = SimulationException.class)
@@ -216,7 +226,7 @@ public class PayByCoinTests {
 		this.logic.startSession();
 		
 		// Not in checkout state
-		this.hardware.coinSlot.sink.receive(this.oneDollarCoin);
+		this.hardware.getCoinSlot().sink.receive(this.oneDollarCoin);
 	}
 	
 	@Test(expected = SimulationException.class)
@@ -227,7 +237,7 @@ public class PayByCoinTests {
 		// Change selected payment
 		this.logic.selectPaymentMethod(PaymentMethods.NONE);
 		
-		this.hardware.coinSlot.sink.receive(this.oneDollarCoin);
+		this.hardware.getCoinSlot().sink.receive(this.oneDollarCoin);
 	}
 	
 	@Test
@@ -240,8 +250,8 @@ public class PayByCoinTests {
 			
 			this.logic.stateLogic.gotoState(States.CHECKOUT);
 			
-			this.hardware.coinSlot.sink.receive(this.oneDollarCoin);
-			this.hardware.coinSlot.sink.receive(this.oneDollarCoin);
+			this.hardware.getCoinSlot().sink.receive(this.oneDollarCoin);
+			this.hardware.getCoinSlot().sink.receive(this.oneDollarCoin);
 		}	
 		while (this.logic.cartLogic.getBalanceOwed().intValue() != 18);
 		
@@ -259,8 +269,8 @@ public class PayByCoinTests {
 			
 			this.logic.stateLogic.gotoState(States.CHECKOUT);
 			
-			this.hardware.coinSlot.sink.receive(this.oneDollarCoin);
-			this.hardware.coinSlot.sink.receive(this.fiveCentCoin);
+			this.hardware.getCoinSlot().sink.receive(this.oneDollarCoin);
+			this.hardware.getCoinSlot().sink.receive(this.fiveCentCoin);
 		}
 		while (this.logic.cartLogic.getBalanceOwed().setScale(5, RoundingMode.HALF_DOWN).compareTo(new BigDecimal(18.95).setScale(5, RoundingMode.HALF_DOWN)) != 0);
 		
@@ -279,7 +289,7 @@ public class PayByCoinTests {
 			this.logic.stateLogic.gotoState(States.CHECKOUT);
 			
 			for (int i = 0; i < 6; i++) {			
-				this.hardware.coinSlot.sink.receive(this.oneDollarCoin);
+				this.hardware.getCoinSlot().sink.receive(this.oneDollarCoin);
 			}
 		}
 		while (BigDecimal.ZERO.setScale(5, RoundingMode.HALF_DOWN).compareTo(this.logic.cartLogic.getBalanceOwed().setScale(5, RoundingMode.HALF_DOWN)) != 0);
@@ -299,7 +309,7 @@ public class PayByCoinTests {
 			this.logic.stateLogic.gotoState(States.CHECKOUT);
 			
 			for (int i = 0; i < 7; i++) {		
-				this.hardware.coinSlot.sink.receive(this.oneDollarCoin);
+				this.hardware.getCoinSlot().sink.receive(this.oneDollarCoin);
 			}
 		}
 	}
@@ -316,18 +326,18 @@ public class PayByCoinTests {
 			
 			// Insert $5.75
 			for (int i = 0; i < 5; i++) {			
-				this.hardware.coinSlot.receive(oneDollarCoin);
+				this.hardware.getCoinSlot().receive(oneDollarCoin);
 			}
 			
 			for (int i = 0; i < 3; i++) {			
-				this.hardware.coinSlot.receive(twentyFiveCentCoin);
+				this.hardware.getCoinSlot().receive(twentyFiveCentCoin);
 			}
 			
 			// Unload all 25 cent coins so none are available to be dispensed
-			this.hardware.coinDispensers.get(twentyFiveCentCoin.getValue()).unload();
+			this.hardware.getCoinDispensers().get(twentyFiveCentCoin.getValue()).unload();
 			
 			// Insert another dollar. $5.75 + $1.00 = $6.75. So $0.75 is the change required
-			this.hardware.coinValidator.receive(oneDollarCoin);
+			this.hardware.getCoinValidator().receive(oneDollarCoin);
 		}
 		while (!this.logic.stateLogic.inState(States.SUSPENDED));
 		
@@ -373,7 +383,7 @@ public class PayByCoinTests {
 		initCoinDispensers(this.hardware, dispensable);
 		
 		// Disable nickel dispenser
-		this.hardware.coinDispensers.get(new BigDecimal(0.05)).disable();
+		this.hardware.getCoinDispensers().get(new BigDecimal(0.05)).disable();
 		
 		BigDecimal missed = this.logic.coinPaymentController.processCoinChange(new BigDecimal(0.10));
 		
@@ -390,7 +400,7 @@ public class PayByCoinTests {
 		
 		// Overload coin tray (capacity is 10)
 		for (int i = 0; i < 10; i++) {			
-			this.hardware.coinTray.receive(this.fiveCentCoin);
+			this.hardware.getCoinTray().receive(this.fiveCentCoin);
 		}
 		
 		BigDecimal missed = this.logic.coinPaymentController.processCoinChange(new BigDecimal(0.10));
@@ -408,10 +418,10 @@ public class PayByCoinTests {
 	public void testAddAndUnloadCoinsForCoinDispenserController() throws DisabledException, CashOverloadException {
 		
 		// Add 1 nickel to the nickel dispenser
-		this.hardware.coinDispensers.get(new BigDecimal(0.05)).receive(fiveCentCoin);
+		this.hardware.getCoinDispensers().get(new BigDecimal(0.05)).receive(fiveCentCoin);
 		
 		// Unload
-		this.hardware.coinDispensers.get(new BigDecimal(0.05)).unload();
+		this.hardware.getCoinDispensers().get(new BigDecimal(0.05)).unload();
 		
 		// Should be 0 nickels recorded in nickel dispenser controller
 		assertEquals(0, this.logic.coinDispenserControllers.get(new BigDecimal(0.05)).getAvailableChange().size());

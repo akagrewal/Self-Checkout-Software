@@ -23,18 +23,28 @@ import ca.ucalgary.seng300.simulation.SimulationException;
 import powerutility.PowerGrid;
 
 /**
- * @author Tara Strickland (10105877)
- * ----------------------------------
- * @author Angelina Rochon (30087177)
- * @author Connell Reffo (10186960)
- * @author Julian Fan (30235289)
- * @author Braden Beler (30084941)
- * @author Samyog Dahal (30194624)
- * @author Maheen Nizmani (30172615)
- * @author Phuong Le (30175125)
- * @author Daniel Yakimenka (10185055)
- * @author Merick Parkinson (30196225)
- * @author Farida Elogueil (30171114)
+ * Adapted from Project Iteration 2 - Group 5
+ * @author Jaimie Marchuk - 30112841
+ * @author Wyatt Deichert - 30174611
+ * @author Jane Magai - 30180119
+ * @author Enzo Mutiso - 30182555
+ * @author Mauricio Murillo - 30180713
+ * @author Ahmed Ibrahim Mohamed Seifeldin Hassan - 30174024
+ * @author Aryaman Sandhu - 30017164
+ * @author Nikki Kim - 30189188
+ * @author Jayden Ma - 30184996
+ * @author Braden Beler - 30084941
+ * @author Danish Sharma - 30172600
+ * @author Angelina Rochon - 30087177
+ * @author Amira Wishah - 30182579
+ * @author Walija Ihsan - 30172565
+ * @author Hannah Pohl - 30173027
+ * @author Akashdeep Grewal - 30179657
+ * @author Rhett Bramfield - 30170520
+ * @author Arthur Huan - 30197354
+ * @author Jaden Myers - 30152504
+ * @author Jincheng Li - 30172907
+ * @author Anandita Mahika - 30097559
  */
 public class AddOwnBagsTests {
 	
@@ -51,7 +61,7 @@ public class AddOwnBagsTests {
 	public Numeral digits;
 	public Numeral[] barcode_numeral;
 	
-	//although bags arent barcoded this will allow me to test logic
+	//although bags aren't barcoded this will allow me to test logic
 	Bag bag1;
 	Bag bag2;
 	Bag bag3;
@@ -106,7 +116,7 @@ public class AddOwnBagsTests {
 	@Test public void addValidBagsTestBagMass() throws Exception {
 		session.startSession();
 		session.addBagsLogic.startAddBags();
-		station.baggingArea.addAnItem(bag1);
+		station.getBaggingArea().addAnItem(bag1);
 		session.addBagsLogic.endAddBags();
 		assertTrue("bag mass did not update correctly", session.weightLogic.getExpectedWeight().equals(bag1mass));
 		
@@ -125,7 +135,7 @@ public class AddOwnBagsTests {
 	@Test public void addValidBagsTestNoDiscrepency() throws Exception {
 		session.startSession();
 		session.addBagsLogic.startAddBags();
-		station.baggingArea.addAnItem(bag1);
+		station.getBaggingArea().addAnItem(bag1);
 		session.addBagsLogic.endAddBags();
 		assertTrue("bag mass did not update correctly", !session.attendantLogic.getBaggingDiscrepency());
 		
@@ -134,8 +144,8 @@ public class AddOwnBagsTests {
 	@Test public void addMultipleValidBagsTestExpectedMass() throws Exception {
 		session.startSession();
 		session.addBagsLogic.startAddBags();
-		station.baggingArea.addAnItem(bag1);
-		station.baggingArea.addAnItem(bag2);
+		station.getBaggingArea().addAnItem(bag1);
+		station.getBaggingArea().addAnItem(bag2);
 		session.addBagsLogic.endAddBags();
 		Mass expected = bag1mass.sum(bag2mass);
 		assertTrue("bag mass did not update correctly",session.weightLogic.getExpectedWeight().equals(expected));
@@ -143,8 +153,8 @@ public class AddOwnBagsTests {
 	}@Test public void addMultipleValidBagsTestNoDiscrepency() throws Exception {
 		session.startSession();
 		session.addBagsLogic.startAddBags();
-		station.baggingArea.addAnItem(bag1);
-		station.baggingArea.addAnItem(bag2);
+		station.getBaggingArea().addAnItem(bag1);
+		station.getBaggingArea().addAnItem(bag2);
 		session.addBagsLogic.endAddBags();
 		assertTrue("bag mass did not update correctly", !session.attendantLogic.getBaggingDiscrepency());
 		
@@ -153,7 +163,7 @@ public class AddOwnBagsTests {
 	@Test public void addInValidBagsTest() throws Exception {
 		session.startSession();
 		session.addBagsLogic.startAddBags();
-		station.baggingArea.addAnItem(bag3);
+		station.getBaggingArea().addAnItem(bag3);
 		session.addBagsLogic.endAddBags();
 		//station.baggingArea.addAnItem(bag2);
 		//Mass expected = bag1mass.sum(bag2mass);
@@ -162,7 +172,7 @@ public class AddOwnBagsTests {
 	}@Test public void addValidBagsExitBaggingCheckBlockedTest() throws Exception {
 		session.startSession();
 		session.addBagsLogic.startAddBags();
-		station.baggingArea.addAnItem(bag1);
+		station.getBaggingArea().addAnItem(bag1);
 		session.addBagsLogic.endAddBags();
 		//station.baggingArea.addAnItem(bag2);
 		//Mass expected = bag1mass.sum(bag2mass);
@@ -171,11 +181,11 @@ public class AddOwnBagsTests {
 	}@Test public void addValidBagsAddItemCheckBlockedTest() throws Exception {
 		session.startSession();
 		session.addBagsLogic.startAddBags();
-		station.baggingArea.addAnItem(bag1);
+		station.getBaggingArea().addAnItem(bag1);
 		session.addBagsLogic.endAddBags();
 		
 		session.addBarcodedProductController.addBarcode(barcode);
-		station.baggingArea.addAnItem(b);
+		station.getBaggingArea().addAnItem(b);
 		//station.handheldScanner.scan();
 		//station.baggingArea.addAnItem(bag2);
 		//Mass expected = bag1mass.sum(bag2mass);
@@ -184,11 +194,11 @@ public class AddOwnBagsTests {
 	}@Test public void addValidBagsAddItemCheckActualMassTest() throws Exception {
 		session.startSession();
 		session.addBagsLogic.startAddBags();
-		station.baggingArea.addAnItem(bag1);
+		station.getBaggingArea().addAnItem(bag1);
 		session.addBagsLogic.endAddBags();
 		
 		session.addBarcodedProductController.addBarcode(barcode);
-		station.baggingArea.addAnItem(b);
+		station.getBaggingArea().addAnItem(b);
 		Mass expected = m_product.sum(bag1mass);
 		
 		//station.handheldScanner.scan();
@@ -199,7 +209,7 @@ public class AddOwnBagsTests {
 	}@Test public void addInvalidBagsFixByApproving() throws Exception {
 		session.startSession();
 		session.addBagsLogic.startAddBags();
-		station.baggingArea.addAnItem(bag3);
+		station.getBaggingArea().addAnItem(bag3);
 		session.addBagsLogic.endAddBags();
 		session.attendantLogic.approveBaggingArea();
 		assertTrue("bag mass did not update correctly", this.session.stateLogic.inState(States.NORMAL));
@@ -207,7 +217,7 @@ public class AddOwnBagsTests {
 	}@Test public void addInvalidBagsFixByApprovingCheckExpectedMass() throws Exception {
 		session.startSession();
 		session.addBagsLogic.startAddBags();
-		station.baggingArea.addAnItem(bag3);
+		station.getBaggingArea().addAnItem(bag3);
 		session.addBagsLogic.endAddBags();
 		session.attendantLogic.approveBaggingArea();
 		assertTrue("bag mass did not update correctly",session.weightLogic.getExpectedWeight().equals(invalidBagMass));
@@ -216,9 +226,9 @@ public class AddOwnBagsTests {
 	@Test public void addInvalidBagsFixByRemoving() throws Exception {
 		session.startSession();
 		session.addBagsLogic.startAddBags();
-		station.baggingArea.addAnItem(bag3);
+		station.getBaggingArea().addAnItem(bag3);
 		session.addBagsLogic.endAddBags();
-		station.baggingArea.removeAnItem(bag3);
+		station.getBaggingArea().removeAnItem(bag3);
 		session.addBagsLogic.endAddBags();
 		
 		assertTrue("bag mass did not update correctly", !this.session.stateLogic.inState(States.BLOCKED));
@@ -226,11 +236,11 @@ public class AddOwnBagsTests {
 	}@Test public void addInvalidBagsFixByapprovingAddMoreBags() throws Exception {
 		session.startSession();
 		session.addBagsLogic.startAddBags();
-		station.baggingArea.addAnItem(bag3);
+		station.getBaggingArea().addAnItem(bag3);
 		session.addBagsLogic.endAddBags();
 		session.attendantLogic.approveBaggingArea();
 		session.addBagsLogic.startAddBags();
-		station.baggingArea.addAnItem(bag2);
+		station.getBaggingArea().addAnItem(bag2);
 		session.addBagsLogic.endAddBags();
 
 		assertTrue("bag mass did not update correctly", this.session.attendantLogic.getBaggingDiscrepency());

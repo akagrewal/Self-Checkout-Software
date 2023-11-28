@@ -25,18 +25,28 @@ import ca.ucalgary.seng300.simulation.SimulationException;
 import powerutility.PowerGrid;
 
 /**
- * @author Tara Strickland (10105877)
- * ----------------------------------
- * @author Angelina Rochon (30087177)
- * @author Connell Reffo (10186960)
- * @author Julian Fan (30235289)
- * @author Braden Beler (30084941)
- * @author Samyog Dahal (30194624)
- * @author Maheen Nizmani (30172615)
- * @author Phuong Le (30175125)
- * @author Daniel Yakimenka (10185055)
- * @author Merick Parkinson (30196225)
- * @author Farida Elogueil (30171114)
+ * Adapted from Project Iteration 2 - Group 5
+ * @author Jaimie Marchuk - 30112841
+ * @author Wyatt Deichert - 30174611
+ * @author Jane Magai - 30180119
+ * @author Enzo Mutiso - 30182555
+ * @author Mauricio Murillo - 30180713
+ * @author Ahmed Ibrahim Mohamed Seifeldin Hassan - 30174024
+ * @author Aryaman Sandhu - 30017164
+ * @author Nikki Kim - 30189188
+ * @author Jayden Ma - 30184996
+ * @author Braden Beler - 30084941
+ * @author Danish Sharma - 30172600
+ * @author Angelina Rochon - 30087177
+ * @author Amira Wishah - 30182579
+ * @author Walija Ihsan - 30172565
+ * @author Hannah Pohl - 30173027
+ * @author Akashdeep Grewal - 30179657
+ * @author Rhett Bramfield - 30170520
+ * @author Arthur Huan - 30197354
+ * @author Jaden Myers - 30152504
+ * @author Jincheng Li - 30172907
+ * @author Anandita Mahika - 30097559
  */
 public class CentralStationLogicTest {
 	
@@ -120,9 +130,9 @@ public class CentralStationLogicTest {
 		session = new CentralStationLogic(null);
 	}@Test public void getAllCoinsInDispenserTest() throws CashOverloadException, DisabledException {
 		session.startSession();
-		session.hardware.coinDispensers.get(new BigDecimal(0.05)).receive(fiveCentCoin);
-		session.hardware.coinDispensers.get(new BigDecimal(0.05)).receive(fiveCentCoin);
-		session.hardware.coinDispensers.get(new BigDecimal(0.25)).receive(twentyFiveCentCoin);
+		session.hardware.getCoinDispensers().get(new BigDecimal(0.05)).receive(fiveCentCoin);
+		session.hardware.getCoinDispensers().get(new BigDecimal(0.05)).receive(fiveCentCoin);
+		session.hardware.getCoinDispensers().get(new BigDecimal(0.25)).receive(twentyFiveCentCoin);
 		Map<BigDecimal, Integer> result = session.getAvailableCoinsInDispensers();
 		assertTrue("did not get all coins in dispenser", result.get(new BigDecimal(0.05)) == 2 && result.get(new BigDecimal(0.25))==1);
 	}@Test public void  getAllBanknotesInDispenserTest() throws CashOverloadException, DisabledException {
@@ -132,9 +142,9 @@ public class CentralStationLogicTest {
 		Banknote[] fiveList = new Banknote[] {fiveDollarBill};
 		Banknote[] twentyList = new Banknote[] {twentyDollarBill, twentyDollarBill, twentyDollarBill};
 		
-		session.hardware.banknoteDispensers.get(new BigDecimal(10.00)).load(banknoteList);
-		session.hardware.banknoteDispensers.get(new BigDecimal(5.00)).load(fiveList);
-		session.hardware.banknoteDispensers.get(new BigDecimal(20.00)).load(twentyList);
+		session.hardware.getBanknoteDispensers().get(new BigDecimal(10.00)).load(banknoteList);
+		session.hardware.getBanknoteDispensers().get(new BigDecimal(5.00)).load(fiveList);
+		session.hardware.getBanknoteDispensers().get(new BigDecimal(20.00)).load(twentyList);
 		Map<BigDecimal, Integer> result = session.getAvailableBanknotesInDispensers();
 		assertTrue("did not get all coins in dispenser", result.get(new BigDecimal(5.0)) == 1 && result.get(new BigDecimal(10.0))==2 && result.get(new BigDecimal(20.0))==3);
 	}

@@ -23,6 +23,30 @@ import com.thelocalmarketplace.software.logic.StateLogic.States;
 import ca.ucalgary.seng300.simulation.SimulationException;
 import powerutility.PowerGrid;
 
+/*
+ * Adapted from Project Iteration 2 - Group 5
+ * @author Jaimie Marchuk - 30112841
+ * @author Wyatt Deichert - 30174611
+ * @author Jane Magai - 30180119
+ * @author Enzo Mutiso - 30182555
+ * @author Mauricio Murillo - 30180713
+ * @author Ahmed Ibrahim Mohamed Seifeldin Hassan - 30174024
+ * @author Aryaman Sandhu - 30017164
+ * @author Nikki Kim - 30189188
+ * @author Jayden Ma - 30184996
+ * @author Braden Beler - 30084941
+ * @author Danish Sharma - 30172600
+ * @author Angelina Rochon - 30087177
+ * @author Amira Wishah - 30182579
+ * @author Walija Ihsan - 30172565
+ * @author Hannah Pohl - 30173027
+ * @author Akashdeep Grewal - 30179657
+ * @author Rhett Bramfield - 30170520
+ * @author Arthur Huan - 30197354
+ * @author Jaden Myers - 30152504
+ * @author Jincheng Li - 30172907
+ * @author Anandita Mahika - 30097559
+ */
 
 public class PayByCashTests {
 	private CentralStationLogic logicBronze;
@@ -84,7 +108,7 @@ public class PayByCashTests {
 	public static void initBanknoteDispensers(AbstractSelfCheckoutStation hardware, Map<BigDecimal, Integer> banknoteAmounts) throws SimulationException, CashOverloadException {
 		for (Entry<BigDecimal, Integer> c : banknoteAmounts.entrySet()) {
 			for (int j = 0; j < c.getValue(); j++) {	
-				hardware.banknoteDispensers.get(c.getKey()).load(new Banknote(Currency.getInstance("CAD"), c.getKey()));;
+				hardware.getBanknoteDispensers().get(c.getKey()).load(new Banknote(Currency.getInstance("CAD"), c.getKey()));;
 			}
 		}
 	}
@@ -105,7 +129,7 @@ public class PayByCashTests {
 			
 			logicBronze.stopSession();
 			logicBronze.cartLogic.updateBalance(new BigDecimal(50));
-			stationBronze.banknoteInput.receive(fiveNote);
+			stationBronze.getBanknoteInput().receive(fiveNote);
 		}
 	}
 	
@@ -117,7 +141,7 @@ public class PayByCashTests {
 			logicBronze.startSession();
 			logicBronze.stateLogic.gotoState(States.NORMAL);
 			logicBronze.cartLogic.updateBalance(new BigDecimal(50));
-			stationBronze.banknoteInput.receive(fiveNote);
+			stationBronze.getBanknoteInput().receive(fiveNote);
 		}
 	}
 	
@@ -130,7 +154,7 @@ public class PayByCashTests {
 			logicBronze.stateLogic.gotoState(States.CHECKOUT);
 			logicBronze.selectPaymentMethod(PaymentMethods.DEBIT);
 			logicBronze.cartLogic.updateBalance(new BigDecimal(50));
-			stationBronze.banknoteInput.receive(fiveNote);
+			stationBronze.getBanknoteInput().receive(fiveNote);
 		}
 	}
 	
@@ -144,7 +168,7 @@ public class PayByCashTests {
 			logicBronze.stateLogic.gotoState(States.CHECKOUT);
 			logicBronze.selectPaymentMethod(PaymentMethods.CASH);
 			logicBronze.cartLogic.updateBalance(new BigDecimal(0));
-			stationBronze.banknoteInput.receive(fiveNote);
+			stationBronze.getBanknoteInput().receive(fiveNote);
 		}
 	}
 	
@@ -158,8 +182,8 @@ public class PayByCashTests {
 			logicBronze.selectPaymentMethod(PaymentMethods.CASH);
 		    logicBronze.cartLogic.updateBalance(new BigDecimal(50));
 		    
-		    stationBronze.banknoteInput.receive(fiveNote);
-		    stationBronze.banknoteInput.receive(fiveNote);
+		    stationBronze.getBanknoteInput().receive(fiveNote);
+		    stationBronze.getBanknoteInput().receive(fiveNote);
 		}
 		while (logicBronze.cartLogic.getBalanceOwed().intValue() != 40);
 		
@@ -181,7 +205,7 @@ public class PayByCashTests {
 			logicBronze.selectPaymentMethod(PaymentMethods.CASH);
 			logicBronze.cartLogic.updateBalance(new BigDecimal(5));
 			
-			stationBronze.banknoteInput.receive(tenNote);
+			stationBronze.getBanknoteInput().receive(tenNote);
 			
 		}
 		while (logicBronze.cartLogic.getBalanceOwed().intValue() != 0);
@@ -206,10 +230,10 @@ public class PayByCashTests {
 			
 			// Overload banknote output channel
 			for (int i = 0; i < 20; i++) {
-				stationBronze.banknoteOutput.receive(fiveNote);
+				stationBronze.getBanknoteOutput().receive(fiveNote);
 			}
 			
-			stationBronze.banknoteInput.receive(tenNote);
+			stationBronze.getBanknoteInput().receive(tenNote);
 		}
 		while (logicBronze.cartLogic.getBalanceOwed().intValue() != 0);
 	    
@@ -225,7 +249,7 @@ public class PayByCashTests {
 			logicBronze.stateLogic.gotoState(States.CHECKOUT);
 			logicBronze.selectPaymentMethod(PaymentMethods.CASH);
 			logicBronze.cartLogic.updateBalance(new BigDecimal(5));
-			stationBronze.banknoteInput.receive(fiveNote);
+			stationBronze.getBanknoteInput().receive(fiveNote);
 		}
 		while (0 != logicBronze.cartLogic.getBalanceOwed().intValue());
 		
@@ -241,7 +265,7 @@ public class PayByCashTests {
 			logicBronze.stateLogic.gotoState(States.CHECKOUT);
 			logicBronze.selectPaymentMethod(PaymentMethods.CASH);
 			logicBronze.cartLogic.updateBalance(new BigDecimal(5));
-			stationBronze.banknoteInput.receive(tenNote);
+			stationBronze.getBanknoteInput().receive(tenNote);
 		}
 		while (0 != logicBronze.cartLogic.getBalanceOwed().intValue());
 		
@@ -251,6 +275,6 @@ public class PayByCashTests {
 	
 	@Test
 	public void badBanknoteTest() {
-		this.logicBronze.cashPaymentController.badBanknote(stationBronze.banknoteValidator);
+		this.logicBronze.cashPaymentController.badBanknote(stationBronze.getBanknoteValidator());
 	}
 }	
