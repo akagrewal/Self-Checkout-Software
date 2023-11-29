@@ -43,6 +43,10 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 	// A duplicate receipt that can be printed by the attendant.
 	String duplicateReceipt;
 	
+	// Flags to see if ink or paper is low or empty
+	boolean inkLow = false;
+	boolean paperLow = false;
+	
 	/**
 	 * Base constructor
 	 */
@@ -171,12 +175,25 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 	
 	@Override
 	public void thePrinterIsOutOfPaper() {
-		this.onPrintingFail();
+		// GUI attendant that paper is empty
+		// Attendant logins in and the system prepares to add paper
+		
+		// Make flag true
+		paperLow = true;
+		// Disable Checkout System so attendent can add paper
+		this.logic.hardware.turnOff();
+		
 	}
 
 	@Override
 	public void thePrinterIsOutOfInk() {
-		this.onPrintingFail();
+		// GUI attendant that paper is empty
+		// Attendant logins in and the system prepares to add ink
+		
+		// Make flag true
+		inkLow = true;
+		// Disable Checkout System so attendant can add paper
+		this.logic.hardware.turnOff();
 	}
 
 	@Override
