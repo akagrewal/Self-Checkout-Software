@@ -181,7 +181,8 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		// Make flag true
 		paperLow = true;
 		// Disable Checkout System so attendent can add paper
-		this.logic.hardware.turnOff();
+		// Attendant disables system from the use case Disable System
+		this.logic.hardware.getPrinter().disable();
 		
 	}
 
@@ -193,7 +194,8 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		// Make flag true
 		inkLow = true;
 		// Disable Checkout System so attendant can add paper
-		this.logic.hardware.turnOff();
+		// Attendant disables system from the use case Disable System
+		this.logic.hardware.getPrinter().disable();
 	}
 
 	@Override
@@ -228,7 +230,8 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		// Make flag true
 		inkLow = true;
 		// Disable Checkout System so attendant can add ink
-		this.logic.hardware.turnOff();
+		// Attendant disables system from the use case Disable System
+		this.logic.hardware.getPrinter().disable();
 		
 	}
 
@@ -239,20 +242,47 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 				
 		// Make flag true
 		paperLow = true;
-		// Disable Checkout System so attendent can add paper
-		this.logic.hardware.turnOff();
+		// Disable Checkout System so attendant can add paper
+		// Attendant disables system from the use case Disable System
+		this.logic.hardware.getPrinter().disable();
 		
 	}
 
 	@Override
 	public void paperHasBeenAddedToThePrinter() {
-		// TODO Auto-generated method stub
+		
+		// Set flag to false
+		paperLow = false;
+		
+		// Check if ink is low or empty
+		if (inkLow == false) {
+			// If enough ink is there enable system
+			this.logic.hardware.getPrinter().enable();
+			// Attendant Enables the system to be used by Customer
+		}
+		
+		// GUI is used to announce that paper has been added
+		// GUI is also used to announce if receipt printer has been turned on or
+		// if ink needs to be added
 		
 	}
 
 	@Override
 	public void inkHasBeenAddedToThePrinter() {
-		// TODO Auto-generated method stub
+		
+		// Set flag to false
+		inkLow = false;
+				
+		// Check if paper is low or empty
+		if (paperLow == false) {
+			// If enough paper is there enable system
+			this.logic.hardware.getPrinter().enable();
+			// Attendant Enables the system to be used by Customer
+		}
+				
+		// GUI is used to announce that ink has been added
+		// GUI is also used to announce if receipt printer has been turned on or
+		// if paper needs to be added
 		
 	}
 }
