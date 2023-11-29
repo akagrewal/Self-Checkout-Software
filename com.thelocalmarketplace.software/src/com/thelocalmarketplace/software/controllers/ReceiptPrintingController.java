@@ -175,7 +175,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 	
 	@Override
 	public void thePrinterIsOutOfPaper() {
-		// GUI attendant that paper is empty
+		// GUI attendant that paper storage is empty
 		// Attendant logins in and the system prepares to add paper
 		
 		// Make flag true
@@ -187,7 +187,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 
 	@Override
 	public void thePrinterIsOutOfInk() {
-		// GUI attendant that paper is empty
+		// GUI attendant that ink storage is empty
 		// Attendant logins in and the system prepares to add ink
 		
 		// Make flag true
@@ -222,13 +222,25 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 
 	@Override
 	public void thePrinterHasLowInk() {
-		// TODO Auto-generated method stub
+		// GUI attendant that ink storage is low
+		// Attendant logins in and the system prepares to add ink
+				
+		// Make flag true
+		inkLow = true;
+		// Disable Checkout System so attendant can add ink
+		this.logic.hardware.turnOff();
 		
 	}
 
 	@Override
 	public void thePrinterHasLowPaper() {
-		// TODO Auto-generated method stub
+		// GUI attendant that paper storage is low
+		// Attendant logins in and the system prepares to add paper
+				
+		// Make flag true
+		paperLow = true;
+		// Disable Checkout System so attendent can add paper
+		this.logic.hardware.turnOff();
 		
 	}
 
