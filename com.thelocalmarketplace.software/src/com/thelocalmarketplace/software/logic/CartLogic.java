@@ -5,8 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.jjjwelectronics.Item;
+import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.scanner.Barcode;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.PLUCodedItem;
+import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.Product;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.Utilities;
@@ -58,7 +63,6 @@ public class CartLogic {
 	 * Constructor for a new CartLogic instance
 	 */
 	public CartLogic() {
-		
 		// Initialization
 		this.cart = new HashMap<Product, Integer>();
 		
@@ -66,37 +70,35 @@ public class CartLogic {
 	}
 	
 	
-	public void addProductToCart(BarcodedProduct product) {
+	public void addProductToCart(Product product) {
 		Utilities.modifyCountMapping(cart, product, 1);
 		
 		// Update balance owed
-		//if (product.isPerUnit()) {
+		if (product.isPerUnit()) {
 		BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(product.getPrice()));
-		this.updateBalance(newPrice);
-		//} else {
+		this.updateBalance(newPrice);}
+		 else {}
 			
-		//}
-	}
+		}
+
 	
 	/**
 	 * Removes a product from customer's cart
 	 * @param product The product to remove
 	 * @throws SimulationException If the product is not in the cart
 	 */
-	public void removeProductFromCart(BarcodedProduct product) throws SimulationException {
+	public void removeProductFromCart(Product product) throws SimulationException {
 		if (!this.getCart().containsKey(product)) {
 			throw new InvalidStateSimulationException("Product not in cart");
-		}
-		
-		Utilities.modifyCountMapping(cart, product, -1);
-		
+		}		
+		Utilities.modifyCountMapping(cart, product, -1);		
 		// Update balance owed
-		//if (product.isPerUnit()) {
+		if (product.isPerUnit()) {
 		BigDecimal newPrice = this.balanceOwed.subtract(new BigDecimal(product.getPrice()));
-		this.updateBalance(newPrice);
-		//} else {
+		this.updateBalance(newPrice);}
+		 else {
 			
-		//}
+		}
 	}
 	
 	/**
@@ -117,6 +119,24 @@ public class CartLogic {
 		
 		this.addProductToCart(toadd);
 	}
+	/**
+	 * Takes a PLU code, looks it up in product database, then adds it to customer cart
+	 * @param PLU Code, The PLU code to use
+	 * @throws SimulationException If PLU code is not registered to product database
+	 * @throws SimulationException If PLU code is not registered in available inventory
+	 */
+	public void addPLUCodedProductToCart(PriceLookUpCode pluCode) throws SimulationException {
+		PLUCodedProduct toadd = ProductDatabases.PLU_PRODUCT_DATABASE.get(pluCode);
+		
+		if (!ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(pluCode)) {
+			throw new InvalidStateSimulationException("PLU Code not registered to product database");
+		}
+		else if (!ProductDatabases.INVENTORY.containsKey(toadd) || ProductDatabases.INVENTORY.get(toadd) < 1) {
+			throw new InvalidStateSimulationException("No items of this type are in inventory");
+		}		
+		this.addProductToCart(toadd);
+	}
+	
 	
 	/**
 	 * Gets the customer's cart
