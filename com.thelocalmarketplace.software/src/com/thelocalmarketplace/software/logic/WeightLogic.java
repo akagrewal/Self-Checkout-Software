@@ -2,8 +2,12 @@ package com.thelocalmarketplace.software.logic;
 
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.Mass.MassDifference;
+import com.jjjwelectronics.OverloadedDevice;
+import com.jjjwelectronics.scale.AbstractElectronicScale;
 import com.jjjwelectronics.scanner.Barcode;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.AbstractLogicDependant;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
@@ -103,6 +107,15 @@ public class WeightLogic extends AbstractLogicDependant {
 		BarcodedProduct product = ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode);
 		Mass mass = new Mass(product.getExpectedWeight());
 		this.expectedWeight = this.expectedWeight.sum(mass);
+	}
+
+	/** Adds the expected weight of the product with given PLU to the expectedWeight
+	 * @param PriceLookUpCode plu of the item for which to add the expected weight */
+	public void addExpectedWeight(PriceLookUpCode plu) {
+		if (!ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu)) {
+			throw new InvalidStateSimulationException("PLU not registered to product database");
+		}
+		this.expectedWeight = this.actualWeight;
 	}
 	
 	/** Removes the weight of the product given from expectedWeight

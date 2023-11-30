@@ -50,44 +50,55 @@ public class CartLogic {
 	 * Tracks all of the products that are in the customer's cart
 	 * Includes products without barcodes
 	 * Maps a product to its count
+	 * If product is by weight, count is weight in kg
 	 */
 	private Map<Product, Integer> cart;
-	
+
 	/**
 	 * Tracks how much money the customer owes
 	 */
 	private BigDecimal balanceOwed;
-	
+
 	public WeightLogic weightLogic;
-	
+
 	/**
 	 * Constructor for a new CartLogic instance
 	 */
-	
+
 	public CartLogic() {
 		// Initialization
 		this.cart = new HashMap<Product, Integer>();
-		
+
 		this.balanceOwed = BigDecimal.ZERO;
 	}
-	
-	
+
+
 	public void addProductToCart(Product product) {
 		Utilities.modifyCountMapping(cart, product, 1);
-		
+
 		// Update balance owed
 		if (product.isPerUnit()) {
-		BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(product.getPrice()));
-		this.updateBalance(newPrice);}
-		 else { 
-		long Price = (product.getPrice()* weightLogic.getActualWeight().inGrams().longValue())/1000;	 
-	    BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(Price));
-		this.updateBalance(newPrice);	 
+			Utilities.modifyCountMapping(cart, product, 1);
+			BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(product.getPrice()));
+			this.updateBalance(newPrice);}
+		 else {
+			 //get actual weight
+			 long actualWeight = weightLogic.getActualWeight().inGrams().longValue()/1000;
+			 //get expected weight
+			 long expectedWeight = weightLogic.getExpectedWeight().inGrams().longValue()/1000;
+			 // subtract expected weight from actual weight to get weight of PLU product on scale
+			 long weight = actualWeight - expectedWeight;
+			 // Update weight in cart
+			 Utilities.modifyCountMapping(cart, product, (int) weight);
+			 long Price = product.getPrice()* weight;
+			 // Update balance owed
+			 BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(Price));
+			 this.updateBalance(newPrice);
 		 }
-			
+
 		}
 
-	
+
 	/**
 	 * Removes a product from customer's cart
 	 * @param product The product to remove
@@ -96,20 +107,23 @@ public class CartLogic {
 	public void removeProductFromCart(Product product) throws SimulationException {
 		if (!this.getCart().containsKey(product)) {
 			throw new InvalidStateSimulationException("Product not in cart");
-		}		
-		Utilities.modifyCountMapping(cart, product, -1);		
+		}
 		// Update balance owed
 		if (product.isPerUnit()) {
-		BigDecimal newPrice = this.balanceOwed.subtract(new BigDecimal(product.getPrice()));
-		this.updateBalance(newPrice);}}
-	
-	
-		/**else 
-		*long Price = (product.getPrice()* weightLogic.getActualWeight().inGrams().longValue())/1000;	 
-		*BigDecimal newPrice = this.balanceOwed.subtract(new BigDecimal(Price));	 
-		*this.updateBalance(newPrice);
-		/
+			BigDecimal newPrice = this.balanceOwed.subtract(new BigDecimal(product.getPrice()));
+			this.updateBalance(newPrice);
+			Utilities.modifyCountMapping(cart, product, -1);
+
+		} else {
+			// Get weight from cart hashmap using product key
+			int productWeight = cart.get(product);
+			// Get total price of item by multiplying weight and price/kg
+			long productPrice = (product.getPrice() * productWeight);
+			BigDecimal newPrice = this.balanceOwed.subtract(new BigDecimal(productPrice));
+			this.updateBalance(newPrice);
+			Utilities.modifyCountMapping(cart, product, -(productWeight));
 		}
+
 	}
 	
 	/**
