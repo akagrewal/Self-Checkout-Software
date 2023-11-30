@@ -46,7 +46,6 @@ import ca.ucalgary.seng300.simulation.SimulationException;
  * @author Anandita Mahika - 30097559
  */
 public class CartLogic {
-	
 	/**
 	 * Tracks all of the products that are in the customer's cart
 	 * Includes products without barcodes
@@ -59,9 +58,12 @@ public class CartLogic {
 	 */
 	private BigDecimal balanceOwed;
 	
+	public WeightLogic weightLogic;
+	
 	/**
 	 * Constructor for a new CartLogic instance
 	 */
+	
 	public CartLogic() {
 		// Initialization
 		this.cart = new HashMap<Product, Integer>();
@@ -77,7 +79,11 @@ public class CartLogic {
 		if (product.isPerUnit()) {
 		BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(product.getPrice()));
 		this.updateBalance(newPrice);}
-		 else {}
+		 else { 
+		long Price = (product.getPrice()* weightLogic.getActualWeight().inGrams().longValue())/1000;	 
+	    BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(Price));
+		this.updateBalance(newPrice);	 
+		 }
 			
 		}
 
@@ -95,9 +101,14 @@ public class CartLogic {
 		// Update balance owed
 		if (product.isPerUnit()) {
 		BigDecimal newPrice = this.balanceOwed.subtract(new BigDecimal(product.getPrice()));
-		this.updateBalance(newPrice);}
-		 else {
-			
+		this.updateBalance(newPrice);}}
+	
+	
+		/**else 
+		*long Price = (product.getPrice()* weightLogic.getActualWeight().inGrams().longValue())/1000;	 
+		*BigDecimal newPrice = this.balanceOwed.subtract(new BigDecimal(Price));	 
+		*this.updateBalance(newPrice);
+		/
 		}
 	}
 	
