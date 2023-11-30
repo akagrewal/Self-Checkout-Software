@@ -4,6 +4,7 @@ package com.thelocalmarketplace.software.gui;
 
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.software.database.CreateTestDatabases;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,6 +38,7 @@ public class GUILogic {
 	//when Customer presses [Start Session] 
 	public void StartSessionButtonPressed() {
 		System.out.println("Start Session");
+		new CreateTestDatabases();
 	}
 	
 //----------------------------------------------------------------
