@@ -150,7 +150,7 @@ public class RemoveItemTests {
 		 * 
 		 */
 		@Test
-		public void testSuccessfulRemoval() {
+		public void testSuccessfulRemovalBarcodedItem() {
 			this.scanUntilAdded(product, bitem);
 			assertTrue(session.cartLogic.getCart().size() == 1);
 			
@@ -162,6 +162,18 @@ public class RemoveItemTests {
 			System.out.println("Test 1 end\n");
 			
 		}
+		/**Tests if the method actually removes an item from cart when called
+		 * 
+		 */
+		@Test
+		public void testSuccesfulRemovalPLUCodedItem() {
+			
+			
+		}
+		
+		
+		
+		
 		/** Tests if the station is blocked while the correct item isn't removed, and unblocked when it is removed
 		 * 
 		 */

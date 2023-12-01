@@ -123,22 +123,35 @@ public class CartLogicTests {
 		
 		logic = new CentralStationLogic(station);
 	}
-	@Test public void updatePriceOfCartTest() {
+	
+//Testing method cartLogic.updateBalance(Int)	
+	@Test
+	public void updatePriceOfCartTest() {
 		BigDecimal price1 = new BigDecimal(50.0);
 		logic.cartLogic.updateBalance(price1);
 		assertTrue("price of cart was not updated correctly when adding to it", logic.cartLogic.getBalanceOwed().equals(price1));
-	}@Test public void updateNegativePriceOfCartTest() {
+	}
+	@Test
+	public void updateNegativePriceOfCartTest() {
 		BigDecimal price1 = new BigDecimal(-50.0);
 		logic.cartLogic.updateBalance(price1);
 		assertTrue("price of cart was not updated correctly when subtracting from it", logic.cartLogic.getBalanceOwed().equals(price1));
-	}@Test public void addProductToCartTestCheckPrice() {
+	}
+	
+//Tests for adding Barcoded and PLU products as well as when they're added together
+	@Test
+	public void addBarcodeProductToCartTestCheckPrice() {
 		logic.cartLogic.addBarcodedProductToCart(barcode);
 		assertTrue("price of cart was not updated correctly after adding to cart", logic.cartLogic.getBalanceOwed().equals(new BigDecimal(5)));
-	}@Test public void addPLUProductToCartTestCheckPrice() {
+	}
+	@Test 
+	public void addPLUProductToCartTestCheckPrice() {
 		logic.weightLogic.updateActualWeight(new Mass(1000000000));
 		logic.cartLogic.addPLUCodedProductToCart(PLU1);
 		assertTrue("price of cart was not updated correctly after adding to cart", logic.cartLogic.getBalanceOwed().equals(new BigDecimal(2)));
-	}@Test public void addMultipleProductToCartTestCheckPrice() {
+	}
+	@Test 
+	public void addMultipleBarcodedProductToCartTestCheckPrice() {
 		BigDecimal price1 = new BigDecimal((long)5);
 		BigDecimal price2 = new BigDecimal((long)1.00);
 		BigDecimal expected = price1.add(price2);
@@ -146,16 +159,16 @@ public class CartLogicTests {
 		logic.cartLogic.addBarcodedProductToCart(barcode2);
 		assertTrue("price of cart was not updated correctly after adding to cart", logic.cartLogic.getBalanceOwed().equals(expected));
 	}
-
-	@Test public void addMultiplePLUProductToCartTestCheckPrice() {
+	@Test
+	public void addMultiplePLUProductsToCartTestCheckPrice() {
 	logic.weightLogic.updateActualWeight(new Mass(1000000000));
 	logic.cartLogic.addPLUCodedProductToCart(PLU1);
 	logic.weightLogic.updateActualWeight(new Mass(1000000000));
 	logic.cartLogic.addPLUCodedProductToCart(PLU2);
-
 	assertTrue("price of cart was not updated correctly after adding to cart", logic.cartLogic.getBalanceOwed().equals(new BigDecimal(5)));
 	}
-	@Test public void addMultipleProductToCartTestGetTotalPrice() {
+	@Test
+	public void addMultipleBarcodedProductsToCartTestGetTotalPrice() {
 		BigDecimal price1 = new BigDecimal(5);
 		BigDecimal price2 = new BigDecimal((long)1.00);
 		BigDecimal expected = price1.add(price2);
@@ -163,8 +176,8 @@ public class CartLogicTests {
 		logic.cartLogic.addBarcodedProductToCart(barcode2);
 		assertTrue("price of cart was not calculated correctly", logic.cartLogic.calculateTotalCost().equals(expected));
 	}
-
-	@Test public void addMultiplePLUProductToCartTestGetTotalPrice() {
+	@Test
+	public void addMultiplePLUProductToCartTestGetTotalPrice() {
 		logic.weightLogic.updateActualWeight(new Mass(1000000000));
 		logic.cartLogic.addPLUCodedProductToCart(PLU1);
 		logic.weightLogic.updateActualWeight(new Mass(1000000000));
@@ -172,9 +185,19 @@ public class CartLogicTests {
 
 		assertTrue("price of cart was not updated correctly after adding to cart", logic.cartLogic.calculateTotalCost().equals(new BigDecimal(5)));
 	}
-	
 	@Test
-	public void testRemoveProductFromCart() {
+	public void addMultipleProductsToCastTestGetTotalPrice() {
+		logic.weightLogic.updateActualWeight(new Mass(1000000000));
+		logic.cartLogic.addPLUCodedProductToCart(PLU1);	
+		BigDecimal price1 = new BigDecimal(5);
+		logic.cartLogic.addBarcodedProductToCart(barcode);
+		BigDecimal expected = price1.add(new BigDecimal(pProduct.getPrice()));
+		assertTrue("price of cart was not calculated correctly", logic.cartLogic.calculateTotalCost().equals(expected));		
+	}
+	
+//Tests for removing a product once it's in the cart
+	@Test
+	public void testRemoveBarcodedProductFromCart() {
 		logic.cartLogic.addBarcodedProductToCart(barcode);
 		assertEquals(1, logic.cartLogic.getCart().size());
 		logic.cartLogic.removeProductFromCart(bProduct);
@@ -183,12 +206,41 @@ public class CartLogicTests {
 
 	@Test
 	public void testRemovePLUProductFromCart() {
+		logic.weightLogic.updateActualWeight(new Mass(1000000000));
 		logic.cartLogic.addPLUCodedProductToCart(PLU1);
 		assertEquals(1, logic.cartLogic.getCart().size());
 		logic.cartLogic.removeProductFromCart(pProduct);
 		assertEquals(0, logic.cartLogic.getCart().size());
 	}
+	@Test
+	public void testRemoveProductFromCart() {
+		logic.weightLogic.updateActualWeight(new Mass(1000000000));
+		logic.cartLogic.addPLUCodedProductToCart(PLU2);	
+		BigDecimal price1 = new BigDecimal(5);
+		logic.cartLogic.addBarcodedProductToCart(barcode);
+		assertEquals(2, logic.cartLogic.getCart().size());
+		logic.cartLogic.removeProductFromCart(pProduct2);
+		assertEquals(1, logic.cartLogic.getCart().size());
+		logic.cartLogic.removeProductFromCart(bProduct);
+		assertEquals(0, logic.cartLogic.getCart().size());	
+		
+	}
 	
+//Test for removing a product from cart and adding it back again.
+	@Test
+	public void testRemoveProductThenAddToCartAgain() {
+		logic.weightLogic.updateActualWeight(new Mass(1000000000));
+		logic.cartLogic.addPLUCodedProductToCart(PLU2);	
+		BigDecimal price1 = new BigDecimal(5);
+		logic.cartLogic.addBarcodedProductToCart(barcode);
+		assertEquals(2, logic.cartLogic.getCart().size());
+		logic.cartLogic.removeProductFromCart(pProduct2);
+		logic.cartLogic.addPLUCodedProductToCart(PLU2);
+		assertEquals(2, logic.cartLogic.getCart().size());
+				
+	}
+	
+//Tests for Simulation Exceptions	
 	@Test(expected = SimulationException.class)
 	public void testRemoveNonExistentProductFromCart() {
 		logic.cartLogic.removeProductFromCart(bProduct);
@@ -228,6 +280,7 @@ public class CartLogicTests {
 		logic.cartLogic.addPLUCodedProductToCart(p);
 	}
 	
+//Tests for cartLogic.modifyBalance() method
 	@Test
 	public void testModifyBalanceAdd() {
 		logic.cartLogic.modifyBalance(new BigDecimal(5));

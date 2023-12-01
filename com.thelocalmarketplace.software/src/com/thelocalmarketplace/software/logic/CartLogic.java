@@ -78,10 +78,9 @@ public class CartLogic {
 
 
 	public void addProductToCart(Product product) {
-		Utilities.modifyCountMapping(cart, product, 1);
-
 		// Update balance owed
 		if (product.isPerUnit()) {
+			Utilities.modifyCountMapping(cart, product, 1);
 			BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(product.getPrice()));
 			this.updateBalance(newPrice);}
 		 else {
