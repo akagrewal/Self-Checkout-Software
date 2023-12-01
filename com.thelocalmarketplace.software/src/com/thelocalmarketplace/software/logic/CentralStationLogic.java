@@ -150,9 +150,14 @@ public class CentralStationLogic {
 	public StateLogic stateLogic;
 	
 	/**
+	 * Instance of logic for membership cards
+	 */
+	public MembershipLogic membershipLogic;
+	
+	/**
 	 * Current selected payment method
 	 */
-	private PaymentMethods paymentMethod;
+	private PaymentMethods paymentMethod;	
 	
 	/**
 	 * Tracks if the customer session is active
