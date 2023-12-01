@@ -150,6 +150,11 @@ public class CentralStationLogic {
 	public StateLogic stateLogic;
 	
 	/**
+	 * Instance of logic for prediction issue 
+	 */
+	public PredictionLogic predictionLogic;
+	
+	/**
 	 * Current selected payment method
 	 */
 	private PaymentMethods paymentMethod;
