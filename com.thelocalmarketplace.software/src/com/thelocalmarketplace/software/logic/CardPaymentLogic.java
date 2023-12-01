@@ -30,14 +30,14 @@ import com.thelocalmarketplace.software.logic.CentralStationLogic.PaymentMethods
  * @author Jincheng Li - 30172907
  * @author Anandita Mahika - 30097559
  */
-public class CardSwipeLogic extends AbstractLogicDependant {
+public class CardPaymentLogic extends AbstractLogicDependant {
 
     public String signature;
     public CardIssuer bank;
     boolean dataRead;
 
     
-    public CardSwipeLogic(CentralStationLogic logic, CardIssuer bank) throws NullPointerException {
+    public CardPaymentLogic(CentralStationLogic logic, CardIssuer bank) throws NullPointerException {
     	super(logic);
     	
         this.bank = bank;
@@ -56,7 +56,7 @@ public class CardSwipeLogic extends AbstractLogicDependant {
 
 
     //keeps track of whether data was read or not
-    public void isDataRead(boolean read){
+    public void setDataRead(boolean read){
         dataRead = read;
     }
 
