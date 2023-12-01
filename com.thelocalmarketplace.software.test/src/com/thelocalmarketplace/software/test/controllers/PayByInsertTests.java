@@ -111,6 +111,7 @@ public class PayByInsertTests {
         session.stateLogic.gotoState(States.CHECKOUT);
         session.hardware.getCardReader().insert(this.card, "1434");
     }
+    
 
     @Test(expected=SimulationException.class)
     public void testSessionNotStartedInsert() throws IOException{

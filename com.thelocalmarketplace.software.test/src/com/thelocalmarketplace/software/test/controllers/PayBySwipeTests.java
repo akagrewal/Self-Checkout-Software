@@ -102,6 +102,7 @@ public class PayBySwipeTests {
         assertEquals(BigDecimal.valueOf(0.0),session.cartLogic.getBalanceOwed());
 
     }
+    
 
     @Test(expected=SimulationException.class)
     public void testSessionNotStartedSwipe() throws IOException{

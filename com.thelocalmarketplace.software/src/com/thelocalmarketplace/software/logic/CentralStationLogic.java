@@ -140,9 +140,9 @@ public class CentralStationLogic {
 	public AttendantLogic attendantLogic;
 
   /**
-   * Instance of logic for card payment via swipe
+   * Instance of logic for card payment on all possible ways
    */
-	public CardSwipeLogic cardLogic;
+	public CardPaymentLogic cardLogic;
 	
 	/**
 	 * Instance of logic for states
@@ -227,7 +227,7 @@ public class CentralStationLogic {
 	 * @param bank is the details of the customer's bank
 	 */
 	public void setupBankDetails(CardIssuer bank) {
-		this.cardLogic=new CardSwipeLogic(this,bank);
+		this.cardLogic=new CardPaymentLogic(this,bank);
 	}
 	
 	/**

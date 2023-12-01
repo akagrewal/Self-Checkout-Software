@@ -52,28 +52,28 @@ public class CardReaderController extends AbstractLogicDependant implements Card
     @Override
     public void aCardHasBeenSwiped() {
         System.out.println("A card has been swiped");
-        this.logic.cardLogic.isDataRead(false);
+        this.logic.cardLogic.setDataRead(false);
     }
     
     //Ask for PIN when card is swiped
   	@Override
   	public void aCardHasBeenInserted() {
   		System.out.println("A card has been Inserted");
-          this.logic.cardLogic.isDataRead(false);
+          this.logic.cardLogic.setDataRead(false);
   	}
 
   	//Ask for signature when card is tapped
   	@Override
   	public void aCardHasBeenTapped() {
   		System.out.println("A card has been swiped");
-          this.logic.cardLogic.isDataRead(false);
+          this.logic.cardLogic.setDataRead(false);
   	}
   	
     @Override
     public void theDataFromACardHasBeenRead(CardData data) {
     	PaymentMethods t = this.logic.cardLogic.getCardPaymentType(data.getType());
    
-        this.logic.cardLogic.isDataRead(true);
+        this.logic.cardLogic.setDataRead(true);
 
         if (!this.logic.isSessionStarted()) {
             throw new InvalidStateSimulationException("Session not started");
