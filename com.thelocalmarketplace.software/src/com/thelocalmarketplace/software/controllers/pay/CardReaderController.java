@@ -44,7 +44,6 @@ public class CardReaderController extends AbstractLogicDependant implements Card
      */
     public CardReaderController(CentralStationLogic logic) throws NullPointerException {
         super(logic);
-
         this.logic.hardware.getCardReader().register(this);
     }
 
@@ -55,7 +54,21 @@ public class CardReaderController extends AbstractLogicDependant implements Card
         System.out.println("A card has been swiped");
         this.logic.cardLogic.isDataRead(false);
     }
+    
+    //Ask for PIN when card is swiped
+  	@Override
+  	public void aCardHasBeenInserted() {
+  		System.out.println("A card has been Inserted");
+          this.logic.cardLogic.isDataRead(false);
+  	}
 
+  	//Ask for signature when card is tapped
+  	@Override
+  	public void aCardHasBeenTapped() {
+  		System.out.println("A card has been swiped");
+          this.logic.cardLogic.isDataRead(false);
+  	}
+  	
     @Override
     public void theDataFromACardHasBeenRead(CardData data) {
     	PaymentMethods t = this.logic.cardLogic.getCardPaymentType(data.getType());
@@ -84,46 +97,22 @@ public class CardReaderController extends AbstractLogicDependant implements Card
 
     }
     
-    // ---- Unused ----
-
+    // ---- Unused Methods, we just care about the ones related to payment ----
     @Override
     public void aDeviceHasBeenEnabled(IDevice<? extends IDeviceListener> device) {
-
     }
-
     @Override
     public void aDeviceHasBeenDisabled(IDevice<? extends IDeviceListener> device) {
-
     }
-
     @Override
     public void aDeviceHasBeenTurnedOn(IDevice<? extends IDeviceListener> device) {
-
     }
-
     @Override
     public void aDeviceHasBeenTurnedOff(IDevice<? extends IDeviceListener> device) {
-
     }
-
-
-	@Override
-	public void aCardHasBeenInserted() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 	@Override
 	public void theCardHasBeenRemoved() {
-		// TODO Auto-generated method stub
-		
 	}
 
-
-	@Override
-	public void aCardHasBeenTapped() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 }
