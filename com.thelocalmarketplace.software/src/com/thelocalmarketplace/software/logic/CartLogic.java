@@ -78,6 +78,14 @@ public class CartLogic {
 		//}
 	}
 	
+	public void addReusableBagToCart(int numOfBags) {
+		
+		BigDecimal bagPrice = new BigDecimal (1.25 * numOfBags);
+		BigDecimal newPrice = this.balanceOwed.add(bagPrice);
+		
+		this.updateBalance(newPrice);
+	}
+	
 	/**
 	 * Removes a product from customer's cart
 	 * @param product The product to remove

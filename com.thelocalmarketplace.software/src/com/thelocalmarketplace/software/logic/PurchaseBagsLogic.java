@@ -1,7 +1,11 @@
 package com.thelocalmarketplace.software.logic;
 
 
+import com.jjjwelectronics.EmptyDevice;
+import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.bag.IReusableBagDispenser;
+import com.jjjwelectronics.bag.ReusableBag;
+import com.jjjwelectronics.scale.IElectronicScale;
 import com.thelocalmarketplace.software.AbstractLogicDependant;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
@@ -32,25 +36,41 @@ import com.thelocalmarketplace.software.logic.CentralStationLogic;
  */
 public class PurchaseBagsLogic extends AbstractLogicDependant{
 	IReusableBagDispenser iDispenser;
+	ReusableBag bag;
+	Mass bagsMass;
+	IElectronicScale scale;
 	
 	public PurchaseBagsLogic(CentralStationLogic logic) {
 		super(logic);
 		this.iDispenser = logic.hardware.getReusableBagDispenser();
+		this.scale = logic.hardware.getBaggingArea();
+		bagsMass = bag.getMass();
+		
+	}
+	
+	public void dispensePurchasedBags(int numOfBags) throws EmptyDevice {
+		// add bag(s) to order
+		// hardcoded price of bags into this method in cartLogic --> change this
+		logic.cartLogic.addReusableBagToCart(numOfBags);
+		//Mass currentCartWeight = logic.weightLogic.getExpectedWeight();
+		
+		// do dispensing
+		iDispenser.dispense();
+		
+		//adjust weight
+		logic.weightLogic.addExpectedPurchasedBagWeight(bag);
+		
+		//detect weight change
+		logic.weightDiscrepancyController.theMassOnTheScaleHasChanged(scale, bagsMass);
+		
+		// notify dispensed (indicate to customer)
+	
+		
+		
 	}
 	
 	
 	
 	
-	// customer indicates they want to purchase reusable bag(s) and indicates # of bags (?)
-	
-	// I add bag into the order 
-		// needed new add item stuff to complete
-	//I dispense # of bags orders
-	
-	// adjust expected weight to match purchased bag(s) weight
-		// weight discrepancy --> updateBagMass(getTotalBagMass + mass of new bags)
-	//weight change detected
-		
-	// indicate to customer that operation has been complete
 		
 }

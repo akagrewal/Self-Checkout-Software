@@ -2,6 +2,7 @@ package com.thelocalmarketplace.software.logic;
 
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.Mass.MassDifference;
+import com.jjjwelectronics.bag.ReusableBag;
 import com.jjjwelectronics.scanner.Barcode;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
@@ -102,6 +103,14 @@ public class WeightLogic extends AbstractLogicDependant {
 		}
 		BarcodedProduct product = ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode);
 		Mass mass = new Mass(product.getExpectedWeight());
+		this.expectedWeight = this.expectedWeight.sum(mass);
+	}
+	
+	/** Adds to the expected weight the weight of Purchased bags
+	 * @param ReusableBag bag
+	 */
+	public void addExpectedPurchasedBagWeight(ReusableBag bag) {
+		Mass mass = bag.getMass();
 		this.expectedWeight = this.expectedWeight.sum(mass);
 	}
 	
