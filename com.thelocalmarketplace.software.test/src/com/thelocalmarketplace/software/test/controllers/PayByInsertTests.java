@@ -1,6 +1,7 @@
 package com.thelocalmarketplace.software.test.controllers;
 
 import com.jjjwelectronics.card.Card;
+import com.jjjwelectronics.card.InvalidPINException;
 import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
 import com.thelocalmarketplace.hardware.SelfCheckoutStationGold;
 import com.thelocalmarketplace.hardware.external.CardIssuer;
@@ -44,7 +45,7 @@ import static org.junit.Assert.assertEquals;
  * @author Jincheng Li - 30172907
  * @author Anandita Mahika - 30097559
  */
-public class PayBySwipeTests {
+public class PayByInsertTests {
 
     SelfCheckoutStationGold station;
     CentralStationLogic session;
@@ -90,7 +91,7 @@ public class PayBySwipeTests {
     public void testInValidState() throws IOException {
         session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
         session.hardware.getCardReader().enable();
-        session.hardware.getCardReader().swipe(this.card);
+        session.hardware.getCardReader().insert(this.card, "1234");
     }
 
     @Test
@@ -98,18 +99,26 @@ public class PayBySwipeTests {
         session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
         session.hardware.getCardReader().enable();
         session.stateLogic.gotoState(States.CHECKOUT);
-        session.hardware.getCardReader().swipe(this.card);
+        session.hardware.getCardReader().insert(this.card, "1234");
         assertEquals(BigDecimal.valueOf(0.0),session.cartLogic.getBalanceOwed());
 
     }
     
+    @Test (expected=InvalidPINException.class)
+    public void testInValidPINTransaction() throws IOException {
+        session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
+        session.hardware.getCardReader().enable();
+        session.stateLogic.gotoState(States.CHECKOUT);
+        session.hardware.getCardReader().insert(this.card, "1434");
+    }
+    
 
     @Test(expected=SimulationException.class)
-    public void testSessionNotStartedSwipe() throws IOException{
+    public void testSessionNotStartedInsert() throws IOException{
         session.stopSession();
         session.hardware.getCardReader().enable();
         session.stateLogic.gotoState(States.CHECKOUT);
-        session.hardware.getCardReader().swipe(this.card);
+        session.hardware.getCardReader().insert(this.card, "1234");
     }
 
     @Test
@@ -117,32 +126,32 @@ public class PayBySwipeTests {
         session.cartLogic.updateBalance(BigDecimal.valueOf(50.00));
         session.hardware.getCardReader().enable();
         session.stateLogic.gotoState(States.CHECKOUT);
-        session.hardware.getCardReader().swipe(this.card);
+        session.hardware.getCardReader().insert(this.card, "1234");
         assertEquals(BigDecimal.valueOf(50.0),session.cartLogic.getBalanceOwed());
     }
     
     @Test(expected=SimulationException.class)
-    public void testWrongSwipeMethodSelected() throws IOException {
+    public void testWrongPaymentMethodSelected() throws IOException {
         this.session.selectPaymentMethod(PaymentMethods.CREDIT);
         session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
         session.hardware.getCardReader().enable();
         session.stateLogic.gotoState(States.CHECKOUT);
-        session.hardware.getCardReader().swipe(this.card);
+        session.hardware.getCardReader().insert(this.card, "1234");
     }
 
     @Test(expected=SimulationException.class)
-    public void testStationBlockedSwipe()throws IOException{
+    public void testStationBlockedInsert()throws IOException{
         session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
         session.stateLogic.gotoState(States.BLOCKED);
         session.hardware.getCardReader().enable();
-        session.hardware.getCardReader().swipe(this.card);
+        session.hardware.getCardReader().insert(this.card, "1234");
     }
 
     @Test(expected=SimulationException.class)
-    public void tesSessionNotStartedSwipe() throws IOException {
+    public void tesSessionNotStartedInsert() throws IOException {
         session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
         session.hardware.getCardReader().enable();
-        session.hardware.getCardReader().swipe(this.card);
+        session.hardware.getCardReader().insert(this.card, "1234");
     }
     
     @Test
