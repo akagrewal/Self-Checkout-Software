@@ -2,10 +2,14 @@
 
 package com.thelocalmarketplace.software.gui;
 
+import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.software.database.CreateTestDatabases;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
-
+import java.util.Set;
 
 
 /*
@@ -14,6 +18,19 @@ import java.util.List;
  * GUI code) and Panels
  */
 public class GUILogic {
+	private final Set<GUIListener> listeners = new HashSet<>();
+
+	/**
+	 * Registers the given listener so that it will receive events from this
+	 * communication facade.
+	 *
+	 * @param listener
+	 *            The listener to be registered. If it is already registered, this
+	 *            call has no effect.
+	 */
+	public void register(GUIListener listener) {
+		listeners.add(listener);
+	}
 	
 //----------------------------------------------------------------
 //Start Session Panel, 
@@ -21,10 +38,23 @@ public class GUILogic {
 	//when Customer presses [Start Session] 
 	public void StartSessionButtonPressed() {
 		System.out.println("Start Session");
+		new CreateTestDatabases();
 	}
 	
 //----------------------------------------------------------------
-//Add Items Panel 
+//Add Items Panel
+
+	// add logic for when customer adds item via PLU/Visual Search
+	private void notifyItemAdded(PLUCodedProduct pk) {
+		for(GUIListener listener : listeners)
+			listener.added(this, pk);
+	}
+
+	// add logic for when customer scans a barcoded item
+	private void notifyItemScanned(BarcodedProduct pk) {
+		for(GUIListener listener : listeners)
+			listener.scanned(this, pk);
+	}
 	
 	// RIGHT BUTTON PANEL 
 	public void buttonR1_AddMemberNoButton() {
