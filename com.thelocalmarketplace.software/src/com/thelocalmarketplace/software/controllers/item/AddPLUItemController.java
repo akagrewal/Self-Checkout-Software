@@ -80,4 +80,3 @@ public class AddPLUItemController extends AbstractLogicDependant {
 }
 
 
-}

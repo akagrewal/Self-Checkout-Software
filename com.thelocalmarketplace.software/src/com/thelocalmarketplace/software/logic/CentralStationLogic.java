@@ -180,7 +180,7 @@ public class CentralStationLogic {
 		this.paymentMethod = PaymentMethods.NONE;
 		
 		// Reference to logic objects
-		this.cartLogic = new CartLogic();
+		this.cartLogic = new CartLogic(this);
 		this.weightLogic = new WeightLogic(this);
 		this.stateLogic = new StateLogic(this);
 

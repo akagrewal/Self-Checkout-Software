@@ -62,13 +62,16 @@ public class CartLogic {
 
 	public WeightLogic weightLogic;
 
+	public CentralStationLogic logic;
+
 	/**
 	 * Constructor for a new CartLogic instance
 	 */
 
-	public CartLogic() {
+	public CartLogic(CentralStationLogic logic) {
 		// Initialization
 		this.cart = new HashMap<Product, Integer>();
+		this.logic = logic;
 
 		this.balanceOwed = BigDecimal.ZERO;
 	}
@@ -83,9 +86,9 @@ public class CartLogic {
 			this.updateBalance(newPrice);}
 		 else {
 			 //get actual weight
-			 long actualWeight = weightLogic.getActualWeight().inGrams().longValue()/1000;
+			 long actualWeight = logic.weightLogic.getActualWeight().inGrams().longValue()/1000;
 			 //get expected weight
-			 long expectedWeight = weightLogic.getExpectedWeight().inGrams().longValue()/1000;
+			 long expectedWeight = logic.weightLogic.getExpectedWeight().inGrams().longValue()/1000;
 			 // subtract expected weight from actual weight to get weight of PLU product on scale
 			 long weight = actualWeight - expectedWeight;
 			 // Update weight in cart

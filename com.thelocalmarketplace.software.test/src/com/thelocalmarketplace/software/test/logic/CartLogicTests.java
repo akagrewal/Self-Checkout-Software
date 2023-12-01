@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import com.jjjwelectronics.Mass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -96,10 +97,11 @@ public class CartLogicTests {
 		bProduct3 = new BarcodedProduct(b_test, "some item 3",(long)1.00,(double)3.0);
 		
 		//Setting up PLU Products
-		
-		
-		
-		
+
+		PLU1 = new PriceLookUpCode("1111");
+		PLU2 = new PriceLookUpCode("2222");
+		pProduct = new PLUCodedProduct(PLU1, "Apples", 2);
+		pProduct2 = new PLUCodedProduct(PLU2, "Bananas", 3);
 		
 		//Populating Databases
 		ProductDatabases.BARCODED_PRODUCT_DATABASE.clear();
@@ -108,6 +110,12 @@ public class CartLogicTests {
 		ProductDatabases.INVENTORY.put(bProduct, 1);
 		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode2, bProduct2);
 		ProductDatabases.INVENTORY.put(bProduct2, 1);
+
+		ProductDatabases.PLU_PRODUCT_DATABASE.clear();
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(PLU1, pProduct);
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(PLU2, pProduct2);
+		ProductDatabases.INVENTORY.put(pProduct, 10);
+		ProductDatabases.INVENTORY.put(pProduct2, 10);
 		
 		station = new SelfCheckoutStationBronze();
 		station.plugIn(PowerGrid.instance());
@@ -126,6 +134,10 @@ public class CartLogicTests {
 	}@Test public void addProductToCartTestCheckPrice() {
 		logic.cartLogic.addBarcodedProductToCart(barcode);
 		assertTrue("price of cart was not updated correctly after adding to cart", logic.cartLogic.getBalanceOwed().equals(new BigDecimal(5)));
+	}@Test public void addPLUProductToCartTestCheckPrice() {
+		logic.weightLogic.updateActualWeight(new Mass(1000000000));
+		logic.cartLogic.addPLUCodedProductToCart(PLU1);
+		assertTrue("price of cart was not updated correctly after adding to cart", logic.cartLogic.getBalanceOwed().equals(new BigDecimal(2)));
 	}@Test public void addMultipleProductToCartTestCheckPrice() {
 		BigDecimal price1 = new BigDecimal((long)5);
 		BigDecimal price2 = new BigDecimal((long)1.00);
@@ -133,6 +145,15 @@ public class CartLogicTests {
 		logic.cartLogic.addBarcodedProductToCart(barcode);
 		logic.cartLogic.addBarcodedProductToCart(barcode2);
 		assertTrue("price of cart was not updated correctly after adding to cart", logic.cartLogic.getBalanceOwed().equals(expected));
+	}
+
+	@Test public void addMultiplePLUProductToCartTestCheckPrice() {
+	logic.weightLogic.updateActualWeight(new Mass(1000000000));
+	logic.cartLogic.addPLUCodedProductToCart(PLU1);
+	logic.weightLogic.updateActualWeight(new Mass(1000000000));
+	logic.cartLogic.addPLUCodedProductToCart(PLU2);
+
+	assertTrue("price of cart was not updated correctly after adding to cart", logic.cartLogic.getBalanceOwed().equals(new BigDecimal(5)));
 	}
 	@Test public void addMultipleProductToCartTestGetTotalPrice() {
 		BigDecimal price1 = new BigDecimal(5);
@@ -142,12 +163,29 @@ public class CartLogicTests {
 		logic.cartLogic.addBarcodedProductToCart(barcode2);
 		assertTrue("price of cart was not calculated correctly", logic.cartLogic.calculateTotalCost().equals(expected));
 	}
+
+	@Test public void addMultiplePLUProductToCartTestGetTotalPrice() {
+		logic.weightLogic.updateActualWeight(new Mass(1000000000));
+		logic.cartLogic.addPLUCodedProductToCart(PLU1);
+		logic.weightLogic.updateActualWeight(new Mass(1000000000));
+		logic.cartLogic.addPLUCodedProductToCart(PLU2);
+
+		assertTrue("price of cart was not updated correctly after adding to cart", logic.cartLogic.calculateTotalCost().equals(new BigDecimal(5)));
+	}
 	
 	@Test
 	public void testRemoveProductFromCart() {
 		logic.cartLogic.addBarcodedProductToCart(barcode);
 		assertEquals(1, logic.cartLogic.getCart().size());
 		logic.cartLogic.removeProductFromCart(bProduct);
+		assertEquals(0, logic.cartLogic.getCart().size());
+	}
+
+	@Test
+	public void testRemovePLUProductFromCart() {
+		logic.cartLogic.addPLUCodedProductToCart(PLU1);
+		assertEquals(1, logic.cartLogic.getCart().size());
+		logic.cartLogic.removeProductFromCart(pProduct);
 		assertEquals(0, logic.cartLogic.getCart().size());
 	}
 	
@@ -162,6 +200,13 @@ public class CartLogicTests {
 		
 		logic.cartLogic.addBarcodedProductToCart(b);
 	}
+
+	@Test(expected = SimulationException.class)
+	public void testAddPLUNotInDatabase() {
+		PriceLookUpCode p = new PriceLookUpCode("1234");
+
+		logic.cartLogic.addPLUCodedProductToCart(p);
+	}
 	
 	@Test(expected = SimulationException.class)
 	public void testAddBarcodeNotInInventory2() {
@@ -171,6 +216,16 @@ public class CartLogicTests {
 		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b, p);
 		
 		logic.cartLogic.addBarcodedProductToCart(b);
+	}
+
+	@Test(expected = SimulationException.class)
+	public void testAddPLUNotInInventory2() {
+		PriceLookUpCode p = new PriceLookUpCode("1234");
+		PLUCodedProduct p1 = new PLUCodedProduct(p, "some item", 5);
+
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(p, p1);
+
+		logic.cartLogic.addPLUCodedProductToCart(p);
 	}
 	
 	@Test
