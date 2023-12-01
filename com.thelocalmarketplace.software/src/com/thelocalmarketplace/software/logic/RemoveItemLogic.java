@@ -1,6 +1,7 @@
 package com.thelocalmarketplace.software.logic;
 
 import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.software.AbstractLogicDependant;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
@@ -58,7 +59,6 @@ public class RemoveItemLogic extends AbstractLogicDependant{
     		throw new InvalidStateSimulationException("The session has not been started");
     	}
     	
-    	
     	// When method is used to resolve weight discrepancies
     	else if (this.logic.stateLogic.inState(States.BLOCKED)) {
 	    	this.logic.cartLogic.removeProductFromCart(product);
@@ -73,6 +73,31 @@ public class RemoveItemLogic extends AbstractLogicDependant{
 	    	this.logic.weightLogic.removeExpectedWeight(product.getBarcode());
 	    	this.logic.stateLogic.gotoState(States.BLOCKED);
 	    	System.out.println("Item removed from cart. Please remove the item from the bagging area");
+    	}	}
+    	
+    public void removePLUCodedItem(PLUCodedProduct product)throws NullPointerException {
+    	if (product == null) {
+            throw new NullPointerException("PLU Code is null");
+        }
+    	else if (!this.logic.isSessionStarted()) {
+    		throw new InvalidStateSimulationException("The session has not been started");
+    	}
+    	// When method is used to resolve weight discrepancies
+    	else if (this.logic.stateLogic.inState(States.BLOCKED)) {
+	    	this.logic.cartLogic.removeProductFromCart(product);
+	    	this.logic.weightLogic.removeExpectedWeight(product.getPLUCode());
+	    	System.out.println("Item removed from cart.");
+	    	logic.weightLogic.handleWeightDiscrepancy();
+    	}
+    	// When method is used to remove unwanted items (without triggering a weight discrepancy
+    	else {
+    		this.logic.cartLogic.removeProductFromCart(product);
+	    	this.logic.weightLogic.removeExpectedWeight(product.getPLUCode());
+	    	this.logic.stateLogic.gotoState(States.BLOCKED);
+	    	System.out.println("Item removed from cart. Please remove the item from the bagging area");
     	}	
-	}
+    }
+	
+	
+	
 }

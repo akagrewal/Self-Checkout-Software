@@ -130,8 +130,18 @@ public class WeightLogic extends AbstractLogicDependant {
 		if (difference.compareTo(Mass.ZERO) < 0) throw new InvalidStateSimulationException("Expected weight cannot be negative");
 		this.expectedWeight = difference.abs();
 	}
+	public void removeExpectedWeight(PriceLookUpCode pluCode) {
+		if (!ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(pluCode)) {
+			throw new InvalidStateSimulationException("Barcode not registered to product database");
+		}
+		PLUCodedProduct product = ProductDatabases.PLU_PRODUCT_DATABASE.get(pluCode);
+		Mass mass = this.actualWeight;
+		MassDifference difference = this.expectedWeight.difference(mass);
+		if (difference.compareTo(Mass.ZERO) < 0) throw new InvalidStateSimulationException("Expected weight cannot be negative");
+		this.expectedWeight = difference.abs();
+	}
 	
-	/** UPdates actual weight to the mass passed
+	/** Updates actual weight to the mass passed
 	 * @param mass - Mass to change the actual weight to */
 	public void updateActualWeight(Mass mass) {
 		this.actualWeight = mass;

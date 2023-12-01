@@ -1,3 +1,4 @@
+
 package com.thelocalmarketplace.software.logic;
 
 import java.math.BigDecimal;
@@ -78,7 +79,6 @@ public class CartLogic {
 
 		// Update balance owed
 		if (product.isPerUnit()) {
-			Utilities.modifyCountMapping(cart, product, 1);
 			BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(product.getPrice()));
 			this.updateBalance(newPrice);}
 		 else {
@@ -97,7 +97,6 @@ public class CartLogic {
 		 }
 
 		}
-
 
 	/**
 	 * Removes a product from customer's cart
