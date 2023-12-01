@@ -43,30 +43,50 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 	public PurchaseBagsLogic(CentralStationLogic logic) {
 		super(logic);
 		this.iDispenser = logic.hardware.getReusableBagDispenser();
-		this.scale = logic.hardware.getBaggingArea();
 		bagsMass = bag.getMass();
+		this.scale = logic.hardware.getBaggingArea();
+		
 		
 	}
 	
 	public void dispensePurchasedBags(int numOfBags) throws EmptyDevice {
+		
+		
 		// add bag(s) to order
 		// hardcoded price of bags into this method in cartLogic --> change this
 		logic.cartLogic.addReusableBagToCart(numOfBags);
 		//Mass currentCartWeight = logic.weightLogic.getExpectedWeight();
 		
-		// do dispensing
-		iDispenser.dispense();
 		
-		//adjust weight
-		logic.weightLogic.addExpectedPurchasedBagWeight(bag);
+		int bagsDispensed = 0;
 		
-		//detect weight change
-		logic.weightDiscrepancyController.theMassOnTheScaleHasChanged(scale, bagsMass);
+		while (bagsDispensed < numOfBags){	
+			
+			// do dispensing
+			if (iDispenser.getQuantityRemaining() >0){
+				
+				iDispenser.dispense();
+				//adjust expected weight
+				logic.weightLogic.addExpectedPurchasedBagWeight(bag);
+				
+				//detect weight change
+				logic.weightDiscrepancyController.theMassOnTheScaleHasChanged(scale, bagsMass);
+				bagsDispensed ++;
+			}
+			
+			else {
+				System.out.println("No bags remaining in dispenser");
+			}
+		
+			
+			
+		
+			
+			
+			
+		}
 		
 		// notify dispensed (indicate to customer)
-	
-		
-		
 	}
 	
 	
