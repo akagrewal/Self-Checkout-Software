@@ -31,6 +31,50 @@ public class GUILogic {
 	public void register(GUIListener listener) {
 		listeners.add(listener);
 	}
+
+// LOGIC PANEL
+	// add logic for when customer adds item via PLU/Visual Search
+	private void notifyItemAdded(PLUCodedProduct pk) {
+		for(GUIListener listener : listeners)
+			listener.added(this, pk);
+	}
+
+	// add logic for when customer scans a barcoded item
+	private void notifyItemScanned(BarcodedProduct pk) {
+		for(GUIListener listener : listeners)
+			listener.scanned(this, pk);
+	}
+
+	// add logic for when customer indicates to add their own bags
+	private void notifyOwnBags(boolean ownBags) {
+		for(GUIListener listener : listeners)
+			listener.ownBags(this, ownBags);
+	}
+
+	// add logic for when customer indicates to change the language
+	private void notifyLanguage(String language) {
+		for(GUIListener listener : listeners)
+			listener.changeLanguage(this, language);
+	}
+
+	// add logic for when customer wants to call an attendant
+	private void callAttendant() {
+		for(GUIListener listener : listeners)
+			listener.attendantCalled(this);
+	}
+
+	// add logic for when customer indicates to add their membership card/id (? might need to be changed)
+	// string changed to whatever the membership identifier is
+	private void addMembership(String id) {
+		for(GUIListener listener : listeners)
+			listener.memberLogin(this, id);
+	}
+
+	// add logic for when customer chooses how they would like to pay
+	private void selectedPayOption(int payOption) {
+		for(GUIListener listener : listeners)
+			listener.payOption(this, payOption);
+	}
 	
 //----------------------------------------------------------------
 //Start Session Panel, 
@@ -44,17 +88,7 @@ public class GUILogic {
 //----------------------------------------------------------------
 //Add Items Panel
 
-	// add logic for when customer adds item via PLU/Visual Search
-	private void notifyItemAdded(PLUCodedProduct pk) {
-		for(GUIListener listener : listeners)
-			listener.added(this, pk);
-	}
 
-	// add logic for when customer scans a barcoded item
-	private void notifyItemScanned(BarcodedProduct pk) {
-		for(GUIListener listener : listeners)
-			listener.scanned(this, pk);
-	}
 	
 	// RIGHT BUTTON PANEL 
 	public void buttonR1_AddMemberNoButton() {
