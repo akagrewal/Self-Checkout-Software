@@ -95,7 +95,7 @@ public class PayByTapTests {
 
     @Test
     public void testValidTransaction() throws IOException {
-        session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
+        session.cartLogic.updateBalance(BigDecimal.valueOf(17.00));
         session.hardware.getCardReader().enable();
         session.stateLogic.gotoState(States.CHECKOUT);
         session.hardware.getCardReader().tap(this.card);
@@ -113,17 +113,17 @@ public class PayByTapTests {
 
     @Test
     public void testDeclinedTransaction() throws IOException {
-        session.cartLogic.updateBalance(BigDecimal.valueOf(50.00));
+        session.cartLogic.updateBalance(BigDecimal.valueOf(33.00));
         session.hardware.getCardReader().enable();
         session.stateLogic.gotoState(States.CHECKOUT);
         session.hardware.getCardReader().tap(this.card);
-        assertEquals(BigDecimal.valueOf(50.0),session.cartLogic.getBalanceOwed());
+        assertEquals(BigDecimal.valueOf(33.0),session.cartLogic.getBalanceOwed());
     }
     
     @Test(expected=SimulationException.class)
     public void testWrongTapMethodSelected() throws IOException {
         this.session.selectPaymentMethod(PaymentMethods.CREDIT);
-        session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
+        session.cartLogic.updateBalance(BigDecimal.valueOf(14.00));
         session.hardware.getCardReader().enable();
         session.stateLogic.gotoState(States.CHECKOUT);
         session.hardware.getCardReader().tap(this.card);
@@ -131,7 +131,7 @@ public class PayByTapTests {
 
     @Test(expected=SimulationException.class)
     public void testStationBlockedTap()throws IOException{
-        session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
+        session.cartLogic.updateBalance(BigDecimal.valueOf(12.00));
         session.stateLogic.gotoState(States.BLOCKED);
         session.hardware.getCardReader().enable();
         session.hardware.getCardReader().tap(this.card);
@@ -139,7 +139,7 @@ public class PayByTapTests {
 
     @Test(expected=SimulationException.class)
     public void tesSessionNotStartedTap() throws IOException {
-        session.cartLogic.updateBalance(BigDecimal.valueOf(10.00));
+        session.cartLogic.updateBalance(BigDecimal.valueOf(14.00));
         session.hardware.getCardReader().enable();
         session.hardware.getCardReader().tap(this.card);
     }
