@@ -10,7 +10,6 @@ import com.thelocalmarketplace.software.AbstractLogicDependant;
 
 
 import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
-import ca.ucalgary.seng300.simulation.NullPointerSimulationException;
 
 
 /**
@@ -44,16 +43,17 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 	IElectronicScale scale;
 	boolean scaleOperational;
 	
-	public PurchaseBagsLogic(CentralStationLogic logic) {
+	public PurchaseBagsLogic(CentralStationLogic logic) throws NullPointerException {
 		super(logic);
+		this.bag = new ReusableBag();
 		this.iDispenser = logic.hardware.getReusableBagDispenser();
 		bagsMass = bag.getMass();
 		this.scale = logic.hardware.getBaggingArea();
 		
 		if (scale.isPoweredUp() && scale.isPluggedIn()) this.scaleOperational = true;
 		else this.scaleOperational = false;
-	
 	}
+	
 	/**
 	 * dispenses purchased bags and adds them to order
 	 * @param int- number of bags to purchase. must be greater than 0
@@ -87,7 +87,7 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 			while (bagsDispensed < numOfBags){	
 				
 				// do dispensing
-				if (iDispenser.getQuantityRemaining() >0){
+				if (iDispenser.getQuantityRemaining() > 0){
 					
 					iDispenser.dispense();
 					//adjust expected weight
@@ -103,13 +103,14 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 					break;
 				}
 			}
+			// notify dispensed (indicate to customer)
 		}
 		else {
-			throw new NullPointerSimulationException("Invalid. Null value inputed.");
+			throw new NullPointerException("Invalid. Null value inputed.");
 		}
 		
 		
-		// notify dispensed (indicate to customer)
+		
 	}
 		
 }
