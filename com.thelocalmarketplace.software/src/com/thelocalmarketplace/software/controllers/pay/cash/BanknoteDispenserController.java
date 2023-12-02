@@ -8,9 +8,11 @@ import com.tdc.IComponent;
 import com.tdc.IComponentObserver;
 import com.tdc.banknote.Banknote;
 import com.tdc.banknote.BanknoteDispenserObserver;
+import com.tdc.banknote.BanknoteStorageUnit;
 import com.tdc.banknote.IBanknoteDispenser;
 import com.thelocalmarketplace.software.AbstractLogicDependant;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
+import powerutility.NoPowerException;
 
 /**
  * Banknote Dispensing
@@ -40,6 +42,7 @@ import com.thelocalmarketplace.software.logic.CentralStationLogic;
 public class BanknoteDispenserController extends AbstractLogicDependant implements BanknoteDispenserObserver {
 	
 	private List<Banknote> available;
+	private IBanknoteDispenser dispenser;
 
 	public BanknoteDispenserController(CentralStationLogic logic, BigDecimal denomination) throws NullPointerException {
 		super(logic);
@@ -51,13 +54,48 @@ public class BanknoteDispenserController extends AbstractLogicDependant implemen
 		this.available = new ArrayList<>();
 		
 		// Attach self to specific dispenser corresponding to its denomination
-		this.logic.hardware.getBanknoteDispensers().get(denomination).attach(this);
+		dispenser = this.logic.hardware.getBanknoteDispensers().get(denomination);
+		dispenser.attach(this);
 	}
 	
 	public List<Banknote> getAvailableBanknotes() {
         return this.available;
     }
-	
+
+	public void testBanknoteLevel() {
+		BanknoteStorageUnit banknoteStorage = this.logic.hardware.getBanknoteStorage();
+		if (!banknoteStorage.isActivated()) {  // This should not happen
+			throw new NoPowerException();
+		}
+		if (!banknoteStorage.isDisabled()) {
+			if (banknoteStorage.getBanknoteCount() < 20) {
+				// TODO: Change GUI display message about low banknote level
+				System.out.println("Banknote level too low. System shutting off.");
+
+				logic.hardware.turnOff();
+			}
+			if (dispenser.size() < 5) {
+				// TODO: Change GUI display message about low banknote level
+				System.out.println("Banknote level too low. System shutting off.");
+
+				logic.hardware.turnOff();
+			}
+
+			if (banknoteStorage.getBanknoteCount() - banknoteStorage.getCapacity() < 10) {
+				// TODO: Change GUI display message about (almost) full banknotes
+				System.out.println("Banknotes full or almost full. System shutting off.");
+
+				logic.hardware.turnOff();
+			}
+			if (dispenser.size() - dispenser.getCapacity() < 3) {
+				//TODO: Change GUI display message about (almost) full banknotes
+				System.out.println("Banknotes full or almost full. System shutting off.");
+
+				logic.hardware.turnOff();
+			}
+        }
+	}
+
 	@Override
 	public void banknotesEmpty(IBanknoteDispenser dispenser) {
 		this.available.clear();
@@ -90,33 +128,28 @@ public class BanknoteDispenserController extends AbstractLogicDependant implemen
 	}
 	@Override
 	public void moneyFull(IBanknoteDispenser dispenser) {
+		// TODO: Change to GUI message about full dispenser
 		System.out.println("Banknote Dispenser is full: " + dispenser);
-		
+		this.logic.hardware.turnOff();
 	}
-	
-	// ---- Unused ----
-	
+
+	// Test banknote level on startup in case of improper or missed maintenance
 	@Override
 	public void enabled(IComponent<? extends IComponentObserver> component) {
-		// TODO Auto-generated method stub
-		
+		testBanknoteLevel();
 	}
 
 	@Override
 	public void disabled(IComponent<? extends IComponentObserver> component) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
+	// Test banknote level on startup in case of improper or missed maintenance
 	public void turnedOn(IComponent<? extends IComponentObserver> component) {
-		// TODO Auto-generated method stub
-		
+		testBanknoteLevel();
 	}
 
 	@Override
 	public void turnedOff(IComponent<? extends IComponentObserver> component) {
-		// TODO Auto-generated method stub
-		
 	}
 }
