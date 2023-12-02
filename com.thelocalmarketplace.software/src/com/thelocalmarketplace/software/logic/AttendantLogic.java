@@ -134,5 +134,6 @@ public class AttendantLogic implements GUIListener{
 		//TODO: change the logic do be able to enable only a specific customer station
 		//TODO GUI: GUI should go back to normal if it was previously disabled
 		
+		logic.stateLogic.gotoState(States.NORMAL);
 	}
 }
