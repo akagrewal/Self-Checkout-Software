@@ -9,6 +9,8 @@ import com.jjjwelectronics.scale.IElectronicScale;
 import com.thelocalmarketplace.software.AbstractLogicDependant;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
+import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
+
 
 /**
  * Adapted from Project Iteration 2 - Group 5
@@ -39,6 +41,7 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 	ReusableBag bag;
 	Mass bagsMass;
 	IElectronicScale scale;
+	boolean scaleOperational;
 	
 	public PurchaseBagsLogic(CentralStationLogic logic) {
 		super(logic);
@@ -46,44 +49,47 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 		bagsMass = bag.getMass();
 		this.scale = logic.hardware.getBaggingArea();
 		
-		
+		if (scale.isPoweredUp() && scale.isPluggedIn()) this.scaleOperational = true;
+		else this.scaleOperational = false;
+	
 	}
 	
 	public void dispensePurchasedBags(int numOfBags) throws EmptyDevice {
 		
+		if (!this.logic.isSessionStarted()) throw new InvalidStateSimulationException("Session not started");
+		else if (!this.scaleOperational) throw new InvalidStateSimulationException("Scale not operational");
 		
-		// add bag(s) to order
-		// hardcoded price of bags into this method in cartLogic --> change this
-		logic.cartLogic.addReusableBagToCart(numOfBags);
-		//Mass currentCartWeight = logic.weightLogic.getExpectedWeight();
+		else {
 		
 		
-		int bagsDispensed = 0;
-		
-		while (bagsDispensed < numOfBags){	
+			// add bag(s) to order
+			// hardcoded price of bags into this method in cartLogic --> change this
+			logic.cartLogic.addReusableBagToCart(numOfBags);
+			//Mass currentCartWeight = logic.weightLogic.getExpectedWeight();
 			
-			// do dispensing
-			if (iDispenser.getQuantityRemaining() >0){
+			
+			int bagsDispensed = 0;
+			
+			while (bagsDispensed < numOfBags){	
 				
-				iDispenser.dispense();
-				//adjust expected weight
-				logic.weightLogic.addExpectedPurchasedBagWeight(bag);
+				// do dispensing
+				if (iDispenser.getQuantityRemaining() >0){
+					
+					iDispenser.dispense();
+					//adjust expected weight
+					logic.weightLogic.addExpectedPurchasedBagWeight(bag);
+					
+					//detect weight change
+					logic.weightDiscrepancyController.theMassOnTheScaleHasChanged(scale, bagsMass);
+					bagsDispensed ++;
+				}
 				
-				//detect weight change
-				logic.weightDiscrepancyController.theMassOnTheScaleHasChanged(scale, bagsMass);
-				bagsDispensed ++;
-			}
-			
-			else {
-				System.out.println("No bags remaining in dispenser");
-			}
+				else {
+					System.out.println("No bags remaining in dispenser");
+				}
 		
 			
-			
-		
-			
-			
-			
+			}
 		}
 		
 		// notify dispensed (indicate to customer)
