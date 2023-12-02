@@ -109,4 +109,31 @@ public class AttendantLogic implements GUIListener{
 		NotifyPopUp notify = new NotifyPopUp();
         notify.notifyPopUp();
     }
+	
+	/** Method to disable a customer station for maintenance and display out of order */
+	public void disableCustomerStation() {
+		//TODO: change the logic do be able to disable only a specific customer station
+		//TODO GUI: GUI should display out of order when disabled for maintenance 
+		
+		// wait for station to finish session
+		while (logic.isSessionStarted()) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		// once the station is out of the session
+		logic.stateLogic.gotoState(States.OUTOFORDER);
+	}
+	
+	/** Method to take a customer station out of maintenance mode */
+	public void enableCustomerStation() {
+		//TODO: change the logic do be able to enable only a specific customer station
+		//TODO GUI: GUI should go back to normal if it was previously disabled
+		
+		logic.stateLogic.gotoState(States.NORMAL);
+	}
 }
