@@ -72,18 +72,6 @@ public class GUILogicTest {
     }
 
     @Test
-    public void testCustomerChangesLanguage() {
-        // TODO: logic will need to be changed to reflect language button (it doesnt exist yet)
-        // guiLogic.(LANGUAGE BUTTON TO BE PRESSED)
-
-        // check if the listener's method was called
-        assertTrue(listener.languageChanged);
-
-        // may need to have a second step confirming that language has been changed? depends on the design by GUI designers
-        // if so then it would be assertTrue(someMethodThatChecksIfLanguageHasBeenSet);
-    }
-
-    @Test
     public void testCustomerCallsAttendant() {
         // TODO: logic will need to be changed to reflect call attendant button (it doesnt exist yet)
         // guiLogic.(CALL ATTENDANT BUTTON TO BE PRESSED)
@@ -144,7 +132,6 @@ public class GUILogicTest {
         boolean addedCalled = false;
         boolean scannedCalled = false;
         boolean ownBagsCalled = false;
-        boolean languageChanged = false;
         boolean attendantCalled = false;
         boolean membershipAdded = false;
         int paymentOptionSelected = 0;
@@ -162,11 +149,6 @@ public class GUILogicTest {
         @Override
         public void ownBags(GUILogic GUILogic, boolean ownBags) {
             ownBagsCalled = true;
-        }
-
-        @Override
-        public void changeLanguage(GUILogic GUILogic, String language) {
-            languageChanged = true;
         }
 
         @Override
