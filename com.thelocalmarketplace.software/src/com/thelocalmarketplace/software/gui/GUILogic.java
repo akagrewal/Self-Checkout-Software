@@ -52,7 +52,7 @@ public class GUILogic {
 	}
 
 	// add logic for when customer wants to call an attendant
-	private void callAttendant() {
+	public void callAttendant() {
 		for(GUIListener listener : listeners)
 			listener.attendantCalled(this);
 	}
