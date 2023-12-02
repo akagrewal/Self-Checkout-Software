@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.thelocalmarketplace.hardware.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,13 +15,6 @@ import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.Numeral;
 import com.jjjwelectronics.scanner.Barcode;
 import com.jjjwelectronics.scanner.BarcodedItem;
-import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
-import com.thelocalmarketplace.hardware.BarcodedProduct;
-import com.thelocalmarketplace.hardware.PLUCodedItem;
-import com.thelocalmarketplace.hardware.PLUCodedProduct;
-import com.thelocalmarketplace.hardware.PriceLookUpCode;
-import com.thelocalmarketplace.hardware.Product;
-import com.thelocalmarketplace.hardware.SelfCheckoutStationBronze;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
@@ -54,7 +48,7 @@ import powerutility.PowerGrid;
  */
 public class RemoveItemTests {
 
-		SelfCheckoutStationBronze station;
+	SelfCheckoutStationGold station;
 		CentralStationLogic session;
 		
 		//stuff for database
@@ -106,7 +100,7 @@ public class RemoveItemTests {
 			PowerGrid.engageUninterruptiblePowerSource();
 			PowerGrid.instance().forcePowerRestore();			
 			AbstractSelfCheckoutStation.resetConfigurationToDefaults();
-			this.station = new SelfCheckoutStationBronze();
+			this.station = new SelfCheckoutStationGold();
 			
 			//Setting Up Barcoded Products
 			barcode_numeral = new Numeral[] {Numeral.one, Numeral.two, Numeral.three};
@@ -273,9 +267,9 @@ public class RemoveItemTests {
 						
 			session.cartLogic.addPLUCodedProductToCart(PLUcode);	
 			station.getBaggingArea().addAnItem(pItem);		
-			session.weightLogic.addExpectedWeight(PLUcode);			
-			station.getBaggingArea().addAnItem(bitem2);
-		    session.cartLogic.addPLUCodedProductToCart(PLUcode2);
+			session.weightLogic.addExpectedWeight(PLUcode);
+			session.cartLogic.addPLUCodedProductToCart(PLUcode2);
+			station.getBaggingArea().addAnItem(pItem2);
 			session.weightLogic.addExpectedWeight(PLUcode2);		
 			
 			session.removeItemLogic.removePLUCodedItem(pProduct);
