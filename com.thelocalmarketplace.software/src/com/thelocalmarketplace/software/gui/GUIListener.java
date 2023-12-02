@@ -2,6 +2,7 @@ package com.thelocalmarketplace.software.gui;
 
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.software.logic.AttendantLogic;
 
 public interface GUIListener {
 

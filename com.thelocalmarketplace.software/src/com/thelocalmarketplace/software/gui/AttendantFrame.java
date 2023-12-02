@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -65,7 +66,8 @@ public class AttendantFrame {
             e -> handleButtonClick(7),
             e -> handleButtonClick(8),
             e -> handleButtonClick(9),
-            e -> handleButtonClick(10)
+            e -> handleButtonClick(10),
+            e -> handleButtonClick(11)
         };
 
         // Add buttons to the bottom panel with titles and listeners
@@ -81,6 +83,7 @@ public class AttendantFrame {
         attend_frame.add(bottomPanel, BorderLayout.SOUTH);
         
         attend_frame.setVisible(true);
+       
     }
 
     
@@ -140,4 +143,5 @@ public class AttendantFrame {
         panel.add(label, gbc);
         return panel;
     }
+    
 }

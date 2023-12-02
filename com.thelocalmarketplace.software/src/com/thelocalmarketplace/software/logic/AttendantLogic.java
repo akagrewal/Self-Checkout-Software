@@ -1,6 +1,10 @@
 package com.thelocalmarketplace.software.logic;
 
 import com.jjjwelectronics.scanner.Barcode;
+import com.thelocalmarketplace.software.gui.AttendantFrame;
+import com.thelocalmarketplace.software.gui.GUIListener;
+import com.thelocalmarketplace.software.gui.GUILogic;
+import com.thelocalmarketplace.software.gui.NotifyPopUp;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 import ca.ucalgary.seng300.simulation.InvalidArgumentSimulationException;
@@ -32,7 +36,7 @@ import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
  * @author Jincheng Li - 30172907
  * @author Anandita Mahika - 30097559
  */
-public class AttendantLogic {
+public class AttendantLogic implements GUIListener{
 	/** tracks the station logic being monitored */
 	private CentralStationLogic logic;
 	
@@ -95,4 +99,14 @@ public class AttendantLogic {
 	public void printDuplicateReceipt() {
 		this.logic.receiptPrintingController.printDuplicateReceipt();
 	}
+	
+	/**
+	 * Notify the attendant their aid is needed
+	 */
+	@ Override
+	public void attendantCalled(GUILogic guiLogic) {
+    	// set visible (or open) NotifyPopUp
+		NotifyPopUp notify = new NotifyPopUp();
+        notify.notifyPopUp();
+    }
 }
