@@ -132,7 +132,7 @@ public class WeightLogic extends AbstractLogicDependant {
 	}
 	public void removeExpectedWeight(PriceLookUpCode pluCode) {
 		if (!ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(pluCode)) {
-			throw new InvalidStateSimulationException("Barcode not registered to product database");
+			throw new InvalidStateSimulationException("PLUcode not registered to product database");
 		}
 		PLUCodedProduct product = ProductDatabases.PLU_PRODUCT_DATABASE.get(pluCode);
 		Mass mass = this.actualWeight;

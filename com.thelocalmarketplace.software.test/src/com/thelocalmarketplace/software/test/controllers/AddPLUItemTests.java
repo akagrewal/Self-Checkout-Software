@@ -81,27 +81,30 @@ public class AddPLUItemTests {
 	public void tearDown() {
 		PowerGrid.engageUninterruptiblePowerSource();
 	}
-	
+	//When PLU is null
 	@Test(expected = NullPointerException.class)
 	public void testAddNullPLUCode(){
 		session.addPLUProductController.addPLU(null);	
 	}
-	
+	//When session isn't started
 	@Test(expected = InvalidStateSimulationException.class)
 	public void testSessionNotstarted(){
 		session.stopSession();
 		session.addPLUProductController.addPLU(PLU1);
 	}
+	//When an item has been succesfully added
 	@Test 
 	public void testSuccesfulAddition() {
 		session.weightLogic.updateActualWeight(new Mass(1000000000));
 		session.addPLUProductController.addPLU(PLU1);
 		assertEquals(session.cartLogic.getCart().size(),1);
 	}
+	// Trying to add an item when station is blocked
 	@Test(expected = InvalidStateSimulationException.class)
 	public void testStateBlocked(){
 		 this.session.stateLogic.gotoState(StateLogic.States.BLOCKED);
 		 session.addPLUProductController.addPLU(PLU2);
+    //Adding a bulky
 		
 	}
 	

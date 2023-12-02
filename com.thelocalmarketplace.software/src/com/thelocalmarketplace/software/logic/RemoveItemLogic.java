@@ -1,5 +1,6 @@
 package com.thelocalmarketplace.software.logic;
 
+import com.jjjwelectronics.Mass;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.software.AbstractLogicDependant;

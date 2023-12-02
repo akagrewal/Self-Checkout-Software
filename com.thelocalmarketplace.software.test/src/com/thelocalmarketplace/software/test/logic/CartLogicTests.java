@@ -274,7 +274,6 @@ public class CartLogicTests {
 	public void testAddPLUNotInInventory2() {
 		PriceLookUpCode p = new PriceLookUpCode("1234");
 		PLUCodedProduct p1 = new PLUCodedProduct(p, "some item", 5);
-
 		ProductDatabases.PLU_PRODUCT_DATABASE.put(p, p1);
 
 		logic.cartLogic.addPLUCodedProductToCart(p);

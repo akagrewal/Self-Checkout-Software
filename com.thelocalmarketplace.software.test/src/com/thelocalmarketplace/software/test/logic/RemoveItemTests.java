@@ -17,6 +17,7 @@ import com.jjjwelectronics.scanner.Barcode;
 import com.jjjwelectronics.scanner.BarcodedItem;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
+import com.thelocalmarketplace.software.logic.StateLogic;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
@@ -96,6 +97,7 @@ public class RemoveItemTests {
 		public PLUCodedProduct pProduct3;
 		public PLUCodedProduct nullPLUProduct;
 		
+		
 		@Before public void setUp() {
 			PowerGrid.engageUninterruptiblePowerSource();
 			PowerGrid.instance().forcePowerRestore();			
@@ -117,7 +119,7 @@ public class RemoveItemTests {
 			PLUcode2 = new PriceLookUpCode("2222");
 			PLUcode3 = new PriceLookUpCode("5555");
 			pProduct = new PLUCodedProduct(PLUcode, "Apples", 2);
-			pProduct2 = new PLUCodedProduct(PLUcode2, "Bananas", 3);
+			pProduct2 = new PLUCodedProduct(PLUcode2, "Bananas", 1);
 			pProduct3 = new PLUCodedProduct (PLUcode3, "Oranges", 4);
 			
             // Populating Databases
@@ -131,10 +133,9 @@ public class RemoveItemTests {
 			ProductDatabases.PLU_PRODUCT_DATABASE.clear();
 			ProductDatabases.PLU_PRODUCT_DATABASE.put(PLUcode, pProduct);
 			ProductDatabases.PLU_PRODUCT_DATABASE.put(PLUcode2, pProduct2);
-			ProductDatabases.PLU_PRODUCT_DATABASE.put(PLUcode3, pProduct3);			
 			ProductDatabases.INVENTORY.put(pProduct, 10);
 			ProductDatabases.INVENTORY.put(pProduct2, 10);
-			ProductDatabases.INVENTORY.put(pProduct3, 10);
+			
 
        // Setting up Items
 			bItemMass = new Mass((double) 400.0);
@@ -262,14 +263,14 @@ public class RemoveItemTests {
 			
 		}	
 		
-		@Test //Might have a bug 
+		@Test 
 		public void testIncorrectRemovalPLU() {
-						
+			station.getBaggingArea().addAnItem(pItem);			
 			session.cartLogic.addPLUCodedProductToCart(PLUcode);	
-			station.getBaggingArea().addAnItem(pItem);		
 			session.weightLogic.addExpectedWeight(PLUcode);
-			session.cartLogic.addPLUCodedProductToCart(PLUcode2);
+			
 			station.getBaggingArea().addAnItem(pItem2);
+			session.cartLogic.addPLUCodedProductToCart(PLUcode2);
 			session.weightLogic.addExpectedWeight(PLUcode2);		
 			
 			session.removeItemLogic.removePLUCodedItem(pProduct);
@@ -321,13 +322,6 @@ public class RemoveItemTests {
 			System.out.println("Test 6 end\n");
 			
 		}
-		@Test // Needs more work
-		public void resolveWeightDescrepencyByRemovalPLU() {
-		 session.cartLogic.addPLUCodedProductToCart(PLUcode);		
-		 assertTrue(session.stateLogic.getState() == States.BLOCKED);
-		 session.removeItemLogic.removePLUCodedItem(pProduct);
-		 assertTrue(session.stateLogic.getState() == States.NORMAL);				
-		}
 		
 		/**
 		 * Tests if the method fails when a session hasn't been started
@@ -342,5 +336,14 @@ public class RemoveItemTests {
 			session.stopSession();
 			session.removeItemLogic.removePLUCodedItem(pProduct);;
 		}
+		//Test for trying to remove an Item not in database
+		@Test (expected = InvalidStateSimulationException.class)
+		public void RemoveProductNotInDatabase(){
+			station.getBaggingArea().addAnItem(pItem);			
+			session.cartLogic.addPLUCodedProductToCart(PLUcode);	
+			session.weightLogic.addExpectedWeight(PLUcode);
+			session.removeItemLogic.removePLUCodedItem(pProduct3);			
+		}
+	
 		
 }

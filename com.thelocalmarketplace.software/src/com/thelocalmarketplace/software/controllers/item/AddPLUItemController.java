@@ -4,8 +4,12 @@ import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
 import ca.ucalgary.seng300.simulation.SimulationException;
 import com.jjjwelectronics.IDevice;
 import com.jjjwelectronics.IDeviceListener;
+import com.jjjwelectronics.Mass;
+import com.jjjwelectronics.scale.ElectronicScaleListener;
+import com.jjjwelectronics.scale.IElectronicScale;
 import com.jjjwelectronics.scanner.Barcode;
 import com.jjjwelectronics.scanner.IBarcodeScanner;
+import com.thelocalmarketplace.hardware.PLUCodedItem;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.software.AbstractLogicDependant;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
@@ -35,7 +39,7 @@ import com.thelocalmarketplace.software.logic.StateLogic;
  * @author Jincheng Li - 30172907
  * @author Anandita Mahika - 30097559
  */
-public class AddPLUItemController extends AbstractLogicDependant {
+public class AddPLUItemController extends AbstractLogicDependant{
 
     /**
      * AddPLUProductController Constructor
@@ -43,8 +47,10 @@ public class AddPLUItemController extends AbstractLogicDependant {
      * @throws NullPointerException If logic is null
      */
     public AddPLUItemController(CentralStationLogic logic) throws NullPointerException {
-        super(logic);
+        super(logic);        
+        // registers to the bagging area as a listener       
     }
+   
 
     /**
      * Adds a new PLU
@@ -55,7 +61,7 @@ public class AddPLUItemController extends AbstractLogicDependant {
      * @throws SimulationException If barcode is not registered in database
      * @throws NullPointerException If barcode is null
      */
-    public void addPLU(PriceLookUpCode plu ) throws SimulationException, NullPointerException {
+    public void addPLU(PriceLookUpCode plu) throws SimulationException, NullPointerException {
         if (plu == null) {
             throw new NullPointerException("PLU is null");
         }
@@ -65,7 +71,7 @@ public class AddPLUItemController extends AbstractLogicDependant {
         else if (this.logic.stateLogic.inState(StateLogic.States.BLOCKED)) {
             throw new InvalidStateSimulationException("Station is blocked");
         }
-
+        
         // Add product to cart first so when on scale the actual and expected weight are different in weightLogic to determine the weight
         // of the product and get its price to add to cart
         this.logic.cartLogic.addPLUCodedProductToCart(plu);
@@ -76,6 +82,8 @@ public class AddPLUItemController extends AbstractLogicDependant {
         System.out.println("Item added to cart. Please place scanned item in bagging area");
     }
 
+
+	
 
 }
 
