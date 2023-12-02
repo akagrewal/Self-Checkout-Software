@@ -10,6 +10,7 @@ import com.thelocalmarketplace.software.AbstractLogicDependant;
 
 
 import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
+import ca.ucalgary.seng300.simulation.NullPointerSimulationException;
 
 
 /**
@@ -53,23 +54,36 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 		else this.scaleOperational = false;
 	
 	}
-	
+	/**
+	 * dispenses purchased bags and adds them to order
+	 * @param int- number of bags to purchase. must be greater than 0
+	 * @throws EmptyDevice
+	 */
 	public void dispensePurchasedBags(int numOfBags) throws EmptyDevice {
 		
 		if (!this.logic.isSessionStarted()) throw new InvalidStateSimulationException("Session not started");
 		else if (!this.scaleOperational) throw new InvalidStateSimulationException("Scale not operational");
+	
+		else if (numOfBags<0) System.out.println("Invalid Request. Cannot purchase negative amount bags");
 		
-		else {
+		else if (numOfBags == 0) System.out.println("No bags added to order");//do nothing
 		
 		
+		else if (numOfBags > 0){
 			// add bag(s) to order
 			// hardcoded price of bags into this method in cartLogic --> change this
-			logic.cartLogic.addReusableBagToCart(numOfBags);
-			//Mass currentCartWeight = logic.weightLogic.getExpectedWeight();
+			
+			int bagsInOrder = 0; 
+			for (int i = 0; i < numOfBags && i < iDispenser.getQuantityRemaining(); i++) {
+				logic.cartLogic.addReusableBagToCart(numOfBags);
+				bagsInOrder = i;
+			}
+			
+			if (numOfBags > bagsInOrder) System.out.println("number of requested bags not available. "
+					+ "dispensing number of available bags") ;
 			
 			
 			int bagsDispensed = 0;
-			
 			while (bagsDispensed < numOfBags){	
 				
 				// do dispensing
@@ -86,17 +100,26 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 				
 				else {
 					System.out.println("No bags remaining in dispenser");
+					break;
 				}
-		
-			
 			}
 		}
+		else {
+			throw new NullPointerSimulationException("Invalid. Null value inputed.");
+		}
+		
 		
 		// notify dispensed (indicate to customer)
 	}
-	
-	
-	
-	
 		
 }
+
+/**
+ * if ((numOfBags > 0) && (numOfBags <= iDispenser.getQuantityRemaining()))
+				logic.cartLogic.addReusableBagToCart(numOfBags);
+			
+			else {
+				System.out.println("number of requested bags not available. dispensing avaialble number of bags");
+				logic.cartLogic.addReusableBagToCart(iDispenser.getQuantityRemaining());
+ */
+
