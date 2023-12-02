@@ -51,12 +51,6 @@ public class GUILogic {
 			listener.ownBags(this, ownBags);
 	}
 
-	// add logic for when customer indicates to change the language
-	private void notifyLanguage(String language) {
-		for(GUIListener listener : listeners)
-			listener.changeLanguage(this, language);
-	}
-
 	// add logic for when customer wants to call an attendant
 	public void callAttendant() {
 		for(GUIListener listener : listeners)
