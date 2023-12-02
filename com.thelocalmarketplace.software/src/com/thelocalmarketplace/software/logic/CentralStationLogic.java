@@ -114,7 +114,12 @@ public class CentralStationLogic {
 	 */
 	public AddBagsLogic addBagsLogic;
 	
-	/*
+	/**
+	 * Instance of purchase bags logic 
+	 */
+	public PurchaseBagsLogic purchaseBagsLogic;
+	
+	/**
 	 * Instance of logic that handles item removal
 	 */
 	public RemoveItemLogic removeItemLogic;
@@ -193,6 +198,7 @@ public class CentralStationLogic {
 		this.receiptPrintingController = new ReceiptPrintingController(this);
 		this.attendantLogic = new AttendantLogic(this);
 		this.addBagsLogic = new AddBagsLogic(this);
+		this.purchaseBagsLogic = new PurchaseBagsLogic(this);
 		this.removeItemLogic = new RemoveItemLogic(this);
 		
 		this.coinCurrencyLogic = new CurrencyLogic(this.hardware.getCoinDenominations());
