@@ -14,9 +14,6 @@ public interface GUIListener {
         // ownBags = false means they want to buy store bags
     }
 
-    // may need changes to this method
-    default void changeLanguage(GUILogic GUILogic, String language) {}
-
     default void attendantCalled(GUILogic guiLogic) {}
 
     default void memberLogin(GUILogic guiLogic, String id) {}
