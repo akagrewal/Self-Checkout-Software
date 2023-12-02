@@ -117,9 +117,16 @@ public class AttendantLogic implements GUIListener{
 		
 		// wait for station to finish session
 		while (logic.isSessionStarted()) {
-			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
+		// once the station is out of the session
+		logic.stateLogic.gotoState(States.OUTOFORDER);
 	}
 	
 	/** Method to take a customer station out of maintenance mode */
