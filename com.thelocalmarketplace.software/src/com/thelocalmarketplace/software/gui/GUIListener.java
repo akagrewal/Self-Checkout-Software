@@ -2,6 +2,7 @@ package com.thelocalmarketplace.software.gui;
 
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.software.logic.AttendantLogic;
 
 public interface GUIListener {
 
@@ -17,7 +18,12 @@ public interface GUIListener {
     // may need changes to this method
     default void changeLanguage(GUILogic GUILogic, String language) {}
 
-    default void attendantCalled(GUILogic guiLogic) {}
+    /**
+	 * Notify the attendant their aid is needed
+	 */
+    default void attendantCalled(GUILogic guiLogic) {
+    	// set visible (or open) NotifyPopUp
+    }
 
     default void memberLogin(GUILogic guiLogic, String id) {}
 
