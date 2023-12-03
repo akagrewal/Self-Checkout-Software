@@ -104,9 +104,6 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 			}
 			// notify dispensed (indicate to customer)
 		}
-		else {
-			throw new NullPointerException("Invalid. Null value inputed.");
-		}
 	}		
 }
 

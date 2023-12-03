@@ -166,6 +166,7 @@ public class PurchaseBagsLogicTest {
 	@Test
 	public void testZeroBagsNoExpectedWeightChange() throws EmptyDevice {
 		logic.startSession();
+		
 		Mass initialWeight = logic.weightLogic.getExpectedWeight();
 		
 		purchaseBagsLogic.dispensePurchasedBags(0);
@@ -207,6 +208,7 @@ public class PurchaseBagsLogicTest {
 	public void testWhenNoBagsAvailable() throws EmptyDevice{
 		logic.startSession();
 		iDispenser.unload();
+		
 		purchaseBagsLogic.dispensePurchasedBags(4);
 		
 		BigDecimal expected = new BigDecimal(0);
@@ -240,8 +242,7 @@ public class PurchaseBagsLogicTest {
 		purchaseBagsLogic.dispensePurchasedBags(4);
 		
 		Mass afterWeight = logic.weightLogic.getExpectedWeight();
-		
-		
+			
 		assertTrue(initialWeight.compareTo(afterWeight)== 0); 
 	}	
 	
