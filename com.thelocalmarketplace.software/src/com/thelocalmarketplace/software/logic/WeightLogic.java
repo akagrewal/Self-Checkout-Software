@@ -2,8 +2,12 @@ package com.thelocalmarketplace.software.logic;
 
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.Mass.MassDifference;
+import com.jjjwelectronics.OverloadedDevice;
+import com.jjjwelectronics.scale.AbstractElectronicScale;
 import com.jjjwelectronics.scanner.Barcode;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.AbstractLogicDependant;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
@@ -82,7 +86,6 @@ public class WeightLogic extends AbstractLogicDependant {
 	
 	/** gets total mass of current bags
 	 * 
-	 * @param m new mass at last event
 	 **/
 	public Mass getTotalBagMass() {
 		return this.bagMassTotal;
@@ -104,6 +107,16 @@ public class WeightLogic extends AbstractLogicDependant {
 		Mass mass = new Mass(product.getExpectedWeight());
 		this.expectedWeight = this.expectedWeight.sum(mass);
 	}
+
+	/** Adds the expected weight of the product with given PLU to the expectedWeight
+	 * @param plu PriceLookUpCode 
+	 * of the item for which to add the expected weight */
+	public void addExpectedWeight(PriceLookUpCode plu) {
+		if (!ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu)) {
+			throw new InvalidStateSimulationException("PLU not registered to product database");
+		}
+		this.expectedWeight = this.expectedWeight.sum(this.actualWeight);
+	}
 	
 	/** Removes the weight of the product given from expectedWeight
 	 * @param barcode - barcode of item to remove weight of */
@@ -117,8 +130,21 @@ public class WeightLogic extends AbstractLogicDependant {
 		if (difference.compareTo(Mass.ZERO) < 0) throw new InvalidStateSimulationException("Expected weight cannot be negative");
 		this.expectedWeight = difference.abs();
 	}
+	/** Removes weight of the product given from expectedWeight
+	 * @param pluCode - pluCode of item to remove
+	 */
+	public void removeExpectedWeight(PriceLookUpCode pluCode) {
+		if (!ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(pluCode)) {
+			throw new InvalidStateSimulationException("PLUcode not registered to product database");
+		}
+		PLUCodedProduct product = ProductDatabases.PLU_PRODUCT_DATABASE.get(pluCode);
+		Mass mass = this.actualWeight;
+		MassDifference difference = this.expectedWeight.difference(mass);
+		if (difference.compareTo(Mass.ZERO) < 0) throw new InvalidStateSimulationException("Expected weight cannot be negative");
+		this.expectedWeight = difference.abs();
+	}
 	
-	/** UPdates actual weight to the mass passed
+	/** Updates actual weight to the mass passed
 	 * @param mass - Mass to change the actual weight to */
 	public void updateActualWeight(Mass mass) {
 		this.actualWeight = mass;

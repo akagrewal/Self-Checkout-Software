@@ -86,9 +86,6 @@ public class AddBarcodedItemTests {
 		PowerGrid.instance().forcePowerRestore();
 		
 		AbstractSelfCheckoutStation.resetConfigurationToDefaults();
-		
-		//d1 = new dummyProductDatabaseWithOneItem();
-		//d2 = new dummyProductDatabaseWithNoItemsInInventory();
 		this.station = new SelfCheckoutStationBronze();
 		
 		//initialize database
@@ -157,7 +154,6 @@ public class AddBarcodedItemTests {
 		session = new CentralStationLogic(station);
 		session.startSession();
 		this.scanUntilAdded(product, bitem2);
-		//long s = session.cart.getLastItem().getPrice();
 		
 		assertTrue("item was not successfully added to cart", session.cartLogic.getCart().containsKey(product));
 	}
@@ -180,9 +176,9 @@ public class AddBarcodedItemTests {
 		this.scanUntilAdded(product2, bitem5);
 		station.getBaggingArea().addAnItem(bitem5);
 		this.scanUntilAdded(product, bitem3);
-		//long s = session.cart.getLastItem().getPrice();
+	
 		
-		assertTrue("item was not successfully added to cart", session.cartLogic.getCart().get(product).equals(1));
+		assertTrue("item was not successfully added to cart", session.cartLogic.getCart().get(product).equals((float)1));
 	}@Test(expected = SimulationException.class) 
 	public void testPowerOnScanItemNoInventory(){
 		station.plugIn(PowerGrid.instance());
