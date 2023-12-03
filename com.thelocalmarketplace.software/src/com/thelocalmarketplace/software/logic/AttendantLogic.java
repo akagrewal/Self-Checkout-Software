@@ -10,6 +10,8 @@ import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.thelocalmarketplace.software.gui.SessionBlockedPopUp.*;
+
 /**
  * Attendant Logic
  * 
@@ -91,6 +93,8 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 	 * approveBaggingArea() */
 	public void baggingDiscrepencyDetected() {
 		//TODO GUI: display that customer is awaiting approval to attendant
+		discrepancyDetected();
+
 		this.inBaggingDiscrepency = true;
 		this.logic.stateLogic.gotoState(States.BLOCKED);
 		if(this.logic.addBagsLogic.approvedBagging) {
@@ -148,7 +152,10 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 	/** Method to disable a customer station for maintenance and display out of order */
 	public void disableCustomerStation() {
 		//TODO: change the logic do be able to disable only a specific customer station
-		//TODO GUI: GUI should display out of order when disabled for maintenance 
+		//TODO GUI: GUI should display out of order when disabled for maintenance
+
+		// test
+		discrepancyDetected();
 		
 		// wait for station to finish session
 		while (logic.isSessionStarted()) {
@@ -167,7 +174,10 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 	/** Method to take a customer station out of maintenance mode */
 	public void enableCustomerStation() {
 		//TODO: change the logic do be able to enable only a specific customer station
+
+
 		//TODO GUI: GUI should go back to normal if it was previously disabled
+		attendantOverride();
 		
 		logic.stateLogic.gotoState(States.NORMAL);
 	}
