@@ -578,36 +578,24 @@ public class RunGUI extends JFrame implements logicObserver {
     }
 
 
-    // Screen LAST Thank You Panel
-    private JPanel createThankYouPanel() {
+private JPanel createThankYouPanel()  {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-
-        JLabel TY_changeLabel = new JLabel("Your change is "+total+"!");
-        TY_changeLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panel.add(TY_changeLabel, gbc);
-
-
-        JLabel TY_receiptLabel = new JLabel("Please Take Your Receipt.");
-        TY_receiptLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        gbc.gridy = 1;
-        panel.add(TY_receiptLabel, gbc);
-
-
-        JButton exitButton = new JButton("Exit");
-        exitButton.addActionListener(new ActionListener() {
+        JButton returnButton = new JButton("Please press this button to continue.");
+        returnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switchPanels("welcomePanel");
             }
         });
-        gbc.gridy = 2;
-        panel.add(exitButton, gbc);
-
+        JLabel TY_receiptLabel = new JLabel("Thank you for Shopping, Please take your receipt.");
+        TY_receiptLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        gbc.gridy = 0;
+        panel.add(TY_receiptLabel, gbc);
+        gbc.gridy = 1;
+        panel.add(returnButton,gbc);
 
         return panel;
     }
