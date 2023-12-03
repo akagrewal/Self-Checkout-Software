@@ -3,6 +3,7 @@
 package com.thelocalmarketplace.software.gui;
 
 import com.jjjwelectronics.Item;
+import com.jjjwelectronics.Mass;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.Product;
@@ -75,33 +76,33 @@ public class GUILogic {
 // HARDWARE ACTION LISTENER METHODS
 
 	// adding item to scale
-	private void addItemToScale(Item pkm) {
+	protected void addItemToScale(Mass weight) {
 		for(GUIListener listener : listeners)
-			listener.itemAddedToScale(this, pkm);
+			listener.itemAddedToScale(this, weight);
 	}
 
 	// removing item from scale
-	private void removeItemFromScale(Item pkm) {
+	protected void removeItemFromScale(Mass weight) {
 		for(GUIListener listener : listeners)
-			listener.itemRemovedFromScale(this, pkm);
+			listener.itemRemovedFromScale(this, weight);
 	}
 
-	private void payWithCredit(String cardDetails) {
+	protected void payWithCredit(String cardDetails) {
 		for(GUIListener listener : listeners)
 			listener.paidWithCredit(this, cardDetails);
 	}
 
-	private void payWithDebit(String cardDetails) {
+	protected void payWithDebit(String cardDetails) {
 		for(GUIListener listener : listeners)
 			listener.paidWithDebit(this, cardDetails);
 	}
 
-	private void insertCoin(int coinAmount) {
+	protected void insertCoin(int coinAmount) {
 		for(GUIListener listener : listeners)
 			listener.coinInserted(this, coinAmount);
 	}
 
-	private void insertBanknote(int banknoteAmount) {
+	protected void insertBanknote(int banknoteAmount) {
 		for(GUIListener listener : listeners)
 			listener.banknoteInserted(this, banknoteAmount);
 	}

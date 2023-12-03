@@ -1,5 +1,10 @@
 package com.thelocalmarketplace.software.gui;
 
+import com.jjjwelectronics.Mass;
+import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.hardware.PriceLookUpCode;
+import com.thelocalmarketplace.hardware.external.ProductDatabases;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -17,11 +22,17 @@ import javax.swing.JTextField;
 
 public class HardwarePopups {
 
+    private static GUILogic guiLogic;
+
+    public HardwarePopups(GUILogic guiLogic) {
+        HardwarePopups.guiLogic = guiLogic;
+    }
+
 	public static void showScanMainScannerPopup(JFrame parentFrame) {
 		JDialog dialog = createDialog(parentFrame, "Scan Main Scanner");
 		JTextField textField = addTextField(dialog, "Scan barcode using the main scanner:");
 		Consumer<String> onSubmit = inputText -> {
-			//TODO 
+			//TODO
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
@@ -41,7 +52,9 @@ public class HardwarePopups {
 		JDialog dialog = createDialog(parentFrame, "Visual Search");
 		JTextField textField = addTextField(dialog, "Enter item details for visual search:");
 		Consumer<String> onSubmit = inputText -> {
-			//TODO 
+            PriceLookUpCode priceLookUpCode = new PriceLookUpCode(inputText);
+            PLUCodedProduct pk = ProductDatabases.PLU_PRODUCT_DATABASE.get(priceLookUpCode);
+            guiLogic.notifyItemAdded(pk);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
@@ -51,7 +64,9 @@ public class HardwarePopups {
 		JDialog dialog = createDialog(parentFrame, "PLU Code");
 		JTextField textField = addTextField(dialog, "Enter PLU code:");
 		Consumer<String> onSubmit = inputText -> {
-			//TODO 
+            PriceLookUpCode priceLookUpCode = new PriceLookUpCode(inputText);
+            PLUCodedProduct pk = ProductDatabases.PLU_PRODUCT_DATABASE.get(priceLookUpCode);
+            guiLogic.notifyItemAdded(pk);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
@@ -59,9 +74,10 @@ public class HardwarePopups {
 
 	public static void showAddItemToScalePopup(JFrame parentFrame) {
 		JDialog dialog = createDialog(parentFrame, "Add Item to Scale");
-		JTextField textField = addTextField(dialog, "Place item on scale and enter weight:");
+		JTextField textField = addTextField(dialog, "Place item on scale and enter weight of item:");
 		Consumer<String> onSubmit = inputText -> {
-			//TODO 
+			Mass weight = new Mass(Double.parseDouble(inputText));
+            guiLogic.addItemToScale(weight);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
@@ -71,7 +87,8 @@ public class HardwarePopups {
 		JDialog dialog = createDialog(parentFrame, "Remove Item from Scale");
 		JTextField textField = addTextField(dialog, "Remove item from scale:");
 		Consumer<String> onSubmit = inputText -> {
-			//TODO 
+            Mass weight = new Mass(Double.parseDouble(inputText));
+            guiLogic.removeItemFromScale(weight);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
@@ -81,11 +98,11 @@ public class HardwarePopups {
 		JDialog dialog = createDialog(parentFrame, real ? "Pay With Real Credit" : "Pay With Fake Credit");
 		JTextField textField = addTextField(dialog, "Enter credit card details:");
 		Consumer<String> onSubmit = inputText -> {
-			//TODO 
+			int cardNumber = Integer.parseInt(inputText);
 			if (real) {
 				//TODO 
 			} else {
-				//TODO 
+				//TODO: can we just have an error message here?
 			}
 		};
 		addSubmitButton(dialog, textField, onSubmit);

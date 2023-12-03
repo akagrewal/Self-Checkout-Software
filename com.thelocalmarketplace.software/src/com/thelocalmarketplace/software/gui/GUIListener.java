@@ -1,6 +1,7 @@
 package com.thelocalmarketplace.software.gui;
 
 import com.jjjwelectronics.Item;
+import com.jjjwelectronics.Mass;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.software.logic.AttendantLogic;
@@ -25,9 +26,9 @@ public interface GUIListener {
     }
 
 // HARDWARE FUNCTIONS
-    default void itemAddedToScale(GUILogic guiLogic, Item pkm) {}
+    default void itemAddedToScale(GUILogic guiLogic, Mass weight) {}
 
-    default void itemRemovedFromScale(GUILogic guiLogic, Item pkm) {}
+    default void itemRemovedFromScale(GUILogic guiLogic, Mass weight) {}
 
     default void paidWithCredit(GUILogic guiLogic, String cardDetails) {}
 
