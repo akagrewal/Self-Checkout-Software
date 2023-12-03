@@ -27,17 +27,9 @@ public class RunGUI extends JFrame implements logicObserver {
 
 
     //For Testing Purposes - to run GUI
-    public RunGUI() {
+    public RunGUI(CentralStationLogic csLogic) {
         SelfCheckoutGUI();
-        this.guiLogicInstance = new GUILogic(cardPanel, cardLayout);
-
-    }
-
-
-    // Constructor to initialize GUILogic
-    public RunGUI(GUILogic guiLogicInstance) {
-        SelfCheckoutGUI();
-        this.guiLogicInstance = guiLogicInstance;
+        this.guiLogicInstance = new GUILogic(cardPanel, cardLayout, csLogic);
     }
 
     /**

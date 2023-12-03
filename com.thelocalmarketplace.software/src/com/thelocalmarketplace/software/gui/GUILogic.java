@@ -8,6 +8,7 @@ import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.Product;
 import com.thelocalmarketplace.software.database.CreateTestDatabases;
+import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -25,12 +26,14 @@ import javax.swing.*;
  */
 public class GUILogic {
 	private final Set<GUIListener> listeners = new HashSet<>();
+	CentralStationLogic centralLogic;
 	CardLayout cardLayout;
 	JPanel cardPanel;
 
-	public GUILogic(JPanel panel, CardLayout layout) {
+	public GUILogic(JPanel panel, CardLayout layout, CentralStationLogic logic) {
 		this.cardLayout = layout;
 		this.cardPanel = panel;
+		this.centralLogic = logic;
 	}
 
 	public void switchPanels(String string) {
