@@ -11,6 +11,7 @@ import com.thelocalmarketplace.software.listeners.AddBagsListener;
 import com.thelocalmarketplace.software.listeners.BlockedListener;
 import com.thelocalmarketplace.software.listeners.CheckoutListener;
 import com.thelocalmarketplace.software.listeners.NormalListener;
+import com.thelocalmarketplace.software.listeners.OutOfOrderListener;
 import com.thelocalmarketplace.software.listeners.SuspendedListener;
 
 /**
@@ -54,7 +55,8 @@ public class StateLogic extends AbstractLogicDependant {
 		BLOCKED,
 		ADDBAGS,
 		CHECKOUT,
-		SUSPENDED
+		SUSPENDED,
+		OUTOFORDER
 	}
 	
 
@@ -111,6 +113,7 @@ public class StateLogic extends AbstractLogicDependant {
 		this.registerListener(States.SUSPENDED, new SuspendedListener(this.logic));
 		this.registerListener(States.ADDBAGS, new AddBagsListener(this.logic));
 		this.registerListener(States.CHECKOUT, new CheckoutListener(this.logic));
+		this.registerListener(States.OUTOFORDER, new OutOfOrderListener(this.logic));
 	}
 	
 	/**

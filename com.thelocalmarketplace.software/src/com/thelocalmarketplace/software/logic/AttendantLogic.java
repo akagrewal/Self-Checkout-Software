@@ -1,10 +1,14 @@
 package com.thelocalmarketplace.software.logic;
 
 import com.jjjwelectronics.scanner.Barcode;
+import com.thelocalmarketplace.software.gui.*;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 import ca.ucalgary.seng300.simulation.InvalidArgumentSimulationException;
 import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Attendant Logic
@@ -32,17 +36,47 @@ import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
  * @author Jincheng Li - 30172907
  * @author Anandita Mahika - 30097559
  */
-public class AttendantLogic {
+public class AttendantLogic implements GUIListener{
 	/** tracks the station logic being monitored */
 	private CentralStationLogic logic;
 	
 	/** tracks weather or not a bagging discrepency has been found */
 	private boolean inBaggingDiscrepency;
 
-	
+// listener stuff
+private final Set<AttendantFrameListener> listeners = new HashSet<>();
+
+	/**
+	 * Registers the given listener so that it will receive events from this
+	 * communication facade.
+	 *
+	 * @param listener The listener to be registered. If it is already registered, this
+	 *                 call has no effect.
+	 */
+	public void register(AttendantFrameListener listener) {
+		listeners.add(listener);
+	}
+
+	// LOGIC PANEL
+	// add logic for when attendant confirms call from customer
+	private void confirmCall(GUILogic guiLogic) {
+		for (AttendantFrameListener listener : listeners)
+			listener.confirmed(this, guiLogic);
+	}
+
+	// add logic for when attendant overrides block on specific station
+	private void override(GUILogic guiLogic, String blockType) {
+		for (AttendantFrameListener listener : listeners)
+			listener.override(this, guiLogic, blockType);
+	}
+// listener end
+
 	public AttendantLogic(CentralStationLogic l) {
 		this.logic = l;
 	}
+
+
+
 	
 	/** simulates attendant signifying they approve the bagging area 
 	 * @throws Exception if the add bags state cannot be exited*/
@@ -58,11 +92,16 @@ public class AttendantLogic {
 	public void baggingDiscrepencyDetected() {
 		//TODO GUI: display that customer is awaiting approval to attendant
 		this.inBaggingDiscrepency = true;
+		this.logic.stateLogic.gotoState(States.BLOCKED);
+		if(this.logic.addBagsLogic.approvedBagging) {
+			this.logic.weightLogic.overrideDiscrepancy();
+			this.logic.stateLogic.gotoState(States.NORMAL);
+		}
 	}
 	
 	/** setter for in baggingDiscrepency */
 	
-	public void setBaggingDiscrepency(boolean b) {
+	public void setBaggingDiscrepency(boolean b){
 		this.inBaggingDiscrepency = b;
 	}
 	
@@ -94,5 +133,42 @@ public class AttendantLogic {
 	
 	public void printDuplicateReceipt() {
 		this.logic.receiptPrintingController.printDuplicateReceipt();
+	}
+	
+	/**
+	 * Notify the attendant their aid is needed
+	 */
+	@ Override
+	public void attendantCalled(GUILogic guiLogic) {
+    	// set visible (or open) NotifyPopUp
+		NotifyPopUp notify = new NotifyPopUp();
+        notify.notifyPopUp();
+    }
+	
+	/** Method to disable a customer station for maintenance and display out of order */
+	public void disableCustomerStation() {
+		//TODO: change the logic do be able to disable only a specific customer station
+		//TODO GUI: GUI should display out of order when disabled for maintenance 
+		
+		// wait for station to finish session
+		while (logic.isSessionStarted()) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		// once the station is out of the session
+		logic.stateLogic.gotoState(States.OUTOFORDER);
+	}
+	
+	/** Method to take a customer station out of maintenance mode */
+	public void enableCustomerStation() {
+		//TODO: change the logic do be able to enable only a specific customer station
+		//TODO GUI: GUI should go back to normal if it was previously disabled
+		
+		logic.stateLogic.gotoState(States.NORMAL);
 	}
 }
