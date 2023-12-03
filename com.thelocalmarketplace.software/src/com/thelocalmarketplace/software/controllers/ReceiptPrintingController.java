@@ -185,8 +185,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		paperLow = true;
 		
 		// Disable System so attendant can add paper
-		this.logic.hardware.getPrinter().disable();
-		this.logic.hardware.turnOff();
+		this.logic.attendantLogic.disableCustomerStation();
 		
 	}
 
@@ -201,8 +200,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		inkLow = true;
 		
 		// Disable System so attendant can add Ink
-		this.logic.hardware.getPrinter().disable();
-		this.logic.hardware.disable();
+		this.logic.attendantLogic.disableCustomerStation();
 	}
 
 	@Override
@@ -240,8 +238,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		paperLow = true;
 		
 		// Disable System so attendant can add paper
-		this.logic.hardware.getPrinter().disable();
-		this.logic.hardware.turnOff();
+		this.logic.attendantLogic.disableCustomerStation();
 	}
 
 	@Override
@@ -255,8 +252,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		paperLow = true;
 		
 		// Disable System so attendant can add paper
-		this.logic.hardware.getPrinter().disable();
-		this.logic.hardware.turnOff();
+		this.logic.attendantLogic.disableCustomerStation();
 		
 	}
 
@@ -275,8 +271,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 			System.out.println("Printer ready for usage");
 			
 			// If enough ink is there enable system
-			this.logic.hardware.turnOn();
-			this.logic.hardware.getPrinter().enable();
+			this.logic.attendantLogic.enableCustomerStation();
 		} else {
 			// TODO: Change GUI display message about printer not ready due to low ink levels
 			System.out.println("Printer not ready for usage; Low Ink; Add Ink");
@@ -301,8 +296,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 			System.out.println("Printer ready for usage");
 			
 			// If enough ink is there enable system
-			this.logic.hardware.turnOn();
-			this.logic.hardware.getPrinter().enable();
+			this.logic.attendantLogic.enableCustomerStation();
 		} else {
 			// TODO: Change GUI display message about printer not ready due to low paper levels
 			System.out.println("Printer not ready for usage; Low Paper; Add Paper");
