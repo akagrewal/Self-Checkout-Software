@@ -172,44 +172,75 @@ public class RunGUI extends JFrame implements logicObserver {
         // Create main panel with GridBagLayout
         JPanel mainPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-
-        // current items panel
-        JPanel topMiddlePanel = new JPanel();
-        topMiddlePanel.setBorder(BorderFactory.createTitledBorder("Current Items: "));
-
-        JScrollPane CurrentItemsPanel = new JScrollPane(topMiddlePanel);
-        CurrentItemsPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        CurrentItemsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        CurrentItemsPanel.getVerticalScrollBar().setUnitIncrement(16);
-        addComponent(mainPanel,CurrentItemsPanel,1, 0, 2, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-
-        JPanel totalPanel = new JPanel();
-        totalPanel.setBorder(BorderFactory.createTitledBorder(" "));
-        addComponent(totalPanel,new JLabel("Total:"),0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(mainPanel,totalPanel,1, 2, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-
-
-        // PANEL FOR ALL THE BUTTONS (USE CASES)
+        
+        // Buttons panel on left side (all use case buttons) 
         JPanel buttonsPanel = new JPanel();
-
-        JButton addItemButton = new JButton("add an item");
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS)); // makes y axis listing
+        
+        // Create buttons 
+        JButton addItemButton = new JButton("Add an item");
         addItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // goto panel with options to add an item
             }
         });
-
+        
+        
         JButton payButton = new JButton("Finish and Pay");
+        payButton.addActionListener(new ActionListener() {
+        	@Override 
+        	public void actionPerformed(ActionEvent e) {
+        		// TODO
+        	}
+        });
+        
+        // Attach buttons 
+        buttonsPanel.add(addItemButton);
+        buttonsPanel.add(payButton);
+        
+        gbc.gridx = 0; 
+        gbc.gridy = 0; 
+        gbc.gridwidth = 1; 
+        gbc.gridheight = 3; 
+        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.anchor = GridBagConstraints.CENTER; 
+        gbc.weightx = 0.3; // 30% horizontal weight 
+        gbc.weighty = 1; // full vertical length
+        mainPanel.add(buttonsPanel, gbc);
 
+        // current items panel
+        JPanel topMiddlePanel = new JPanel();
+        topMiddlePanel.setBorder(BorderFactory.createTitledBorder("Current Items: "));
 
-        addComponent(buttonsPanel,addItemButton,0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(buttonsPanel,payButton,0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-
-
-        addComponent(mainPanel,buttonsPanel,0, 0, 1, 3, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-
-
+        // setup scroll pane 
+        JScrollPane CurrentItemsPanel = new JScrollPane(topMiddlePanel);
+        CurrentItemsPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        CurrentItemsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        CurrentItemsPanel.getVerticalScrollBar().setUnitIncrement(16);
+//        addComponent(mainPanel,CurrentItemsPanel,1, 0, 2, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        gbc.gridx = 1; 
+        gbc.gridy = 0; 
+        gbc.gridwidth = 1; 
+        gbc.gridheight = 2; 
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 0.7; // 70% horizontal 
+        gbc.weighty = 0.7; // 70% vertical
+        mainPanel.add(CurrentItemsPanel, gbc);
+        
+        JPanel totalPanel = new JPanel();
+        totalPanel.setBorder(BorderFactory.createTitledBorder(" "));
+        addComponent(totalPanel,new JLabel("Total:"),0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        
+        gbc.gridx = 1; 
+        gbc.gridy = 2; 
+        gbc.gridwidth = 1; 
+        gbc.gridheight = 1; 
+        gbc.fill = GridBagConstraints.BOTH; 
+        gbc.weightx = 0.7; // 70% horizontal
+        gbc.weighty = 0.3; // 30% vertical 
+        mainPanel.add(totalPanel, gbc);
+//        addComponent(mainPanel,totalPanel,1, 2, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return mainPanel;
     }
