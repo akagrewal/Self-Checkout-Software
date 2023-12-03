@@ -14,6 +14,7 @@ import com.thelocalmarketplace.software.AbstractLogicDependant;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
+
 /**
  * Adapted from Project Iteration 2 - Group 5
  * @author Jaimie Marchuk - 30112841
@@ -175,27 +176,33 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 	
 	@Override
 	public void thePrinterIsOutOfPaper() {
-		// GUI attendant that paper storage is empty
-		// Attendant logins in and the system prepares to add paper
+		// TODO: Notify Attendant
 		
-		// Make flag true
+		// TODO: Change GUI display message about no Paper
+		System.out.println("Paper Storage Empty. System shutting off.");
+		
+		// Flag to see if paper remains empty
 		paperLow = true;
-		// Disable Checkout System so attendent can add paper
-		// Attendant disables system from the use case Disable System
+		
+		// Disable System so attendant can add paper
 		this.logic.hardware.getPrinter().disable();
+		this.logic.hardware.turnOff();
 		
 	}
 
 	@Override
 	public void thePrinterIsOutOfInk() {
-		// GUI attendant that ink storage is empty
-		// Attendant logins in and the system prepares to add ink
+		// TODO: Notify Attendant
 		
-		// Make flag true
+		// TODO: Change GUI display message about no Ink
+		System.out.println("Ink Storage Empty. System shutting off.");
+		
+		// Flag to see if Ink remains empty
 		inkLow = true;
-		// Disable Checkout System so attendant can add paper
-		// Attendant disables system from the use case Disable System
+		
+		// Disable System so attendant can add Ink
 		this.logic.hardware.getPrinter().disable();
+		this.logic.hardware.turnOff();
 	}
 
 	@Override
@@ -224,27 +231,32 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 
 	@Override
 	public void thePrinterHasLowInk() {
-		// GUI attendant that ink storage is low
-		// Attendant logins in and the system prepares to add ink
-				
-		// Make flag true
-		inkLow = true;
-		// Disable Checkout System so attendant can add ink
-		// Attendant disables system from the use case Disable System
-		this.logic.hardware.getPrinter().disable();
+		// TODO: Notify Attendant
 		
+		// TODO: Change GUI display message about no Ink
+		System.out.println("Paper Level is low. System shutting off.");
+		
+		// Flag to see if paper remains low
+		paperLow = true;
+		
+		// Disable System so attendant can add paper
+		this.logic.hardware.getPrinter().disable();
+		this.logic.hardware.turnOff();
 	}
 
 	@Override
 	public void thePrinterHasLowPaper() {
-		// GUI attendant that paper storage is low
-		// Attendant logins in and the system prepares to add paper
-				
-		// Make flag true
+		// TODO: Notify Attendant
+		
+		// TODO: Change GUI display message about no Paper
+		System.out.println("Paper Level is low. System shutting off.");
+		
+		// Flag to see if paper remains low
 		paperLow = true;
-		// Disable Checkout System so attendant can add paper
-		// Attendant disables system from the use case Disable System
+		
+		// Disable System so attendant can add paper
 		this.logic.hardware.getPrinter().disable();
+		this.logic.hardware.turnOff();
 		
 	}
 
@@ -254,16 +266,23 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		// Set flag to false
 		paperLow = false;
 		
-		// Check if ink is low or empty
-		if (inkLow == false) {
-			// If enough ink is there enable system
-			this.logic.hardware.getPrinter().enable();
-			// Attendant Enables the system to be used by Customer
-		}
+		// TODO: Change GUI display message about paper being added
+		System.out.println("Paper has been added");
 		
-		// GUI is used to announce that paper has been added
-		// GUI is also used to announce if receipt printer has been turned on or
-		// if ink needs to be added
+		// Check if ink is low or empty
+		if (!inkLow) {
+			// TODO: Change GUI display message about printer ready
+			System.out.println("Printer ready for usage");
+			
+			// If enough ink is there enable system
+			this.logic.hardware.turnOn();
+			this.logic.hardware.getPrinter().enable();
+		} else {
+			// TODO: Change GUI display message about printer not ready due to low ink levels
+			System.out.println("Printer not ready for usage; Low Ink; Add Ink");
+			
+			// TODO: Notify Attendant
+		}
 		
 	}
 
@@ -272,17 +291,24 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		
 		// Set flag to false
 		inkLow = false;
-				
-		// Check if paper is low or empty
-		if (paperLow == false) {
-			// If enough paper is there enable system
-			this.logic.hardware.getPrinter().enable();
-			// Attendant Enables the system to be used by Customer
-		}
-				
-		// GUI is used to announce that ink has been added
-		// GUI is also used to announce if receipt printer has been turned on or
-		// if paper needs to be added
 		
+		// TODO: Change GUI display message about paper being added
+		System.out.println("Ink has been added");
+		
+		// Check if paper is low or empty
+		if (!paperLow) {
+			// TODO: Change GUI display message about printer ready
+			System.out.println("Printer ready for usage");
+			
+			// If enough ink is there enable system
+			this.logic.hardware.turnOn();
+			this.logic.hardware.getPrinter().enable();
+		} else {
+			// TODO: Change GUI display message about printer not ready due to low paper levels
+			System.out.println("Printer not ready for usage; Low Paper; Add Paper");
+			
+			// TODO: Notify Attendant
+		}
+
 	}
 }
