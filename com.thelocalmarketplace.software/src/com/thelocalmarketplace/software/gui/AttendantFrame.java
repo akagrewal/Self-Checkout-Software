@@ -20,7 +20,7 @@ public class AttendantFrame {
     // Attendant Frame --------------------------------------BEGIN
 	// It assumes that there is only one SelfCheckoutStation right now 
 	
-    public void AttendantFrame() {
+    public void createAttendantFrame() {
         JFrame attend_frame = new JFrame("Attendant Screen");
         attend_frame.setSize(450, 800);
         attend_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

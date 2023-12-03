@@ -31,6 +31,7 @@ public class RunGUI extends JFrame implements logicObserver {
 
     //For Testing Purposes - to run GUI
     public RunGUI() {
+        this.guiLogicInstance = new GUILogic();
         SelfCheckoutGUI();
     }
 
@@ -38,6 +39,7 @@ public class RunGUI extends JFrame implements logicObserver {
     // Constructor to initialize GUILogic
     public RunGUI(GUILogic guiLogicInstance) {
         this.guiLogicInstance = guiLogicInstance;
+        SelfCheckoutGUI();
     }
 
     /**
@@ -48,8 +50,6 @@ public class RunGUI extends JFrame implements logicObserver {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
         setLocation(0,0);
-
-        guiLogicInstance = new GUILogic();
 
         // Create and add panels to the card panel
         // When you add new panel, make sure to add one here too
@@ -74,7 +74,7 @@ public class RunGUI extends JFrame implements logicObserver {
 
         // Open Attendant Frame beside the Self CheckOut
         AttendantFrame attendantFrame = new AttendantFrame();
-        attendantFrame.AttendantFrame();
+        attendantFrame.createAttendantFrame();
 
         HardwareActionSimulations actionsFrame = new HardwareActionSimulations();
         actionsFrame.setVisible(true);
