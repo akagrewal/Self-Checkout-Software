@@ -26,7 +26,7 @@ import java.util.Map;
  * @author Jincheng Li - 30172907
  * @author Anandita Mahika - 30097559
  */
-public class Utilities {
+public class Utilities{
 
 	/**
 	 * Used for incrementing/decrementing a counting map
@@ -36,6 +36,18 @@ public class Utilities {
 	 * @param amount Is the amount to increment/decrement by
 	 */
 	public static <T> void modifyCountMapping(Map<T, Integer> map, T item, int amount) {
+		if (map.containsKey(item)) {
+			map.put(item, map.get(item) + amount);
+		}
+		else {
+			map.put(item, amount);
+		}
+		
+		if (map.get(item) <= 0) {
+			map.remove(item);
+		}
+	}
+	public static <T> void modifyCountMapping(Map<T, Float> map, T item, float amount) {
 		if (map.containsKey(item)) {
 			map.put(item, map.get(item) + amount);
 		}
