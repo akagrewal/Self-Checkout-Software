@@ -18,7 +18,7 @@ public class AttendantFrame {
 
     public AttendantFrame() {
         stationLogicsMap = new HashMap<>();
-        itemsArray = new Vector<> (Arrays.asList("Apricot", "Apricot Jam", "Apple", "Bagel", "Banana"));
+        itemsArray = new Vector<> (Arrays.asList("Banana", "Apple", "Soup Can", "Pickles Jar"));
     }
 
     public void registerStationLogic(CentralStationLogic logic) {

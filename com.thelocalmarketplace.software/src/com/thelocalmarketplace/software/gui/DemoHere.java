@@ -17,6 +17,7 @@ import com.tdc.banknote.BanknoteValidator;
 import com.tdc.coin.CoinValidator;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.SelfCheckoutStationGold;
+import com.thelocalmarketplace.software.database.CreateTestDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 public class DemoHere {
@@ -55,6 +56,9 @@ public class DemoHere {
 
     //For Testing Purposes - to run GUI (main)
     public static void main(String[] args) {
+        // create example database for demo
+        CreateTestDatabases.createDatabase();
+
         SelfCheckoutStationGold station1 = new SelfCheckoutStationGold();
         CentralStationLogic stationLogic1 = new CentralStationLogic(station1);
 
