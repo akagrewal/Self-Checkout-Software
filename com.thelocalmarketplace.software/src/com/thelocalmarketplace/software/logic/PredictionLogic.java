@@ -1,15 +1,16 @@
 package com.thelocalmarketplace.software.logic;
 
 import com.thelocalmarketplace.software.AbstractLogicDependant;
-import com.thelocalmarketplace.software.logic.StateLogic.States;
-
-import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
 
 public class PredictionLogic extends AbstractLogicDependant {
 	
+	public PredictionLogic(CentralStationLogic logic) throws NullPointerException {
+		super(logic);
+	}	
+	
 	public Boolean checkLowCoinPrediction() {
 		if (logic.hardware.getCoinStorage().getCoinCount() <= 100) {
-			predictionAction("WARING: Low Coins!");
+			predictionAction("Warning: Low Coins!");
 			return true;
 		} else {
 			return false;
@@ -18,7 +19,7 @@ public class PredictionLogic extends AbstractLogicDependant {
 	
 	public Boolean checkCoinsFullPrediction() {
 		if (logic.hardware.getCoinStorage().getCoinCount() <= logic.hardware.getCoinStorage().getCapacity() - 100) {
-			predictionAction("WARING: Coins Full!");
+			predictionAction("Warning: Coins Full!");
 			return true;
 		} else {
 			return false;
@@ -29,10 +30,10 @@ public class PredictionLogic extends AbstractLogicDependant {
         int currentLinesRemaining = logic.hardware.getPrinter().paperRemaining();
         boolean isLow = false;
         
-        // assume that 100 lines is required for a receipt, any less would constitute a low paper warning.
-        if (currentLinesRemaining <= 100) {
+        // Warning is triggered at 175 lines remaining, should permit for 1-2 receipts before empty.
+        if (currentLinesRemaining <= 175) {
             // low paper!!
-            predictionAction("WARNING: Low Paper!");
+            predictionAction("Warning: Low Paper!");
             isLow = true;
         }
         
@@ -43,18 +44,18 @@ public class PredictionLogic extends AbstractLogicDependant {
         int currentInkRemaining = logic.hardware.getPrinter().inkRemaining();
         boolean isLow = false;
 
-        // assume that 100 chars is required for a receipt, any less would constitute a low ink warning.
-        if (currentInkRemaining <= 20) {
+        // Warning is made when 20 units of ink remain in the machine, should permit for 1-2 more receipts before empty.
+        if (currentInkRemaining <= 20) {       	
             // low ink!!
-            predictionAction("WARNING: Low Ink!"); 
+            predictionAction("Warning: Low Ink!"); 
             isLow = true;
-        }
+        } 
         return isLow;
     }
     
     /**
      * Predict issue with low banknotes
-     * Assuming the store is small, low bank notes would be considered less than 50 banknotes
+     * In an average sized store, low bank notes would be considered less than 50 banknotes
      */
     public boolean PredictLowBanknotes() {
 	 
@@ -63,15 +64,12 @@ public class PredictionLogic extends AbstractLogicDependant {
     	if (currentBankNotes <= 50) {
 		 
     		//notify attendant and disable customer station
-    		predictionAction("WARNING: Banknote storage is almost empty.");
+    		predictionAction("Warning: Banknote storage is almost empty.");
 		 
     		return true;
-		 
+    		
     	}
-	 
     	return false;
-	 
-	 
     }
  
     /**
@@ -85,7 +83,7 @@ public class PredictionLogic extends AbstractLogicDependant {
     	if ((capacity - currentBankNotes) <= 50) {
 		 
     		//notify attendant and disable customer station
-    		predictionAction("WARNING: Banknote storage is almost full.");
+    		predictionAction("Warning: Banknote storage is almost full.");
 	
 	
 	
@@ -98,11 +96,7 @@ public class PredictionLogic extends AbstractLogicDependant {
     }
 	
 	public void predictionAction(String message) {
-		logic.hardware.turnOff();
-		logic.attendantLogic.notifyAttendant(message);
-	}
-	
-	public PredictionLogic(CentralStationLogic logic) throws NullPointerException {
-		super(logic);
-	}		
+		// need to notify attendant.
+		logic.attendantLogic.disableCustomerStation(); 
+	}	
 }

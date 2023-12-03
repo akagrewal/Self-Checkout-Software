@@ -96,7 +96,5 @@ public class AttendantLogic {
 		this.logic.receiptPrintingController.printDuplicateReceipt();
 	}
 	
-	public void notifyAttendant(String message) {
-		System.out.println(message);
-	}
+
 }
