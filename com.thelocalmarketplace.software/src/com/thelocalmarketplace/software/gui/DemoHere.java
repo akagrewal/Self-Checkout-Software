@@ -2,7 +2,6 @@
 
 package com.thelocalmarketplace.software.gui;
 
-//
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
