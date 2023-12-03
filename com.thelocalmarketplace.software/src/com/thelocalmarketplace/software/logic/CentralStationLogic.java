@@ -103,6 +103,11 @@ public class CentralStationLogic {
 	 * Instance of the controller that handles adding barcoded product
 	 */
 	public AddBarcodedItemController addBarcodedProductController;
+
+	/**
+	 * Instance of the controller that handles adding PLU product
+	 */
+	public AddPLUItemController addPLUProductController;
 	
 	/** 
 	 * Instance of weight logic 
@@ -180,7 +185,7 @@ public class CentralStationLogic {
 		this.paymentMethod = PaymentMethods.NONE;
 		
 		// Reference to logic objects
-		this.cartLogic = new CartLogic();
+		this.cartLogic = new CartLogic(this);
 		this.weightLogic = new WeightLogic(this);
 		this.stateLogic = new StateLogic(this);
 
@@ -188,6 +193,7 @@ public class CentralStationLogic {
 		this.coinPaymentController = new CoinPaymentController(this);
 		this.cashPaymentController = new CashPaymentController(this);
 		this.addBarcodedProductController = new AddBarcodedItemController(this);
+		this.addPLUProductController = new AddPLUItemController(this);
 		this.weightDiscrepancyController = new WeightDiscrepancyController(this);
 		this.cardReaderController = new CardReaderController(this);
 		this.receiptPrintingController = new ReceiptPrintingController(this);
