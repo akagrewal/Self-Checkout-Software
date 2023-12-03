@@ -2,8 +2,10 @@
 
 package com.thelocalmarketplace.software.gui;
 
+import com.jjjwelectronics.Item;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.hardware.Product;
 import com.thelocalmarketplace.software.database.CreateTestDatabases;
 
 import java.util.ArrayList;
@@ -32,42 +34,76 @@ public class GUILogic {
 		listeners.add(listener);
 	}
 
-// LOGIC PANEL
+// LISTENER METHODS
 	// add logic for when customer adds item via PLU/Visual Search
-	private void notifyItemAdded(PLUCodedProduct pk) {
+	protected void notifyItemAdded(PLUCodedProduct pk) {
 		for(GUIListener listener : listeners)
 			listener.added(this, pk);
 	}
 
 	// add logic for when customer scans a barcoded item
-	private void notifyItemScanned(BarcodedProduct pk) {
+	protected void notifyItemScanned(BarcodedProduct pk) {
 		for(GUIListener listener : listeners)
 			listener.scanned(this, pk);
 	}
 
 	// add logic for when customer indicates to add their own bags
-	private void notifyOwnBags(boolean ownBags) {
+	protected void notifyOwnBags(boolean ownBags) {
 		for(GUIListener listener : listeners)
 			listener.ownBags(this, ownBags);
 	}
 
 	// add logic for when customer wants to call an attendant
-	public void callAttendant() {
+	protected void callAttendant() {
 		for(GUIListener listener : listeners)
 			listener.attendantCalled(this);
 	}
 
 	// add logic for when customer indicates to add their membership card/id (? might need to be changed)
 	// string changed to whatever the membership identifier is
-	private void addMembership(String id) {
+	protected void addMembership(String id) {
 		for(GUIListener listener : listeners)
 			listener.memberLogin(this, id);
 	}
 
 	// add logic for when customer chooses how they would like to pay
-	private void selectedPayOption(int payOption) {
+	protected void selectedPayOption(int payOption) {
 		for(GUIListener listener : listeners)
 			listener.payOption(this, payOption);
+	}
+
+// HARDWARE ACTION LISTENER METHODS
+
+	// adding item to scale
+	private void addItemToScale(Item pkm) {
+		for(GUIListener listener : listeners)
+			listener.itemAddedToScale(this, pkm);
+	}
+
+	// removing item from scale
+	private void removeItemFromScale(Item pkm) {
+		for(GUIListener listener : listeners)
+			listener.itemRemovedFromScale(this, pkm);
+	}
+
+	private void payWithCredit(String cardDetails) {
+		for(GUIListener listener : listeners)
+			listener.paidWithCredit(this, cardDetails);
+	}
+
+	private void payWithDebit(String cardDetails) {
+		for(GUIListener listener : listeners)
+			listener.paidWithDebit(this, cardDetails);
+	}
+
+	private void insertCoin(int coinAmount) {
+		for(GUIListener listener : listeners)
+			listener.coinInserted(this, coinAmount);
+	}
+
+	private void insertBanknote(int banknoteAmount) {
+		for(GUIListener listener : listeners)
+			listener.banknoteInserted(this, banknoteAmount);
 	}
 	
 //----------------------------------------------------------------
