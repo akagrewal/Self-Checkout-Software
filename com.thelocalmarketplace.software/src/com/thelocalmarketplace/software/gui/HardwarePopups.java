@@ -1,14 +1,20 @@
 package com.thelocalmarketplace.software.gui;
 
 import com.jjjwelectronics.Mass;
+import com.jjjwelectronics.Numeral;
+import com.jjjwelectronics.scanner.Barcode;
+import com.jjjwelectronics.scanner.BarcodedItem;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
+import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.function.Consumer;
 
 import javax.swing.Box;
@@ -22,19 +28,50 @@ import javax.swing.JTextField;
 
 public class HardwarePopups {
 
-    private static GUILogic guiLogic;
+    private CentralStationLogic centralStationLogic;
+    private static BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass(10));
+    private static BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.four,Numeral.five, Numeral.six}), new Mass(10));
 
-    public HardwarePopups(GUILogic guiLogic) {
-        HardwarePopups.guiLogic = guiLogic;
+    public HardwarePopups(CentralStationLogic centralStationLogic) {
+    	
+    	this.centralStationLogic = centralStationLogic;
+    	
     }
 
-	public static void showScanMainScannerPopup(JFrame parentFrame) {
+//	public static void showScanMainScannerPopup(JFrame parentFrame) {
+//		JDialog dialog = createDialog(parentFrame, "Scan Main Scanner");
+//		JTextField textField = addTextField(dialog, "Scan barcode using the main scanner:");
+//		String barcode;
+//		Consumer<String> onSubmit = inputText -> {
+//			
+//		};			
+//		addSubmitButton(dialog, textField, onSubmit);
+//		showDialog(dialog);
+//	}
+	
+	public void showScanMainScannerPopup(JFrame parentFrame) {
 		JDialog dialog = createDialog(parentFrame, "Scan Main Scanner");
-		JTextField textField = addTextField(dialog, "Scan barcode using the main scanner:");
-		Consumer<String> onSubmit = inputText -> {
-			//TODO
-		};
-		addSubmitButton(dialog, textField, onSubmit);
+		JButton apple = new JButton("Apple");
+		JButton orange = new JButton("Orange");
+
+        apple.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	centralStationLogic.hardware.getMainScanner().scan(Apple);
+            }
+        });
+        orange.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	centralStationLogic.hardware.getMainScanner().scan(Orange);
+            }
+        });
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        dialog.add(panel);
+        panel.add(apple);
+        panel.add(orange);
 		showDialog(dialog);
 	}
 
@@ -54,7 +91,7 @@ public class HardwarePopups {
 		Consumer<String> onSubmit = inputText -> {
             PriceLookUpCode priceLookUpCode = new PriceLookUpCode(inputText);
             PLUCodedProduct pk = ProductDatabases.PLU_PRODUCT_DATABASE.get(priceLookUpCode);
-            guiLogic.notifyItemAdded(pk);
+            //guiLogic.notifyItemAdded(pk);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
@@ -66,7 +103,7 @@ public class HardwarePopups {
 		Consumer<String> onSubmit = inputText -> {
             PriceLookUpCode priceLookUpCode = new PriceLookUpCode(inputText);
             PLUCodedProduct pk = ProductDatabases.PLU_PRODUCT_DATABASE.get(priceLookUpCode);
-            guiLogic.notifyItemAdded(pk);
+            //guiLogic.notifyItemAdded(pk);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
@@ -77,7 +114,7 @@ public class HardwarePopups {
 		JTextField textField = addTextField(dialog, "Place item on scale and enter weight of item:");
 		Consumer<String> onSubmit = inputText -> {
 			Mass weight = new Mass(Double.parseDouble(inputText));
-            guiLogic.addItemToScale(weight);
+            //guiLogic.addItemToScale(weight);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
@@ -88,7 +125,7 @@ public class HardwarePopups {
 		JTextField textField = addTextField(dialog, "Remove item from scale:");
 		Consumer<String> onSubmit = inputText -> {
             Mass weight = new Mass(Double.parseDouble(inputText));
-            guiLogic.removeItemFromScale(weight);
+            //guiLogic.removeItemFromScale(weight);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
@@ -100,7 +137,7 @@ public class HardwarePopups {
 		Consumer<String> onSubmit = inputText -> {
 			int cardNumber = Integer.parseInt(inputText);
 			if (real) {
-				guiLogic.payWithCredit(cardNumber);
+				//guiLogic.payWithCredit(cardNumber);
 			} else {
 				//TODO: can we just have an error message here?
 			}
@@ -114,7 +151,7 @@ public class HardwarePopups {
 		JTextField textField = addTextField(dialog, "Enter debit card details:");
 		Consumer<String> onSubmit = inputText -> {
             int cardNumber = Integer.parseInt(inputText);
-            guiLogic.payWithDebit(cardNumber);
+            //guiLogic.payWithDebit(cardNumber);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
@@ -125,7 +162,7 @@ public class HardwarePopups {
 		JTextField textField = addTextField(dialog, "Enter coin value:");
 		Consumer<String> onSubmit = inputText -> {
 			int coinValue = Integer.parseInt(inputText);
-            guiLogic.insertCoin(coinValue);
+            //guiLogic.insertCoin(coinValue);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
@@ -136,7 +173,7 @@ public class HardwarePopups {
 		JTextField textField = addTextField(dialog, "Enter banknote value:");
 		Consumer<String> onSubmit = inputText -> {
             int banknoteValue = Integer.parseInt(inputText);
-            guiLogic.insertBanknote(banknoteValue);
+            //guiLogic.insertBanknote(banknoteValue);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);

@@ -4,6 +4,7 @@ package com.thelocalmarketplace.software.gui;
 
 import com.jjjwelectronics.Item;
 import com.jjjwelectronics.Mass;
+import com.jjjwelectronics.scanner.BarcodedItem;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.Product;
@@ -28,12 +29,14 @@ public class GUILogic {
 	private final Set<GUIListener> listeners = new HashSet<>();
 	CardLayout cardLayout;
 	JPanel cardPanel;
-	private CentralStationLogic centralStationLogic;
+	public CentralStationLogic centralStationLogic;
 
 	public GUILogic(JPanel panel, CardLayout layout, CentralStationLogic logic) {
 		this.cardLayout = layout;
 		this.cardPanel = panel;
 		this.centralStationLogic = logic;
+		
+		
 		
 	}
 
@@ -53,6 +56,26 @@ public class GUILogic {
 		listeners.add(listener);
 	}
 
+	// START BUTTON
+	public void StartSessionButtonPressed() {
+		System.out.println("Start Session");
+		centralStationLogic.startSession();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+// ENZOS CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 // LISTENER METHODS
 	// add logic for when customer adds item via PLU/Visual Search
 	protected void notifyItemAdded(PLUCodedProduct pk) {
@@ -129,9 +152,9 @@ public class GUILogic {
 //Start Session Panel, 
 	
 	//when Customer presses [Start Session] 
-	public void StartSessionButtonPressed() {
-		System.out.println("Start Session");
-	}
+//	public void StartSessionButtonPressed() {
+//		System.out.println("Start Session");
+//	}
 	
 //----------------------------------------------------------------
 //Add Items Panel
@@ -251,18 +274,7 @@ public class GUILogic {
         String addItemB3_result = "New Barcoded Product thru RFID Tag";
 		return addItemB3_result;
 	}
-	
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
 //----------------------------------------------------------------
 // FOR TESTING PURPOSES - DO NOT SUBMIT FOR PROJECT 3 
 

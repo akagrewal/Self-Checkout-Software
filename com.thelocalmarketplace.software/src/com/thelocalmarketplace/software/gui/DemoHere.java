@@ -9,14 +9,20 @@ import java.util.Currency;
 import javax.swing.SwingUtilities;
 
 import com.jjjwelectronics.Mass;
+import com.jjjwelectronics.Numeral;
 import com.jjjwelectronics.card.ICardReader;
 import com.jjjwelectronics.scale.IElectronicScale;
+import com.jjjwelectronics.scanner.Barcode;
+import com.jjjwelectronics.scanner.BarcodedItem;
 import com.jjjwelectronics.scanner.IBarcodeScanner;
 import com.tdc.banknote.BanknoteValidator;
 import com.tdc.coin.CoinValidator;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.SelfCheckoutStationGold;
+import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
+
+import powerutility.PowerGrid;
 
 public class DemoHere {
 
@@ -53,13 +59,42 @@ public class DemoHere {
 
     //For Testing Purposes - to run GUI (main)
     public static void main(String[] args) {
-        RunGUI runGUI = new RunGUI(new CentralStationLogic(new SelfCheckoutStationGold()));
+    	Barcode barcode;
+    	 Numeral digits;
+    	
+    	 BarcodedItem bitem;
 
-    	//To open GUI 
-        SwingUtilities.invokeLater(() -> {
-            RunGUI GUIframe = runGUI;
-            GUIframe.setTitle("Welcome Screen");
-        });
+    	 Numeral[] barcode_numeral;
+    	 Numeral[] barcode_numeral2;
+    	 Numeral[] barcode_numeral3;
+    	 Barcode b_test;
+    	 Barcode barcode2;
+    	 BarcodedProduct product;
+    	 BarcodedProduct product2;
+    	 BarcodedProduct product3;
+    	barcode_numeral = new Numeral[]{Numeral.one,Numeral.two, Numeral.three};
+		barcode_numeral2 = new Numeral[]{Numeral.three,Numeral.two, Numeral.three};
+		barcode_numeral3 = new Numeral[]{Numeral.three,Numeral.three, Numeral.three};
+		barcode = new Barcode(barcode_numeral);
+		barcode2 = new Barcode(barcode_numeral2);
+		b_test = new Barcode(barcode_numeral3);
+		product = new BarcodedProduct(barcode, "some item",5,(double)3.0);
+		product2 = new BarcodedProduct(barcode2, "some item 2",(long)1.00,(double)300.0);
+		product3 = new BarcodedProduct(b_test, "some item 3",(long)1.00,(double)3.0);
+		
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.clear();
+		ProductDatabases.INVENTORY.clear();
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode, product);
+		ProductDatabases.INVENTORY.put(product, 1);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode2, product2);
+		ProductDatabases.INVENTORY.put(product2, 1);
+    	
+    	SelfCheckoutStationGold  station = new SelfCheckoutStationGold();
+    	station.plugIn(PowerGrid.instance());
+		station.turnOn();
+    	
+    	CentralStationLogic c = new CentralStationLogic(station);
+    	
     }
 
 }
