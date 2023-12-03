@@ -91,7 +91,7 @@ public class PurchaseBagsLogicTest {
 	}
 	
 	@Test
-	public void testValidThreeBagsNoWeightDiscrep() throws EmptyDevice {
+	public void testValidThreeBagsNoWeightDiscrepancy() throws EmptyDevice {
 		
 		purchaseBagsLogic.dispensePurchasedBags(3);
 		
@@ -140,15 +140,17 @@ public class PurchaseBagsLogicTest {
 		BigDecimal expected = new BigDecimal(5.00);
 		BigDecimal actual = logic.cartLogic.getBalanceOwed();
 		
-		assertTrue(expected.compareTo(actual) == 0);
-		
-		
-		
-		
+		assertTrue(expected.compareTo(actual) == 0);		
 	}
+	
 	@Test
-	public void testZeroBagsNoWeightChange() {
+	public void testZeroBagsNoWeightChange() throws EmptyDevice {
+		Mass initialWeight = logic.weightLogic.getActualWeight();
+		purchaseBagsLogic.dispensePurchasedBags(0);
 		
+		Mass afterWeight = logic.weightLogic.getActualWeight();
+		
+		assertTrue(initialWeight.compareTo(afterWeight) == 0);	
 	}
 	
 	@Test 
