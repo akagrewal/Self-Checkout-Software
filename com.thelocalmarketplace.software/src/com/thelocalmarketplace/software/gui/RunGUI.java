@@ -62,13 +62,6 @@ public class RunGUI extends JFrame implements logicObserver {
 
         setVisible(true);
 
-        // Open Attendant Frame beside the Self CheckOut
-        AttendantFrame attendantFrame = new AttendantFrame();
-        attendantFrame.createAttendantFrame();
-
-        HardwareActionSimulations actionsFrame = new HardwareActionSimulations();
-        actionsFrame.setVisible(true);
-
     }
 
     private static void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {

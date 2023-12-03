@@ -55,6 +55,15 @@ public class DemoHere {
 
     //For Testing Purposes - to run GUI (main)
     public static void main(String[] args) {
+        SelfCheckoutStationGold station1 = new SelfCheckoutStationGold();
+        CentralStationLogic stationLogic1 = new CentralStationLogic(station1);
+
+        AttendantFrame attendantFrame = new AttendantFrame();
+        attendantFrame.registerStationLogic(stationLogic1);
+        attendantFrame.createAttendantFrame();
+        HardwareActionSimulations actionsFrame = new HardwareActionSimulations();
+        actionsFrame.setVisible(true);
+
         RunGUI guiFrame = new RunGUI(new CentralStationLogic(new SelfCheckoutStationGold()));
     	//To open GUI
         SwingUtilities.invokeLater(() -> {

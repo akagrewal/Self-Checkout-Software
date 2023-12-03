@@ -1,56 +1,60 @@
-
-
 package com.thelocalmarketplace.software.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import com.thelocalmarketplace.hardware.external.ProductDatabases;
+import com.thelocalmarketplace.software.logic.CentralStationLogic;
+
+
 import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Vector;
 
 import javax.swing.*;
 
+
 public class AttendantFrame {
-	 
-	JLabel totalLabel;
-	
-    // Attendant Frame --------------------------------------BEGIN
-	// It assumes that there is only one SelfCheckoutStation right now 
-	
+	HashMap<CentralStationLogic, JPanel> stationLogicsMap;
+    Vector<String> itemsArray;
+
+    public AttendantFrame() {
+        stationLogicsMap = new HashMap<>();
+        itemsArray = new Vector<> (Arrays.asList("Apricot", "Apricot Jam", "Apple", "Bagel", "Banana"));
+    }
+
+    public void registerStationLogic(CentralStationLogic logic) {
+        stationLogicsMap.put(logic, null);
+    }
+
+    public void deregisterStationLogic(CentralStationLogic logic) {
+        stationLogicsMap.remove(logic);
+    }
+
     public void createAttendantFrame() {
-        JFrame attend_frame = new JFrame("Attendant Screen");
-        attend_frame.setSize(450, 800);
-        attend_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        attend_frame.setLocation(1000, 0); // Adjust the coordinates as needed
 
-        JPanel mainPanel = new JPanel(new GridLayout(3,1));
-        JPanel till1 = new JPanel(new GridLayout(2,2));
-        JPanel till2 = new JPanel(new GridLayout(2, 2));
-        JPanel till3 = new JPanel(new GridLayout(2, 2));
+        JFrame attendantFrame = new JFrame("Attendant Screen");
+        attendantFrame.setSize(450, 600);
+        attendantFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        attendantFrame.setLocation(1000, 0); // Adjust the coordinates as needed
 
-        till1.add(new JButton("activate till 1"));
-        till2.add(new JButton("activate till 2"));
-        till3.add(new JButton("activate till 3"));
+        JPanel mainPanel = new JPanel(new GridLayout(12,3));
 
-        till1.add(new JButton("deactivate till 1"));
-        till2.add(new JButton("deactivate till 2"));
-        till3.add(new JButton("deactivate till 3"));
+        int i = 0;
+        for (CentralStationLogic stationLogic : stationLogicsMap.keySet()) {
+            i++;
+            JPanel tempPanel = new JPanel(new GridLayout(1,3));
+            JButton buttonEnable = new JButton("Enable Station "+i);
+            JButton buttonDisable = new JButton("DisableStation "+i);
+            JComboBox<String> searchBox = new JComboBox<>(itemsArray);
+            tempPanel.add(buttonEnable);
+            tempPanel.add(buttonDisable);
+            tempPanel.add(searchBox);
+            stationLogicsMap.put(stationLogic, tempPanel);
+            mainPanel.add(tempPanel);
+        }
 
+        attendantFrame.add(mainPanel);
 
-        till1.add(new JTextField());
-        till2.add(new JTextField());
-        till3.add(new JTextField());
-
-        mainPanel.add(till1);
-        mainPanel.add(till2);
-        mainPanel.add(till3);
-
-        attend_frame.add(mainPanel);
-
-        attend_frame.setVisible(true);
+        attendantFrame.setVisible(true);
     }
 
 
@@ -100,6 +104,9 @@ public class AttendantFrame {
         }
     }
 
+
+
+    /*
     private JPanel createLabelPanel(String labelText, int width, int height) {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setPreferredSize(new Dimension(width, height));
@@ -110,4 +117,5 @@ public class AttendantFrame {
         panel.add(label, gbc);
         return panel;
     }
+     */
 }
