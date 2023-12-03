@@ -54,10 +54,8 @@ public class RunGUI extends JFrame implements logicObserver {
         setSize(1000, 800);
         setLocation(0,0);
 
-        // create GUILogic instance and add listeners as needed
         guiLogicInstance = new GUILogic();
-        guiLogicInstance.register(centralStationLogic.attendantLogic);
-       
+
         // Create and add panels to the card panel
         // When you add new panel, make sure to add one here too
         cardLayout = new CardLayout();
