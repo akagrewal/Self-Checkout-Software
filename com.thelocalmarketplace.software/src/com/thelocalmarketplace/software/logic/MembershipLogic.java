@@ -9,6 +9,29 @@ import com.thelocalmarketplace.software.AbstractLogicDependant;
  * This class includes functionality to handle membership numbers, account names,
  * and the creation of membership cards.
  *
+ * @author Jaimie Marchuk - 30112841
+ * @author Wyatt Deichert - 30174611
+ * @author Jane Magai - 30180119
+ * @author Enzo Mutiso - 30182555
+ * @author Mauricio Murillo - 30180713
+ * @author Ahmed Ibrahim Mohamed Seifeldin Hassan - 30174024
+ * @author Aryaman Sandhu - 30017164
+ * @author Nikki Kim - 30189188
+ * @author Jayden Ma - 30184996
+ * @author Braden Beler - 30084941
+ * @author Danish Sharma - 30172600
+ * @author Angelina Rochon - 30087177
+ * @author Amira Wishah - 30182579
+ * @author Walija Ihsan - 30172565
+ * @author Hannah Pohl - 30173027
+ * @author Akashdeep Grewal - 30179657
+ * @author Rhett Bramfield - 30170520
+ * @author Arthur Huan - 30197354
+ * @author Jaden Myers - 30152504
+ * @author Jincheng Li - 30172907
+ * @author Anandita Mahika - 30097559
+
+ *
  * @author Rhett Bramfield
  */
 
@@ -47,7 +70,7 @@ public class MembershipLogic extends AbstractLogicDependant {
      * @param cardNumber The membership number to set.
      */
 	public void setMembershipNumber(String cardNumber) {
-		if(isMembershipNumberValid(membershipNumber)) {
+		if(isMembershipNumberValid(cardNumber)) {
 			this.membershipNumber = cardNumber;
 		} else {
 			System.out.println("Invalid membership number. Please enter your 6-digit number");
@@ -61,12 +84,12 @@ public class MembershipLogic extends AbstractLogicDependant {
      * @return True if the membership number is valid, false otherwise.
      */
 	public boolean isMembershipNumberValid(String membershipNumber) {
-		if(membershipNumber != null && membershipNumber.matches("\\d{6}") ){
-			return true;
-		} else {
-			return false;
-		}
-	}
+        if (membershipNumber != null && membershipNumber.matches("\\d+")) {
+            return membershipNumber.length() == 6;
+        } else {
+            return false;
+        }
+    }
 	 /**
      * Gets the current account name.
      *
@@ -96,15 +119,17 @@ public class MembershipLogic extends AbstractLogicDependant {
      * @param hasChip       True if the card has a chip, false otherwise. False.
      */
 	public void createMembershipCard(String cardType, String cardNumber, String cardholder, String cvv, String pin,
-			boolean isTapEnabled, boolean hasChip) {
-		if (isMembershipNumberValid(membershipNumber) && accountName != null) {
-			membershipCard = new Card(cardType, cardNumber, cardholder, cvv, pin, isTapEnabled, hasChip);
-			this.membershipNumber = cardNumber;
-			this.accountName = cardholder;
-		} else {
-			System.out.println("Invalid membership number or account name. Please set valid values before creating a card.");
-		}
+	        boolean isTapEnabled, boolean hasChip) {
+	    if (isMembershipNumberValid(cardNumber) && cardholder != null) {
+	        membershipCard = new Card(cardType, cardNumber, cardholder, cvv, pin, isTapEnabled, hasChip);
+	        this.membershipNumber = cardNumber;
+	        this.accountName = cardholder;
+	    } else {
+	        System.out.println("Invalid membership number or account name. Please set valid values before creating a card.");
+	    }
 	}
+
+
 	 /**
      * Gets the current membership card.
      *
