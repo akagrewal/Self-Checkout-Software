@@ -15,6 +15,7 @@ import com.jjjwelectronics.bag.ReusableBag;
 import com.jjjwelectronics.scale.IElectronicScale;
 import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
 import com.thelocalmarketplace.hardware.SelfCheckoutStationBronze;
+import com.thelocalmarketplace.hardware.SelfCheckoutStationGold;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 import com.thelocalmarketplace.software.logic.PurchaseBagsLogic;
 
@@ -22,7 +23,7 @@ import powerutility.PowerGrid;
 
 public class PurchaseBagsLogicTest {
 	
-	SelfCheckoutStationBronze hardware;
+	SelfCheckoutStationGold hardware;
 	PurchaseBagsLogic purchaseBagsLogic;
 	CentralStationLogic logic;
 	IReusableBagDispenser iDispenser;
@@ -45,7 +46,7 @@ public class PurchaseBagsLogicTest {
 		PowerGrid.engageUninterruptiblePowerSource();
 		PowerGrid.instance().forcePowerRestore();
 		
-		this.hardware = new SelfCheckoutStationBronze();
+		this.hardware = new SelfCheckoutStationGold();
 		this.hardware.plugIn(PowerGrid.instance());
 		this.hardware.turnOn();
 		this.logic = new CentralStationLogic(hardware);
@@ -67,6 +68,7 @@ public class PurchaseBagsLogicTest {
 		bags.add(bag5);
 		
 		iDispenser.load(bag1, bag2, bag3, bag4, bag5);	
+		logic.startSession();
 	}
 	
 	@Test
@@ -82,8 +84,12 @@ public class PurchaseBagsLogicTest {
 	}
 	
 	@Test
-	public void testValidThreeBagsNoWeightDiscrep() {
+	public void testValidThreeBagsNoWeightDiscrep() throws EmptyDevice {
+		purchaseBagsLogic.dispensePurchasedBags(3);
 		
+		BigDecimal expectedOwed = new BigDecimal ("1.25");
+		BigDecimal actualOwed = logic.cartLogic.getBalanceOwed();	
+		BigDecimal zero = new BigDecimal("0");
 	}
 	
 	@Test
