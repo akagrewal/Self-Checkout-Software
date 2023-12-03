@@ -76,7 +76,6 @@ public class GUILogic {
 	//when Customer presses [Start Session] 
 	public void StartSessionButtonPressed() {
 		System.out.println("Start Session");
-		new CreateTestDatabases();
 	}
 	
 //----------------------------------------------------------------

@@ -1,14 +1,14 @@
 package com.thelocalmarketplace.software.logic;
 
 import com.jjjwelectronics.scanner.Barcode;
-import com.thelocalmarketplace.software.gui.AttendantFrame;
-import com.thelocalmarketplace.software.gui.GUIListener;
-import com.thelocalmarketplace.software.gui.GUILogic;
-import com.thelocalmarketplace.software.gui.NotifyPopUp;
+import com.thelocalmarketplace.software.gui.*;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 import ca.ucalgary.seng300.simulation.InvalidArgumentSimulationException;
 import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Attendant Logic
@@ -43,10 +43,40 @@ public class AttendantLogic implements GUIListener{
 	/** tracks weather or not a bagging discrepency has been found */
 	private boolean inBaggingDiscrepency;
 
-	
+// listener stuff
+private final Set<AttendantFrameListener> listeners = new HashSet<>();
+
+	/**
+	 * Registers the given listener so that it will receive events from this
+	 * communication facade.
+	 *
+	 * @param listener The listener to be registered. If it is already registered, this
+	 *                 call has no effect.
+	 */
+	public void register(AttendantFrameListener listener) {
+		listeners.add(listener);
+	}
+
+	// LOGIC PANEL
+	// add logic for when attendant confirms call from customer
+	private void confirmCall(GUILogic guiLogic) {
+		for (AttendantFrameListener listener : listeners)
+			listener.confirmed(this, guiLogic);
+	}
+
+	// add logic for when attendant overrides block on specific station
+	private void override(GUILogic guiLogic, String blockType) {
+		for (AttendantFrameListener listener : listeners)
+			listener.override(this, guiLogic, blockType);
+	}
+// listener end
+
 	public AttendantLogic(CentralStationLogic l) {
 		this.logic = l;
 	}
+
+
+
 	
 	/** simulates attendant signifying they approve the bagging area 
 	 * @throws Exception if the add bags state cannot be exited*/
@@ -62,11 +92,16 @@ public class AttendantLogic implements GUIListener{
 	public void baggingDiscrepencyDetected() {
 		//TODO GUI: display that customer is awaiting approval to attendant
 		this.inBaggingDiscrepency = true;
+		this.logic.stateLogic.gotoState(States.BLOCKED);
+		if(this.logic.addBagsLogic.approvedBagging) {
+			this.logic.weightLogic.overrideDiscrepancy();
+			this.logic.stateLogic.gotoState(States.NORMAL);
+		}
 	}
 	
 	/** setter for in baggingDiscrepency */
 	
-	public void setBaggingDiscrepency(boolean b) {
+	public void setBaggingDiscrepency(boolean b){
 		this.inBaggingDiscrepency = b;
 	}
 	
