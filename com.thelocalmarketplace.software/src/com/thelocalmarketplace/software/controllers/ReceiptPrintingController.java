@@ -185,7 +185,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		paperLow = true;
 		
 		// Disable System so attendant can add paper
-		this.logic.attendantLogic.disableCustomerStation();
+		this.logic.hardware.turnOff();
 		
 	}
 
@@ -200,7 +200,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		inkLow = true;
 		
 		// Disable System so attendant can add Ink
-		this.logic.attendantLogic.disableCustomerStation();
+		this.logic.hardware.turnOff();
 	}
 
 	@Override
@@ -238,7 +238,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		paperLow = true;
 		
 		// Disable System so attendant can add paper
-		this.logic.attendantLogic.disableCustomerStation();
+		this.logic.hardware.turnOff();
 	}
 
 	@Override
@@ -252,7 +252,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		paperLow = true;
 		
 		// Disable System so attendant can add paper
-		this.logic.attendantLogic.disableCustomerStation();
+		this.logic.hardware.turnOff();
 		
 	}
 
@@ -271,7 +271,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 			System.out.println("Printer ready for usage");
 			
 			// If enough ink is there enable system
-			this.logic.attendantLogic.enableCustomerStation();
+			this.logic.hardware.turnOn();
 		} else {
 			// TODO: Change GUI display message about printer not ready due to low ink levels
 			System.out.println("Printer not ready for usage; Low Ink; Add Ink");
@@ -296,7 +296,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 			System.out.println("Printer ready for usage");
 			
 			// If enough ink is there enable system
-			this.logic.attendantLogic.enableCustomerStation();
+			this.logic.hardware.turnOn();
 		} else {
 			// TODO: Change GUI display message about printer not ready due to low paper levels
 			System.out.println("Printer not ready for usage; Low Paper; Add Paper");
