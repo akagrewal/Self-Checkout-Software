@@ -73,15 +73,14 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 			// add bag(s) to order
 			// hardcoded price of bags into this method in cartLogic --> change this
 			
-			int bagsInOrder = 0; 
-			for (int i = 0; i < numOfBags && i < iDispenser.getQuantityRemaining(); i++) {
+			if(numOfBags < iDispenser.getQuantityRemaining()) {
 				logic.cartLogic.addReusableBagToCart(numOfBags);
-				bagsInOrder = i;
 			}
 			
-			if (numOfBags > bagsInOrder) System.out.println("number of requested bags not available. "
-					+ "dispensing number of available bags") ;
-			
+			else {
+				System.out.println("number of requested bags not available. dispensing number of available bags");
+				logic.cartLogic.addReusableBagToCart(iDispenser.getQuantityRemaining());
+		}
 			
 			int bagsDispensed = 0;
 			while (bagsDispensed < numOfBags){	
@@ -92,9 +91,10 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 					iDispenser.dispense();
 					//adjust expected weight
 					logic.weightLogic.addExpectedPurchasedBagWeight(bag);
+					logic.weightLogic.updateActualWeight(logic.weightLogic.getActualWeight().sum(bagsMass));
 					
 					//detect weight change
-					logic.weightDiscrepancyController.theMassOnTheScaleHasChanged(scale, bagsMass);
+					//logic.weightDiscrepancyController.theMassOnTheScaleHasChanged(scale, bagsMass);
 					bagsDispensed ++;
 				}
 				
@@ -108,19 +108,6 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 		else {
 			throw new NullPointerException("Invalid. Null value inputed.");
 		}
-		
-		
-		
-	}
-		
+	}		
 }
-
-/**
- * if ((numOfBags > 0) && (numOfBags <= iDispenser.getQuantityRemaining()))
-				logic.cartLogic.addReusableBagToCart(numOfBags);
-			
-			else {
-				System.out.println("number of requested bags not available. dispensing avaialble number of bags");
-				logic.cartLogic.addReusableBagToCart(iDispenser.getQuantityRemaining());
- */
 

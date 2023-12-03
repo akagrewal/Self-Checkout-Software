@@ -1,9 +1,11 @@
 package com.thelocalmarketplace.software.test;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -67,43 +69,83 @@ public class PurchaseBagsLogicTest {
 		bags.add(bag4);
 		bags.add(bag5);
 		
-		iDispenser.load(bag1, bag2, bag3, bag4, bag5);	
+		iDispenser.load(bag1, bag2, bag3, bag4, bag5);
+		System.out.println( iDispenser.getQuantityRemaining());
 		logic.startSession();
+	}
+	
+	@After
+	public void teardown() {
+		
 	}
 	
 	@Test
 	public void testValidThreeBagsAddedToOrder() throws EmptyDevice {
+		
 		purchaseBagsLogic.dispensePurchasedBags(3);
 		
-		BigDecimal expectedOwed = new BigDecimal ("1.25");
+		BigDecimal expectedOwed = new BigDecimal (3.75);
 		BigDecimal actualOwed = logic.cartLogic.getBalanceOwed();	
-		BigDecimal zero = new BigDecimal("0");
 		
-		expectedOwed.compareTo(actualOwed);
-		
+		assertTrue(expectedOwed.compareTo(actualOwed) == 0);		
 	}
 	
 	@Test
 	public void testValidThreeBagsNoWeightDiscrep() throws EmptyDevice {
+		
 		purchaseBagsLogic.dispensePurchasedBags(3);
 		
-		BigDecimal expectedOwed = new BigDecimal ("1.25");
-		BigDecimal actualOwed = logic.cartLogic.getBalanceOwed();	
-		BigDecimal zero = new BigDecimal("0");
+		assertFalse(logic.weightLogic.checkWeightDiscrepancy());
 	}
 	
 	@Test
-	public void testInvalidNegativeBagsNotAddedToOrder() {
+	public void testInvalidNegativeBagsNotAddedToOrderWhenOrderEmpty() throws EmptyDevice {
+		purchaseBagsLogic.dispensePurchasedBags(-3);
 		
+		BigDecimal expected = new BigDecimal("0");
+		BigDecimal actual = logic.cartLogic.getBalanceOwed();
+		
+		assertTrue(expected.compareTo(actual) == 0);
 	}
 	
+	public void testInvalidNegativeBagsNotAddedToOrderWhenOrderNotEmpty() throws EmptyDevice {
+		purchaseBagsLogic.dispensePurchasedBags(1); // amount owed should be 1.25
+		
+		purchaseBagsLogic.dispensePurchasedBags(-3);
+		
+		BigDecimal expected = new BigDecimal(1.25);
+		BigDecimal actual = logic.cartLogic.getBalanceOwed();
+		
+		System.out.println("invalid e" + expected);
+		System.out.println("invalid a" + actual);
+		
+		assertTrue(expected.compareTo(actual) == 0) ;
+	}
 	
 	
 	@Test
-	public void testZeroBagsNotAddedToOrder() {
+	public void testZeroBagsNotAddedToOrderWhenOrderEmpty() throws EmptyDevice {
+		purchaseBagsLogic.dispensePurchasedBags(0);
+		BigDecimal expected = new BigDecimal(0);
+		BigDecimal actual = logic.cartLogic.getBalanceOwed();
 		
+		assertTrue(expected.compareTo(actual)== 0);
 	}
 	
+	@Test
+	public void testZeroBagsNotAddedToOrderWhenOrderNotEmpty() throws EmptyDevice {
+		purchaseBagsLogic.dispensePurchasedBags(4); // balance owed should equal 5.00
+		
+		purchaseBagsLogic.dispensePurchasedBags(0);
+		BigDecimal expected = new BigDecimal(5.00);
+		BigDecimal actual = logic.cartLogic.getBalanceOwed();
+		
+		assertTrue(expected.compareTo(actual) == 0);
+		
+		
+		
+		
+	}
 	@Test
 	public void testZeroBagsNoWeightChange() {
 		
