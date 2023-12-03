@@ -76,6 +76,10 @@ public class RunGUI extends JFrame implements logicObserver {
         attendantFrame.AttendantFrame();
     }
 
+    private static void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
+        GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, gridheight, 1.0, 1.0, anchor, fill, insets, 0, 0);
+        container.add(component, gbc);
+    }
 
     // Customer Screen 1
     private JPanel StartSessionPanel() {
@@ -158,14 +162,6 @@ public class RunGUI extends JFrame implements logicObserver {
         return panel;
     }
 
-
-    private static void addComponent(Container container, Component component, int gridx, int gridy,
-                                     int gridwidth, int gridheight, int anchor, int fill) {
-        GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, gridheight, 1.0, 1.0,
-                anchor, fill, insets, 0, 0);
-        container.add(component, gbc);
-    }
-
     /*
      * The Panel for Checkout (MAIN)
      * There are additional parts that made this layout
@@ -176,66 +172,44 @@ public class RunGUI extends JFrame implements logicObserver {
         JPanel mainPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
+        // current items panel
+        JPanel topMiddlePanel = new JPanel();
+        topMiddlePanel.setBorder(BorderFactory.createTitledBorder("Current Items: "));
 
-        // Top Left Panel (To Display Current items and total)
-        JPanel topLeftPanel = createLabelPanel("", 500, 20);
-        JLabel custTotalLabel = new JLabel("Total is: "+total);
-        topLeftPanel.add(custTotalLabel);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.20;
-        gbc.fill = GridBagConstraints.BOTH;
-        mainPanel.add(topLeftPanel, gbc);
+        JScrollPane CurrentItemsPanel = new JScrollPane(topMiddlePanel);
+        CurrentItemsPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        CurrentItemsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        CurrentItemsPanel.getVerticalScrollBar().setUnitIncrement(16);
+        addComponent(mainPanel,CurrentItemsPanel,1, 0, 2, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
-        // Left Panel (Product List / Checkout / Receipt)
-        leftPanel = createLabelPanel("", 500, 500);
-        leftPanel.add(new JLabel("RECEIPT / LIST OF CHECKOUT PRODUCT HERE"));
-
-
-        // Left Panel with JScrollPane)
-        JScrollPane leftScrollPane = new JScrollPane(leftPanel);
-        leftScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        leftScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        leftScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.weightx = 0.5;
-        gbc.weighty = 1.20;
-        gbc.fill = GridBagConstraints.BOTH;
-        mainPanel.add(leftScrollPane, gbc);
+        JPanel totalPanel = new JPanel();
+        totalPanel.setBorder(BorderFactory.createTitledBorder(" "));
+        addComponent(totalPanel,new JLabel("Total:"),0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(mainPanel,totalPanel,1, 2, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
 
-        // Top Right Panel (Weight Display)
-        JPanel topRightPanel = createLabelPanel("Top right Panel", 500, 20);
-        JLabel topRightLabel = new JLabel("Weight Goes Here");
-        topRightPanel.add(topRightLabel);
-        gbc.gridx = 2;  // Adjust the gridx to place it to the right
-        gbc.gridy = 0;
-        gbc.weightx = 0.5;  // Adjust the weightx to control the width ratio
-        mainPanel.add(topRightPanel, gbc);
+        // PANEL FOR ALL THE BUTTONS (USE CASES)
+        JPanel buttonsPanel = new JPanel();
+
+        JButton addItemButton = new JButton("add an item");
+        addItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // goto panel with options to add an item
+            }
+        });
+
+        JButton payButton = new JButton("Finish and Pay");
 
 
-        // Right Panel (TouchScreen Buttons)
-        JPanel rightPanel = createButtonPanelRightPanel("Touch Screen", 500, 500);
-        gbc.gridx = 2;  // Adjust the gridx to place it to the right
-        gbc.gridy = 1;
-        gbc.weightx = 0.5;  // Adjust the weightx to control the width ratio
-        gbc.weighty = 1.0;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        mainPanel.add(rightPanel, gbc);
+        addComponent(buttonsPanel,addItemButton,0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(buttonsPanel,payButton,0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
 
-        // Bottom Panel (Customer Actions not displayed in TouchScreen)
-        JPanel bottomPanel = createButtonPanelBottomPanel("Customer Actions (Not Displayed on Touch Screen)", 1000, 200);
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        mainPanel.add(bottomPanel, gbc);
+        addComponent(mainPanel,buttonsPanel,0, 0, 1, 3, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
 
-        // Add the main panel to the card panel
-        cardPanel.add(mainPanel, "yourFrameClass2");
+
         return mainPanel;
     }
     /*
