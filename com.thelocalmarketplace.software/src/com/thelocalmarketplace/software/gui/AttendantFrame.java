@@ -13,7 +13,7 @@ import javax.swing.*;
 
 
 public class AttendantFrame {
-	HashMap<CentralStationLogic, JPanel> stationLogicsMap;
+    HashMap<CentralStationLogic, JPanel> stationLogicsMap;
     Vector<String> itemsArray;
 
     public AttendantFrame() {
@@ -36,14 +36,14 @@ public class AttendantFrame {
         attendantFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         attendantFrame.setLocation(1000, 0); // Adjust the coordinates as needed
 
-        JPanel mainPanel = new JPanel(new GridLayout(12,3));
+        JPanel mainPanel = new JPanel(new GridLayout(12, 3));
 
         int i = 0;
         for (CentralStationLogic stationLogic : stationLogicsMap.keySet()) {
             i++;
-            JPanel tempPanel = new JPanel(new GridLayout(1,3));
-            JButton buttonEnable = new JButton("Enable Station "+i);
-            JButton buttonDisable = new JButton("DisableStation "+i);
+            JPanel tempPanel = new JPanel(new GridLayout(1, 3));
+            JButton buttonEnable = new JButton("Enable Station " + i);
+            JButton buttonDisable = new JButton("DisableStation " + i);
             JComboBox<String> searchBox = new JComboBox<>(itemsArray);
             tempPanel.add(buttonEnable);
             tempPanel.add(buttonDisable);
@@ -56,66 +56,4 @@ public class AttendantFrame {
 
         attendantFrame.setVisible(true);
     }
-
-
-
-    private void handleButtonClick(int buttonNumber) {
-        switch (buttonNumber) {
-            case 1:
-                System.out.println("Meow");
-                //insert logic
-                break;
-            case 2:
-                System.out.println("Button Clicked");
-                //insert Logic
-                break;
-            case 3:
-                System.out.println("Button Clicked");
-                //insert Logic
-                break;
-            case 4:
-                System.out.println("Button Clicked");
-                //insert Logic
-                break;
-            case 5:
-                System.out.println("Button Clicked");
-                //insert Logic
-                break;
-            case 6:
-                System.out.println("Button Clicked");
-                //insert Logic
-                break;
-            case 7:
-                System.out.println("Button Clicked");
-                //insert Logic
-                break;
-            case 8:
-                System.out.println("Button Clicked");
-                //insert Logic
-                break;
-            case 9:
-                System.out.println("Button Clicked");
-                //insert Logic
-                break;
-            case 10:
-                System.out.println("Button Clicked");
-                //insert Logic
-                break;
-        }
-    }
-
-
-
-    /*
-    private JPanel createLabelPanel(String labelText, int width, int height) {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setPreferredSize(new Dimension(width, height));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        JLabel label = new JLabel(labelText);
-        label.setFont(new Font("Arial", Font.BOLD, 18));
-        panel.add(label, gbc);
-        return panel;
-    }
-     */
 }

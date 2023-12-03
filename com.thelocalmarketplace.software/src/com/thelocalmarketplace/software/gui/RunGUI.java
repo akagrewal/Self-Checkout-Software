@@ -50,8 +50,8 @@ public class RunGUI extends JFrame implements logicObserver {
         cardPanel.add(createVisualCatalogue(), "visualCatalogue");
         cardPanel.add(createThankYouPanel(), "thankYouPanel");
         cardPanel.add(createPaymentPanel(), "paymentPanel");
-        cardPanel.add(createCashBillPanel(), "cashBillPanel");
-        cardPanel.add(createCashCoinPanel(), "cashCoinPanel");
+        // cardPanel.add(createCashBillPanel(), "cashBillPanel");
+        // cardPanel.add(createCashCoinPanel(), "cashCoinPanel");
 
 //        cardPanel.add(createNumberPad(), "numpadPanel");
         add(cardPanel);
@@ -277,28 +277,7 @@ public class RunGUI extends JFrame implements logicObserver {
 
         return mainPanel;
     }
-    private JPanel createThankYouPanel()  {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
 
-        JButton returnButton = new JButton("Please press this button to continue.");
-        returnButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("welcomePanel");
-            }
-        });
-        JLabel TY_receiptLabel = new JLabel("Thank you for Shopping, Please take your receipt.");
-        TY_receiptLabel.setFont(new Font("Arial", Font.BOLD, 26));
-        gbc.gridy = 0;
-        panel.add(TY_receiptLabel, gbc);
-        gbc.gridy = 1;
-        panel.add(returnButton,gbc);
-
-
-        return panel;
-    }
 
     //Screen 3 Payment Panel
     private JPanel createPaymentPanel() {
@@ -306,79 +285,43 @@ public class RunGUI extends JFrame implements logicObserver {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-
-        JButton payment_button_card = new JButton("Credit/Debit");
-        payment_button_card.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("thankYouPanel");
-            }
-        });
-        JButton payment_button_coins = new JButton("Coins");
-        payment_button_coins.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("thankYouPanel");
-            }
-        });
-        JButton payment_button_banknotes = new JButton("Banknotes");
-        payment_button_banknotes.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("thankYouPanel");
-            }
-        });
-        JButton payment_button_mixed = new JButton("Mixed");
-        payment_button_mixed.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("thankYouPanel");
-            }
-        });
-        JButton payment_button_leave_without_paying = new JButton("Leave Without Paying");
-        payment_button_leave_without_paying.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("thankYouPanel");
-            }
-        });
-        JButton BacktoCheckoutButton = new JButton("Back to Checkout");
-        BacktoCheckoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("AddItemsPanel");
-            }
-        });
+        JButton button_CardPayment = new JButton("Credit/Debit");
+        JButton buttonCoinPayment = new JButton("Coins");
+        JButton buttonCashPayment = new JButton("Banknotes");
+        JButton buttonMixedPayment = new JButton("Mixed");
+        JButton buttonLeaveWithoutPaying = new JButton("Leave Without Paying");
+        JButton buttonBackToCheckout = new JButton("Back to Checkout");
         gbc.gridx = 1; gbc.gridy = 1;
-        payment_button_card.setPreferredSize(new Dimension(200,123));
-        PaymentPanel.add(payment_button_card, gbc);
-
-
+        button_CardPayment.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(button_CardPayment, gbc);
         gbc.gridx = 2; gbc.gridy = 1;
-        payment_button_coins.setPreferredSize(new Dimension(200,123));
-        PaymentPanel.add(payment_button_coins, gbc);
-
+        buttonCoinPayment.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(buttonCoinPayment, gbc);
         gbc.gridx = 3; gbc.gridy = 1;
-        payment_button_banknotes.setPreferredSize(new Dimension(200,123));
-        PaymentPanel.add(payment_button_banknotes, gbc);
-
+        buttonCashPayment.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(buttonCashPayment, gbc);
         gbc.gridx = 4; gbc.gridy = 1;
-        payment_button_mixed.setPreferredSize(new Dimension(200,123));
-        PaymentPanel.add(payment_button_mixed, gbc);
-
+        buttonMixedPayment.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(buttonMixedPayment, gbc);
         gbc.gridx = 1; gbc.gridy = 3;
-        payment_button_leave_without_paying.setPreferredSize(new Dimension(200,50));
-        PaymentPanel.add(payment_button_leave_without_paying, gbc);
-
+        buttonLeaveWithoutPaying.setPreferredSize(new Dimension(200,50));
+        PaymentPanel.add(buttonLeaveWithoutPaying, gbc);
         gbc.gridx = 4; gbc.gridy = 3;
-        BacktoCheckoutButton.setPreferredSize(new Dimension(200,50));
-        PaymentPanel.add(BacktoCheckoutButton, gbc);
+        buttonBackToCheckout.setPreferredSize(new Dimension(200,50));
+        PaymentPanel.add(buttonBackToCheckout, gbc);
+
+        button_CardPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
+        buttonCoinPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
+        buttonCashPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
+        buttonMixedPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
+        buttonLeaveWithoutPaying.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
+        buttonBackToCheckout.addActionListener(e -> guiLogicInstance.switchPanels("AddItemsPanel"));
 
         return PaymentPanel;
     }
 
 
-
+/*
     //Screen 3.B Payment Panel (Coin Bill)
     private JPanel createCashBillPanel() {
         JPanel CoinBillPanel = new JPanel(new GridBagLayout());
@@ -467,6 +410,9 @@ public class RunGUI extends JFrame implements logicObserver {
         return CoinBillPanel;
     }
 
+ */
+
+    /*
     //Screen 3 Payment Panel (Coin Coin)
     private JPanel createCashCoinPanel() {
         JPanel CoinBillPanel = new JPanel(new GridBagLayout());
@@ -553,6 +499,32 @@ public class RunGUI extends JFrame implements logicObserver {
         CoinBillPanel.add(payment_button7, gbc);
 
         return CoinBillPanel;
+    }
+
+     */
+
+
+    private JPanel createThankYouPanel()  {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        JButton returnButton = new JButton("Please press this button to continue.");
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guiLogicInstance.switchPanels("welcomePanel");
+            }
+        });
+        JLabel TY_receiptLabel = new JLabel("Thank you for Shopping, Please take your receipt.");
+        TY_receiptLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        gbc.gridy = 0;
+        panel.add(TY_receiptLabel, gbc);
+        gbc.gridy = 1;
+        panel.add(returnButton,gbc);
+
+
+        return panel;
     }
 
     @Override
