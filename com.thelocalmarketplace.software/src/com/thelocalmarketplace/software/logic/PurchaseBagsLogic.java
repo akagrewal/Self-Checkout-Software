@@ -2,6 +2,7 @@ package com.thelocalmarketplace.software.logic;
 
 
 import com.jjjwelectronics.EmptyDevice;
+import com.jjjwelectronics.IllegalDigitException;
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.bag.IReusableBagDispenser;
 import com.jjjwelectronics.bag.ReusableBag;
@@ -10,6 +11,7 @@ import com.thelocalmarketplace.software.AbstractLogicDependant;
 
 
 import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
+import powerutility.NoPowerException;
 
 
 /**
@@ -41,17 +43,13 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 	ReusableBag bag;
 	Mass bagsMass;
 	IElectronicScale scale;
-	boolean scaleOperational;
 	
-	public PurchaseBagsLogic(CentralStationLogic logic) throws NullPointerException {
+	public PurchaseBagsLogic(CentralStationLogic logic) {
 		super(logic);
 		this.bag = new ReusableBag();
 		this.iDispenser = logic.hardware.getReusableBagDispenser();
 		bagsMass = bag.getMass();
 		this.scale = logic.hardware.getBaggingArea();
-		
-		if (scale.isPoweredUp() && scale.isPluggedIn()) this.scaleOperational = true;
-		else this.scaleOperational = false;
 	}
 	
 	/**
@@ -62,9 +60,10 @@ public class PurchaseBagsLogic extends AbstractLogicDependant{
 	public void dispensePurchasedBags(int numOfBags) throws EmptyDevice {
 		
 		if (!this.logic.isSessionStarted()) throw new InvalidStateSimulationException("Session not started");
-		else if (!this.scaleOperational) throw new InvalidStateSimulationException("Scale not operational");
+		
+		else if (!scale.isPoweredUp()) throw new NoPowerException();
 	
-		else if (numOfBags<0) System.out.println("Invalid Request. Cannot purchase negative amount bags");
+		else if (numOfBags<0) throw new IllegalDigitException("Invalid Request. Cannot purchase negative amount bags");
 		
 		else if (numOfBags == 0) System.out.println("No bags added to order");//do nothing
 		
