@@ -62,11 +62,16 @@ public class AttendantLogic implements GUIListener{
 	public void baggingDiscrepencyDetected() {
 		//TODO GUI: display that customer is awaiting approval to attendant
 		this.inBaggingDiscrepency = true;
+		this.logic.stateLogic.gotoState(States.BLOCKED);
+		if(this.logic.addBagsLogic.approvedBagging) {
+			this.logic.weightLogic.overrideDiscrepancy();
+			this.logic.stateLogic.gotoState(States.NORMAL);
+		}
 	}
 	
 	/** setter for in baggingDiscrepency */
 	
-	public void setBaggingDiscrepency(boolean b) {
+	public void setBaggingDiscrepency(boolean b){
 		this.inBaggingDiscrepency = b;
 	}
 	
