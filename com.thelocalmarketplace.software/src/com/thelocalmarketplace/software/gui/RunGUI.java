@@ -1,9 +1,4 @@
-
-
-
-
 package com.thelocalmarketplace.software.gui;
-
 import com.thelocalmarketplace.software.logic.AttendantLogic;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
@@ -76,14 +71,14 @@ public class RunGUI extends JFrame implements logicObserver {
         // Open Attendant Frame beside the Self CheckOut
         AttendantFrame attendantFrame = new AttendantFrame();
         attendantFrame.AttendantFrame();
-        
+
         HardwareActionSimulations actionsFrame = new HardwareActionSimulations();
         actionsFrame.setVisible(true);
-       
+
     }
 
     private static void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
-	Insets insets = new Insets(0, 0, 0, 0);
+        Insets insets = new Insets(0, 0, 0, 0);
         GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, gridheight, 1.0, 1.0, anchor, fill, insets, 0, 0);
         container.add(component, gbc);
     }
@@ -178,12 +173,11 @@ public class RunGUI extends JFrame implements logicObserver {
         // Create main panel with GridBagLayout
         JPanel mainPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        
-        // Buttons panel on left side (all use case buttons) 
-        JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS)); // makes y axis listing
-        
-        // Create buttons 
+
+        // Buttons panel on left side (all use case buttons)
+        JPanel buttonsPanel = new JPanel(new GridLayout(9,1));
+
+        // Create buttons
         JButton addItemButton = new JButton("Add an item");
         addItemButton.addActionListener(new ActionListener() {
             @Override
@@ -191,27 +185,36 @@ public class RunGUI extends JFrame implements logicObserver {
                 // goto panel with options to add an item
             }
         });
-        
-        
+
+        JButton removeItemButton = new JButton("Remove an Item");
+        addItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // goto panel to remove an item
+            }
+        });
+
         JButton payButton = new JButton("Finish and Pay");
         payButton.addActionListener(new ActionListener() {
-        	@Override 
-        	public void actionPerformed(ActionEvent e) {
-        		// TODO
-        	}
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switchPanels("paymentPanel");
+            }
         });
-        
-        // Attach buttons 
+
+
+        // Attach buttons
         buttonsPanel.add(addItemButton);
+        buttonsPanel.add(removeItemButton);
         buttonsPanel.add(payButton);
-        
-        gbc.gridx = 0; 
-        gbc.gridy = 0; 
-        gbc.gridwidth = 1; 
-        gbc.gridheight = 3; 
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 3;
         gbc.fill = GridBagConstraints.VERTICAL;
-        gbc.anchor = GridBagConstraints.CENTER; 
-        gbc.weightx = 0.3; // 30% horizontal weight 
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.weightx = 0.3; // 30% horizontal weight
         gbc.weighty = 1; // full vertical length
         mainPanel.add(buttonsPanel, gbc);
 
@@ -219,365 +222,38 @@ public class RunGUI extends JFrame implements logicObserver {
         JPanel topMiddlePanel = new JPanel();
         topMiddlePanel.setBorder(BorderFactory.createTitledBorder("Current Items: "));
 
-        // setup scroll pane 
+        // setup scroll pane
         JScrollPane CurrentItemsPanel = new JScrollPane(topMiddlePanel);
         CurrentItemsPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         CurrentItemsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         CurrentItemsPanel.getVerticalScrollBar().setUnitIncrement(16);
 //        addComponent(mainPanel,CurrentItemsPanel,1, 0, 2, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        gbc.gridx = 1; 
-        gbc.gridy = 0; 
-        gbc.gridwidth = 1; 
-        gbc.gridheight = 2; 
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 2;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 0.7; // 70% horizontal 
+        gbc.weightx = 0.7; // 70% horizontal
         gbc.weighty = 0.7; // 70% vertical
         mainPanel.add(CurrentItemsPanel, gbc);
-        
+
         JPanel totalPanel = new JPanel();
         totalPanel.setBorder(BorderFactory.createTitledBorder(" "));
         addComponent(totalPanel,new JLabel("Total:"),0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        
-        gbc.gridx = 1; 
-        gbc.gridy = 2; 
-        gbc.gridwidth = 1; 
-        gbc.gridheight = 1; 
-        gbc.fill = GridBagConstraints.BOTH; 
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 0.7; // 70% horizontal
-        gbc.weighty = 0.3; // 30% vertical 
+        gbc.weighty = 0.3; // 30% vertical
         mainPanel.add(totalPanel, gbc);
 //        addComponent(mainPanel,totalPanel,1, 2, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return mainPanel;
     }
-    /*
-     * The Panel for Checkout (MAIN)
-     * Part 2
-     * This is for Upper Left and Upper Right Panels
-     */
-    private JPanel createLabelPanel(String label, int width, int height) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createTitledBorder(label));
-
-
-        // Set the preferred size to have a fixed width and height
-        panel.setPreferredSize(new Dimension(width, height));
-        // Set the maximum size to enforce the desired height
-        panel.setMaximumSize(new Dimension(width, height));        // Set the maximum size to have a fixed width and height
-        return panel;
-    }
-    /*
-     * The Panel for Checkout (MAIN)
-     * Part 3
-     * This is for Right Panel Buttons
-     */
-    private JPanel createButtonPanelRightPanel(String label, int width, int height) {
-        JPanel panel = new JPanel(new GridLayout(3, 3, 10, 10));
-        panel.setBorder(BorderFactory.createTitledBorder(label));
-        panel.setMaximumSize(new Dimension(width-5, height));
-
-        JButton button1 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Add<br>Member #</div></html>");
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.buttonR1_AddMemberNoButton();
-                // PROJ3 : Something needs to happen when member swips his membership
-            }
-        });
-
-        JButton button2 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Sign Up for<br>Membership</div></html>");
-        button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.buttonR2_SignUpForMembershipButton();
-                //PROJ3 : Something needs to happen when customer wants to create membership
-            }
-        });
-
-        JButton button3 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Call<br>Attendant</div></html>");
-        button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.buttonR3_CustomerCallsAttendant();
-                // PROJ3: Customer gets blocked until Attendant clears
-            }
-        });
-
-        JButton button4 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Add<br>Own Bags</div></html>");
-        button4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.buttonR4_CustomerAddsOwnBag();
-                // PROJ3: Customer Adds Bags to Scale
-            }
-        });
-
-        JButton button5 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Remove<br>Last Item</div></html>");
-        button5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.buttonR5_CustomerWantstoRemoveItem();
-                //GUI will remove Last Product added
-                removeLastLabel();
-            }
-        });
-
-        JButton button6 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "BLANK<br>..</div></html>");
-        button6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.buttonR6_BLANK();
-                //Additional Button just in case
-            }
-        });
-        JButton button7 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Enter Item<br>(PLU Code)</div></html>");
-        button7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String addItemPLU_result = guiLogicInstance.buttonR7_CustomerAddsItem_PLUCode();
-                addNewLabel(addItemPLU_result);
-
-
-            }
-        });
-        JButton button8 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Enter Item<br>(Visual Catalog)</div></html>");
-        button8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String addItemVC_result = guiLogicInstance.buttonR8_CustomerAddsItem_VisualCatalogue();
-                addNewLabel(addItemVC_result);
-            }
-        });
-        JButton button9 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Pay<br>For Order</div></html>");
-        button9.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.buttonR9_CustomerWantsToPay();
-                switchPanels("paymentPanel");
-            }
-        });
-
-        //Turns Pay Button 9 (PAY) Green
-        button9.setBackground(new Color(0, 255, 0));
-
-        //Display the Buttons on the GUI Panel
-        panel.add(button1);
-        panel.add(button2);
-        panel.add(button3);
-        panel.add(button4);
-        panel.add(button5);
-        panel.add(button6);
-        panel.add(button7);
-        panel.add(button8);
-        panel.add(button9);
-
-
-        // Set a smaller font size for each button
-        Font smallFont = new Font(button1.getFont().getName(), Font.BOLD, 10); // Adjust the font size as needed
-        button1.setFont(smallFont);
-        button2.setFont(smallFont);
-        button3.setFont(smallFont);
-        button4.setFont(smallFont);
-        button5.setFont(smallFont);
-        button6.setFont(smallFont);
-        button7.setFont(smallFont);
-        button8.setFont(smallFont);
-        button9.setFont(smallFont);
-
-        // Set maximum size for each button to control the width
-        Dimension buttonMaxSize = new Dimension(width / 3, height / 3);
-        button1.setMaximumSize(buttonMaxSize);
-        button2.setMaximumSize(buttonMaxSize);
-        button3.setMaximumSize(buttonMaxSize);
-        button4.setMaximumSize(buttonMaxSize);
-        button5.setMaximumSize(buttonMaxSize);
-        button6.setMaximumSize(buttonMaxSize);
-        button7.setMaximumSize(buttonMaxSize);
-        button8.setMaximumSize(buttonMaxSize);
-        button9.setMaximumSize(buttonMaxSize);
-
-        return panel;
-    }
-
-    /*
-     * The Panel for Checkout (MAIN)
-     * Part 4
-     * This is for Bottom Panel Buttons
-     */
-    private JPanel createButtonPanelBottomPanel(String label, int width, int height) {
-        JPanel panel = new JPanel(new GridLayout(3, 3, 10, 10));
-        panel.setBorder(BorderFactory.createTitledBorder(label));
-        panel.setMaximumSize(new Dimension(width-5, height));
-
-        JButton bot_button1 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Add Item<br>(Barcoded Product)<br>Main Scanner</div></html>");
-        bot_button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String addItem_result = guiLogicInstance.buttonB1_CustomerScansBarcodedProduct_MainScanner();
-                addNewLabel(addItem_result);
-            }
-        });
-
-        JButton bot_button2 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Add Item<br>(Barcoded Product)<br>HandheldScanner</div></html>");
-        bot_button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String addItem_result = guiLogicInstance.buttonB2_CustomerScansBarcodedProduct_HandheldScanner();
-                addNewLabel(addItem_result);
-            }
-        });
-
-        JButton bot_button3 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Add Item<br>RFID Tag</div></html>");
-        // Button 4: Custom Title
-        bot_button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String addItem_result = guiLogicInstance.buttonB3_CustomerScansBarcodedProduct_RFIDTag();
-                addNewLabel(addItem_result);
-                openOverlayPanel();
-            }
-        });
-
-        JButton bot_button4 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Add Item <br>to Bagging Area</div></html>");
-        bot_button4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Button Clicked!");
-            }
-        });
-
-        JButton bot_button5 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Remove Item <br>from Bagging Area</div></html>");
-        bot_button5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Button Clicked!");
-            }
-        });
-
-
-        JButton bot_button6 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "BLANK<br>..</div></html>");
-        bot_button6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Custom Title button click
-                System.out.println("Button Clicked!");
-            }
-        });
-
-        JButton bot_button7 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "BLANK</div></html>");
-        bot_button7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Custom Title button click
-                System.out.println("Button Clicked!");
-            }
-        });
-
-        JButton bot_button8 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "BLANK</div></html>");
-        bot_button8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Custom Title button click
-                System.out.println("Button Clicked!");
-            }
-        });
-
-
-        JButton bot_button9 = new JButton("<html><div style='text-align: center; display: flex; flex-direction: column; align-items: center;'>"
-                + "Try to Steal</div></html>");
-        bot_button9.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle Custom Title button click
-                System.out.println("Button Clicked!");
-            }
-        });
-        // Set a smaller font size for each button
-        Font smallFont = new Font(bot_button1.getFont().getName(), Font.PLAIN, 12); // Adjust the font size as needed
-        bot_button1.setFont(smallFont);
-        bot_button2.setFont(smallFont);
-        bot_button3.setFont(smallFont);
-        bot_button4.setFont(smallFont);
-        bot_button5.setFont(smallFont);
-        bot_button6.setFont(smallFont);
-        bot_button7.setFont(smallFont);
-        bot_button8.setFont(smallFont);
-        bot_button9.setFont(smallFont);
-
-        // Set maximum size for each button to control the width
-        Dimension buttonMaxSize = new Dimension(width / 3, height / 3);
-        bot_button1.setMaximumSize(buttonMaxSize);
-        bot_button2.setMaximumSize(buttonMaxSize);
-        bot_button3.setMaximumSize(buttonMaxSize);
-        bot_button4.setMaximumSize(buttonMaxSize);
-        bot_button5.setMaximumSize(buttonMaxSize);
-        bot_button6.setMaximumSize(buttonMaxSize);
-        bot_button7.setMaximumSize(buttonMaxSize);
-        bot_button8.setMaximumSize(buttonMaxSize);
-        bot_button9.setMaximumSize(buttonMaxSize);
-
-
-        //Display the Buttons on the GUI Panel
-        panel.add(bot_button1);
-        panel.add(bot_button2);
-        panel.add(bot_button3);
-        panel.add(bot_button4);
-        panel.add(bot_button5);
-        panel.add(bot_button6);
-        panel.add(bot_button7);
-        panel.add(bot_button8);
-        panel.add(bot_button9);
-
-
-        return panel;
-    }
-
-    /*
-     * The Panel for Checkout (MAIN)
-     * Part 5
-     * This is for Left Panel/Checkout (Add product to Receipt)
-     */
-    private void addNewLabel(String text) {
-        JLabel label = new JLabel(text);
-        labelList.add(label);
-        leftPanel.add(label);
-        leftPanel.revalidate();
-        leftPanel.repaint();
-    }
-    /*
-     * The Panel for Checkout (MAIN)
-     * Part 5
-     * This is for Left Panel/Checkout (Remove product from Receipt)
-     */
-    private void removeLastLabel() {
-        if (!labelList.isEmpty()) {
-            JLabel removedLabel = labelList.remove(labelList.size() - 1);
-            leftPanel.remove(removedLabel);
-            leftPanel.revalidate();
-            leftPanel.repaint();
-        }
-    }
-
-
-private JPanel createThankYouPanel()  {
+    private JPanel createThankYouPanel()  {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -1131,35 +807,11 @@ private JPanel createThankYouPanel()  {
         setGlassPane(overlayPanel);
         overlayPanel.setVisible(false);
     }
-
-
-
-    // Function Methods ------------------------------------BEGIN
     public void switchPanels(String string) {
         cardLayout.show(cardPanel, string);
     }
-    // Function Methods ------------------------------------END
-
-    //Observer Methods --------------------------------------BEGIN
     @Override
     public void updateTotal(int total) {
         totalLabel.setText("Total: "+ total);
     }
-
-    //Observer Methods --------------------------------------END
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
