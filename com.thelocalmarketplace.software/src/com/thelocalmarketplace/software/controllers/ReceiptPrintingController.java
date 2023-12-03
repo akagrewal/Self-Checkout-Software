@@ -202,7 +202,7 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 		
 		// Disable System so attendant can add Ink
 		this.logic.hardware.getPrinter().disable();
-		this.logic.hardware.turnOff();
+		this.logic.hardware.disable();
 	}
 
 	@Override
@@ -310,5 +310,13 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 			// TODO: Notify Attendant
 		}
 
+	}
+	
+	public boolean getInkLow() {
+		return inkLow;
+	}
+	
+	public boolean getPaperLow() {
+		return paperLow;
 	}
 }
