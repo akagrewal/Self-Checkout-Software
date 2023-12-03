@@ -155,6 +155,11 @@ public class CentralStationLogic {
 	public MembershipLogic membershipLogic;
 	
 	/**
+	 * Instance of logic for prediction
+	 */
+	public PredictionLogic predictionLogic;
+	
+	/**
 	 * Current selected payment method
 	 */
 	private PaymentMethods paymentMethod;	
@@ -194,6 +199,7 @@ public class CentralStationLogic {
 		this.attendantLogic = new AttendantLogic(this);
 		this.addBagsLogic = new AddBagsLogic(this);
 		this.removeItemLogic = new RemoveItemLogic(this);
+		this.predictionLogic = new PredictionLogic(this);
 		
 		this.coinCurrencyLogic = new CurrencyLogic(this.hardware.getCoinDenominations());
 		this.banknoteCurrencyLogic = new CurrencyLogic(this.hardware.getBanknoteDenominations());
