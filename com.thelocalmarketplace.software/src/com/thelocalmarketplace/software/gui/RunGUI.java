@@ -1,7 +1,7 @@
 package com.thelocalmarketplace.software.gui;
 import com.thelocalmarketplace.software.logic.AttendantLogic;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
-import database.*;
+import com.thelocalmarketplace.hardware.external.ProductDatabases;
 
 import javax.swing.*;
 import java.awt.*;
@@ -324,64 +324,36 @@ public class RunGUI extends JFrame implements logicObserver {
         gbc.insets = new Insets(10, 10, 10, 10);
 
 
-        JButton payment_button1 = new JButton("DEBIT (Swipe)");
-        payment_button1.addActionListener(new ActionListener() {
+        JButton payment_button_card = new JButton("Credit/Debit");
+        payment_button_card.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switchPanels("thankYouPanel");
             }
         });
-        JButton payment_button2 = new JButton("DEBIT (Tap)");
-        payment_button2.addActionListener(new ActionListener() {
+        JButton payment_button_coins = new JButton("Coins");
+        payment_button_coins.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switchPanels("thankYouPanel");
             }
         });
-        JButton payment_button3 = new JButton("DEBIT (Insert Card)");
-        payment_button3.addActionListener(new ActionListener() {
+        JButton payment_button_banknotes = new JButton("Banknotes");
+        payment_button_banknotes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switchPanels("thankYouPanel");
             }
         });
-        JButton payment_button4 = new JButton("CREDIT (Swipe)");
-        payment_button4.addActionListener(new ActionListener() {
+        JButton payment_button_mixed = new JButton("Mixed");
+        payment_button_mixed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switchPanels("thankYouPanel");
             }
         });
-        JButton payment_button5 = new JButton("CREDIT (Tap)");
-        payment_button5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switchPanels("thankYouPanel");
-            }
-        });
-        JButton payment_button6 = new JButton("CREDIT (Insert Card)");
-        payment_button6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switchPanels("thankYouPanel");
-            }
-        });
-        JButton payment_button7 = new JButton("Cash (Bills)");
-        payment_button7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switchPanels("cashBillPanel");
-            }
-        });
-        JButton payment_button8 = new JButton("Cash (Coins)");
-        payment_button8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                switchPanels("cashCoinPanel");
-            }
-        });
-        JButton payment_button9 = new JButton("Leave Without Paying");
-        payment_button9.addActionListener(new ActionListener() {
+        JButton payment_button_leave_without_paying = new JButton("Leave Without Paying");
+        payment_button_leave_without_paying.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 switchPanels("thankYouPanel");
@@ -395,44 +367,28 @@ public class RunGUI extends JFrame implements logicObserver {
             }
         });
         gbc.gridx = 1; gbc.gridy = 1;
-        payment_button1.setPreferredSize(new Dimension(150,150));
-        PaymentPanel.add(payment_button1, gbc);
+        payment_button_card.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(payment_button_card, gbc);
 
-
-        gbc.gridx = 1; gbc.gridy = 2;
-        payment_button2.setPreferredSize(new Dimension(150,150));
-        PaymentPanel.add(payment_button2, gbc);
-
-        gbc.gridx = 1; gbc.gridy = 3;
-        payment_button3.setPreferredSize(new Dimension(150,150));
-        PaymentPanel.add(payment_button3, gbc);
 
         gbc.gridx = 2; gbc.gridy = 1;
-        payment_button4.setPreferredSize(new Dimension(150,150));
-        PaymentPanel.add(payment_button4, gbc);
-
-        gbc.gridx = 2; gbc.gridy = 2;
-        payment_button5.setPreferredSize(new Dimension(150,150));
-        PaymentPanel.add(payment_button5, gbc);
-
-        gbc.gridx = 2; gbc.gridy = 3;
-        payment_button6.setPreferredSize(new Dimension(150,150));
-        PaymentPanel.add(payment_button6, gbc);
+        payment_button_coins.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(payment_button_coins, gbc);
 
         gbc.gridx = 3; gbc.gridy = 1;
-        payment_button7.setPreferredSize(new Dimension(150,150));
-        PaymentPanel.add(payment_button7, gbc);
+        payment_button_banknotes.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(payment_button_banknotes, gbc);
 
-        gbc.gridx = 3; gbc.gridy = 2;
-        payment_button8.setPreferredSize(new Dimension(150,150));
-        PaymentPanel.add(payment_button8, gbc);
+        gbc.gridx = 4; gbc.gridy = 1;
+        payment_button_mixed.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(payment_button_mixed, gbc);
 
-        gbc.gridx = 3; gbc.gridy = 3;
-        payment_button9.setPreferredSize(new Dimension(150,150));
-        PaymentPanel.add(payment_button9, gbc);
+        gbc.gridx = 1; gbc.gridy = 3;
+        payment_button_leave_without_paying.setPreferredSize(new Dimension(200,50));
+        PaymentPanel.add(payment_button_leave_without_paying, gbc);
 
-        gbc.gridx = 2; gbc.gridy = 4;
-        BacktoCheckoutButton.setPreferredSize(new Dimension(150,50));
+        gbc.gridx = 4; gbc.gridy = 3;
+        BacktoCheckoutButton.setPreferredSize(new Dimension(200,50));
         PaymentPanel.add(BacktoCheckoutButton, gbc);
 
         return PaymentPanel;
