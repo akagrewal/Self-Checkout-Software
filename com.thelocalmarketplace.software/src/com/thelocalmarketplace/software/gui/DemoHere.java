@@ -49,8 +49,8 @@ public class DemoHere {
     private static final BigDecimal value_dime = new BigDecimal("0.10");
     private static final BigDecimal value_nickel = new BigDecimal("0.05");
     private static final BigDecimal value_penny = new BigDecimal("0.01");
-	
-	
+
+
     //For Testing Purposes - to run GUI (main)
     public static void main(String[] args) {
     	
