@@ -51,13 +51,13 @@ public class DemoHere {
     private static final BigDecimal value_nickel = new BigDecimal("0.05");
     private static final BigDecimal value_penny = new BigDecimal("0.01");
 
-
     //For Testing Purposes - to run GUI (main)
     public static void main(String[] args) {
-    	
+        RunGUI runGUI = new RunGUI(new CentralStationLogic(new SelfCheckoutStationGold()));
+
     	//To open GUI 
         SwingUtilities.invokeLater(() -> {
-            RunGUI GUIframe = new RunGUI(new CentralStationLogic(new SelfCheckoutStationGold()));
+            RunGUI GUIframe = runGUI;
             GUIframe.setTitle("Welcome Screen");
         });
     }
