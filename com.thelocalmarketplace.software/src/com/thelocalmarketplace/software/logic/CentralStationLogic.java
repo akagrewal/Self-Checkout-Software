@@ -140,9 +140,9 @@ public class CentralStationLogic {
 	public AttendantLogic attendantLogic;
 
   /**
-   * Instance of logic for card payment via swipe
+   * Instance of logic for card payment on all possible ways
    */
-	public CardSwipeLogic cardLogic;
+	public CardPaymentLogic cardLogic;
 	
 	/**
 	 * Instance of logic for states
@@ -153,11 +153,15 @@ public class CentralStationLogic {
 	 * Instance of logic for prediction
 	 */
 	public PredictionLogic predictionLogic;
+	/**
+	 * Instance of logic for membership cards
+	 */
+	public MembershipLogic membershipLogic;
 	
 	/**
 	 * Current selected payment method
 	 */
-	private PaymentMethods paymentMethod;
+	private PaymentMethods paymentMethod;	
 	
 	/**
 	 * Tracks if the customer session is active
@@ -233,7 +237,7 @@ public class CentralStationLogic {
 	 * @param bank is the details of the customer's bank
 	 */
 	public void setupBankDetails(CardIssuer bank) {
-		this.cardLogic=new CardSwipeLogic(this,bank);
+		this.cardLogic=new CardPaymentLogic(this,bank);
 	}
 	
 	/**
