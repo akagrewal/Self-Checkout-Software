@@ -2,6 +2,9 @@
 
 package com.thelocalmarketplace.software.gui;
 
+import com.thelocalmarketplace.software.logic.AttendantLogic;
+import com.thelocalmarketplace.software.logic.CentralStationLogic;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,6 +25,11 @@ public class RunGUI extends JFrame implements logicObserver {
     
     //This is what allows Logic to happen when I click a button
 	private GUILogic guiLogicInstance;
+
+    // TODO: this might need to be changed
+    // add a central station logic instance
+    private CentralStationLogic centralStationLogic;
+
     
     //For Testing Purposes - to run GUI 
     public RunGUI() {
@@ -41,8 +49,10 @@ public class RunGUI extends JFrame implements logicObserver {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1000, 800);
         setLocation(0,0);
-        
+
+        // create GUILogic instance and add listeners as needed
         guiLogicInstance = new GUILogic();
+        guiLogicInstance.register(centralStationLogic.attendantLogic);
        
         // Create and add panels to the card panel
         // When you add new panel, make sure to add one here too 
