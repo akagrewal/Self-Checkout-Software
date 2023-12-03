@@ -79,7 +79,8 @@ public class CartLogic {
 	}
 	
 	/**
-	 * Adds purchased bags to the customer's cart
+	 * Adds purchased bags to the total cost
+	 * not actually added to cart 
 	 * @param int the number of bags to add
 	 */
 	public void addReusableBagToCart(int numOfBags) {
