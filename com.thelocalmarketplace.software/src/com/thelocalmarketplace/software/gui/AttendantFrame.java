@@ -11,11 +11,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class AttendantFrame {
 	 
@@ -30,64 +26,35 @@ public class AttendantFrame {
         attend_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         attend_frame.setLocation(1000, 0); // Adjust the coordinates as needed
 
-        // Top Panel (Text: Meow)
-        JPanel topPanel = createLabelPanel("Meow", 450, 150); 
-        attend_frame.add(topPanel, BorderLayout.NORTH);
+        JPanel mainPanel = new JPanel(new GridLayout(3,1));
+        JPanel till1 = new JPanel(new GridLayout(2,2));
+        JPanel till2 = new JPanel(new GridLayout(2, 2));
+        JPanel till3 = new JPanel(new GridLayout(2, 2));
 
-        // Middle Panel (Single Button)
-        JPanel middlePanel = new JPanel();
-        JButton topButton = new JButton("Top Button");
-        topButton.addActionListener(e -> handleButtonClick(1)); // Assuming 1 corresponds to "Meow"
-        middlePanel.add(topButton);
-        attend_frame.add(middlePanel, BorderLayout.CENTER);
+        till1.add(new JButton("activate till 1"));
+        till2.add(new JButton("activate till 2"));
+        till3.add(new JButton("activate till 3"));
 
-        // Bottom Panel
-        JPanel bottomPanel = new JPanel(new GridLayout(5, 2));
-        // Array of button titles
-        String[] buttonTitles = {"Button 1", 
-        						 "Button 2", 
-        						 "Button 3", 
-        						 "Button 4", 
-        						 "Button 5", 
-                                 "Button 6", 
-                                 "Button 7", 
-                                 "Button 8", 
-                                 "Button 9", 
-                                 "Button 10"};
+        till1.add(new JButton("deactivate till 1"));
+        till2.add(new JButton("deactivate till 2"));
+        till3.add(new JButton("deactivate till 3"));
 
-        // Array of button listeners
-        ActionListener[] buttonListeners = {
-            e -> handleButtonClick(1),
-            e -> handleButtonClick(2),
-            e -> handleButtonClick(3),
-            e -> handleButtonClick(4),
-            e -> handleButtonClick(5),
-            e -> handleButtonClick(6),
-            e -> handleButtonClick(7),
-            e -> handleButtonClick(8),
-            e -> handleButtonClick(9),
-            e -> handleButtonClick(10),
-            e -> handleButtonClick(11)
-        };
 
-        // Add buttons to the bottom panel with titles and listeners
-        for (int i = 0; i < buttonTitles.length; i++) {
-            JButton button = new JButton(buttonTitles[i]);
-            button.addActionListener(buttonListeners[i]);
-            bottomPanel.add(button);
-        }
-        // Add the components to the main frame
-        attend_frame.setLayout(new BorderLayout());
-        attend_frame.add(topPanel, BorderLayout.NORTH);
-        attend_frame.add(middlePanel, BorderLayout.CENTER);
-        attend_frame.add(bottomPanel, BorderLayout.SOUTH);
-        
+        till1.add(new JTextField());
+        till2.add(new JTextField());
+        till3.add(new JTextField());
+
+        mainPanel.add(till1);
+        mainPanel.add(till2);
+        mainPanel.add(till3);
+
+        attend_frame.add(mainPanel);
+
         attend_frame.setVisible(true);
-       
     }
 
-    
-    
+
+
     private void handleButtonClick(int buttonNumber) {
         switch (buttonNumber) {
             case 1:
@@ -129,7 +96,7 @@ public class AttendantFrame {
             case 10:
                 System.out.println("Button Clicked");
                 //insert Logic
-                break;    
+                break;
         }
     }
 
@@ -143,5 +110,4 @@ public class AttendantFrame {
         panel.add(label, gbc);
         return panel;
     }
-    
 }
