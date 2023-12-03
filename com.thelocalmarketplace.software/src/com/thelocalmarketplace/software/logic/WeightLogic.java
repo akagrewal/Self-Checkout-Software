@@ -86,7 +86,6 @@ public class WeightLogic extends AbstractLogicDependant {
 	
 	/** gets total mass of current bags
 	 * 
-	 * @param m new mass at last event
 	 **/
 	public Mass getTotalBagMass() {
 		return this.bagMassTotal;
@@ -110,12 +109,13 @@ public class WeightLogic extends AbstractLogicDependant {
 	}
 
 	/** Adds the expected weight of the product with given PLU to the expectedWeight
-	 * @param PriceLookUpCode plu of the item for which to add the expected weight */
+	 * @param plu PriceLookUpCode 
+	 * of the item for which to add the expected weight */
 	public void addExpectedWeight(PriceLookUpCode plu) {
 		if (!ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu)) {
 			throw new InvalidStateSimulationException("PLU not registered to product database");
 		}
-		this.expectedWeight = this.actualWeight;
+		this.expectedWeight = this.expectedWeight.sum(this.actualWeight);
 	}
 	
 	/** Removes the weight of the product given from expectedWeight
@@ -130,6 +130,9 @@ public class WeightLogic extends AbstractLogicDependant {
 		if (difference.compareTo(Mass.ZERO) < 0) throw new InvalidStateSimulationException("Expected weight cannot be negative");
 		this.expectedWeight = difference.abs();
 	}
+	/** Removes weight of the product given from expectedWeight
+	 * @param pluCode - pluCode of item to remove
+	 */
 	public void removeExpectedWeight(PriceLookUpCode pluCode) {
 		if (!ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(pluCode)) {
 			throw new InvalidStateSimulationException("PLUcode not registered to product database");

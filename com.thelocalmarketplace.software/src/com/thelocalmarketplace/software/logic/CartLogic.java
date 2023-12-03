@@ -15,6 +15,7 @@ import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.Product;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
+import com.thelocalmarketplace.software.AbstractLogicDependant;
 import com.thelocalmarketplace.software.Utilities;
 
 import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
@@ -46,59 +47,60 @@ import ca.ucalgary.seng300.simulation.SimulationException;
  * @author Jincheng Li - 30172907
  * @author Anandita Mahika - 30097559
  */
-public class CartLogic {
+public class CartLogic extends AbstractLogicDependant{
 	/**
 	 * Tracks all of the products that are in the customer's cart
 	 * Includes products without barcodes
 	 * Maps a product to its count
 	 * If product is by weight, count is weight in kg
 	 */
-	private Map<Product, Integer> cart;
+	protected Map<Product,Float> cart;
 
 	/**
 	 * Tracks how much money the customer owes
 	 */
 	private BigDecimal balanceOwed;
 
-	public WeightLogic weightLogic;
-
-	public CentralStationLogic logic;
-
+	
 	/**
 	 * Constructor for a new CartLogic instance
 	 */
 
-	public CartLogic(CentralStationLogic logic) {
+	public CartLogic(CentralStationLogic logic){
+		super(logic);
 		// Initialization
-		this.cart = new HashMap<Product, Integer>();
-		this.logic = logic;
-
+		this.cart = new HashMap<Product, Float>();
 		this.balanceOwed = BigDecimal.ZERO;
 	}
+	/**
+	 * Adds a Barcodedproduct to customer's cart. Calculates the price and updates the balance owed by the customer.
+	 * @param product The Barcoded product added.
+	 * @throws SimulationException If the product is not in the cart
+	 */
 
-
-	public void addProductToCart(Product product) {
+	public void addProductToCart(BarcodedProduct product) {
 		// Update balance owed
 		if (product.isPerUnit()) {
 			Utilities.modifyCountMapping(cart, product, 1);
 			BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(product.getPrice()));
 			this.updateBalance(newPrice);}
-		 else {
-			 //get actual weight
-			 long actualWeight = logic.weightLogic.getActualWeight().inGrams().longValue()/1000;
-			 //get expected weight
-			 long expectedWeight = logic.weightLogic.getExpectedWeight().inGrams().longValue()/1000;
-			 // subtract expected weight from actual weight to get weight of PLU product on scale
-			 long weight = actualWeight - expectedWeight;
-			 // Update weight in cart
-			 Utilities.modifyCountMapping(cart, product, (int) weight);
-			 long Price = product.getPrice()* weight;
-			 // Update balance owed
-			 BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(Price));
-			 this.updateBalance(newPrice);
-		 }
 
 		}
+	/**
+	 * Adds a PLUCodedproduct to customer's cart. Calculates the price and updates the balance owed by the customer.
+	 * @param product The PLUCodedproduct added
+	 * @throws SimulationException If the product is not in the cart
+	 */
+	public void addProductToCart(PLUCodedProduct product) {
+		 long actualWeight = logic.weightLogic.getActualWeight().inGrams().longValue()/1000;
+		 // Update weight in cart
+		 Utilities.modifyCountMapping(cart, product, (float)actualWeight);
+		 long Price = product.getPrice()* actualWeight;
+		 // Update balance owed
+		 BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(Price));
+		 this.updateBalance(newPrice);
+		
+	}
 
 	/**
 	 * Removes a product from customer's cart
@@ -117,9 +119,9 @@ public class CartLogic {
 
 		} else {
 			// Get weight from cart hashmap using product key
-			int productWeight = cart.get(product);
+			float productWeight = cart.get(product);
 			// Get total price of item by multiplying weight and price/kg
-			long productPrice = (product.getPrice() * productWeight);
+			long productPrice = (product.getPrice() * (long)productWeight);
 			BigDecimal newPrice = this.balanceOwed.subtract(new BigDecimal(productPrice));
 			this.updateBalance(newPrice);
 			Utilities.modifyCountMapping(cart, product, -(productWeight));
@@ -147,7 +149,7 @@ public class CartLogic {
 	}
 	/**
 	 * Takes a PLU code, looks it up in product database, then adds it to customer cart
-	 * @param PLU Code, The PLU code to use
+	 * @param pluCode, The PLU code to use
 	 * @throws SimulationException If PLU code is not registered to product database
 	 * @throws SimulationException If PLU code is not registered in available inventory
 	 */
@@ -168,7 +170,7 @@ public class CartLogic {
 	 * Gets the customer's cart
 	 * @return A list of products that represent the cart
 	 */
-	public Map<Product, Integer> getCart() {
+	public Map<Product, Float> getCart() {
 		return this.cart;
 	}
 	
@@ -179,9 +181,9 @@ public class CartLogic {
 	public BigDecimal calculateTotalCost() {
 		long balance = 0;
 		
-		for (Entry<Product, Integer> productAndCount : this.getCart().entrySet()) {
+		for (Entry<Product, Float> productAndCount : this.getCart().entrySet()) {
 			Product product = productAndCount.getKey();
-			int count = productAndCount.getValue();
+			Float count = productAndCount.getValue();
 			
 			balance += product.getPrice() * count;
 		}
@@ -216,4 +218,6 @@ public class CartLogic {
 	public void updateBalance(BigDecimal balance) {
 		this.balanceOwed = balance;
 	}
+	
+	
 }

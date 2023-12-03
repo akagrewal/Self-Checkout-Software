@@ -144,7 +144,6 @@ public class RemoveItemTests {
 			bitem2 = new BarcodedItem(barcode2, bItemMass2);
 			bItemMass3 = new Mass((double) 300.0);//3.0 grams
 			bitem3 = new BarcodedItem(barcode3, bItemMass3);
-			//bitem4 = new BarcodedItem(b_test, itemMass3);
 			bItemMass5 = new Mass((double) 300.0);
 			bitem5 = new BarcodedItem(barcode2,bItemMass5);
 			
@@ -262,7 +261,7 @@ public class RemoveItemTests {
 			assertTrue(session.stateLogic.getState() == States.NORMAL);	
 			
 		}	
-		
+
 		@Test 
 		public void testIncorrectRemovalPLU() {
 			station.getBaggingArea().addAnItem(pItem);			
@@ -275,9 +274,10 @@ public class RemoveItemTests {
 			
 			session.removeItemLogic.removePLUCodedItem(pProduct);
 			station.getBaggingArea().removeAnItem(pItem2);
-			assertTrue(session.stateLogic.getState() == States.BLOCKED);			
+			assertTrue(session.weightLogic.checkWeightDiscrepancy());			
 			
 		}
+		
 		
 		
 		

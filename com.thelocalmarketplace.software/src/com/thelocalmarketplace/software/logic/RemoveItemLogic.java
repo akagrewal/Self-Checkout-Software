@@ -93,11 +93,10 @@ public class RemoveItemLogic extends AbstractLogicDependant{
     	// When method is used to remove unwanted items (without triggering a weight discrepancy
     	else {
     		this.logic.cartLogic.removeProductFromCart(product);
-	    	this.logic.weightLogic.removeExpectedWeight(product.getPLUCode());
+    		this.logic.weightLogic.removeExpectedWeight(product.getPLUCode());
 	    	this.logic.stateLogic.gotoState(States.BLOCKED);
 	    	System.out.println("Item removed from cart. Please remove the item from the bagging area");
-    	}	
-    }
+    	}	    }
 	
 	
 	
