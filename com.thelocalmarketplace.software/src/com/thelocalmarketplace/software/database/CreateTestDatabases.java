@@ -9,7 +9,7 @@ import com.thelocalmarketplace.hardware.external.ProductDatabases;
 
 public class CreateTestDatabases {
 
-    public CreateTestDatabases() {
+    public static void createDatabase() {
         // Populate PLU-coded products (fruits)
         PriceLookUpCode bananaPLU = new PriceLookUpCode("1001");
         PLUCodedProduct banana = new PLUCodedProduct(bananaPLU, "Banana", 150);

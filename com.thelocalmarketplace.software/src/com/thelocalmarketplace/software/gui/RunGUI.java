@@ -27,14 +27,12 @@ public class RunGUI extends JFrame implements logicObserver {
     private JLabel totalLabel;
 
     //This is what allows Logic to happen when I click a button
-	private GUILogic guiLogicInstance;
+    private GUILogic guiLogicInstance;
 
-    // TODO: this might need to be changed
-    // add a central station logic instance
-    private CentralStationLogic centralStationLogic;
+    private static final Insets insets = new Insets(0, 0, 0, 0);
 
-    
-    //For Testing Purposes - to run GUI 
+
+    //For Testing Purposes - to run GUI
     public RunGUI() {
         SelfCheckoutGUI();
     }
