@@ -16,6 +16,8 @@ import com.jjjwelectronics.scanner.IBarcodeScanner;
 import com.tdc.banknote.BanknoteValidator;
 import com.tdc.coin.CoinValidator;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.SelfCheckoutStationGold;
+import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 public class DemoHere {
 
@@ -56,7 +58,7 @@ public class DemoHere {
     	
     	//To open GUI 
         SwingUtilities.invokeLater(() -> {
-            RunGUI GUIframe = new RunGUI();
+            RunGUI GUIframe = new RunGUI(new CentralStationLogic(new SelfCheckoutStationGold()));
             GUIframe.setTitle("Welcome Screen");
         });
     }
