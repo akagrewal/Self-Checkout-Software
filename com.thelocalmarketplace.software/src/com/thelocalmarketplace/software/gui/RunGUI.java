@@ -31,15 +31,16 @@ public class RunGUI extends JFrame implements logicObserver {
 
     //For Testing Purposes - to run GUI
     public RunGUI() {
-        this.guiLogicInstance = new GUILogic();
         SelfCheckoutGUI();
+        this.guiLogicInstance = new GUILogic(cardPanel, cardLayout);
+
     }
 
 
     // Constructor to initialize GUILogic
     public RunGUI(GUILogic guiLogicInstance) {
-        this.guiLogicInstance = guiLogicInstance;
         SelfCheckoutGUI();
+        this.guiLogicInstance = guiLogicInstance;
     }
 
     /**
@@ -68,7 +69,7 @@ public class RunGUI extends JFrame implements logicObserver {
 
         // Show the welcome panel initially
         cardLayout.show(cardPanel, "welcomePanel");
-        //Or use method switchPanels("welcomePanel")
+        //Or use method guiLogicInstance.switchPanels("welcomePanel")
 
         setVisible(true);
 
@@ -98,7 +99,7 @@ public class RunGUI extends JFrame implements logicObserver {
             @Override
             public void actionPerformed(ActionEvent e) {
                 guiLogicInstance.StartSessionButtonPressed();
-                switchPanels("AddItemsPanel");
+                guiLogicInstance.switchPanels("AddItemsPanel");
             }
         });
 
@@ -197,7 +198,7 @@ public class RunGUI extends JFrame implements logicObserver {
         VCButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("visualCatalogue");
+                guiLogicInstance.switchPanels("visualCatalogue");
             }
         });
 
@@ -222,7 +223,7 @@ public class RunGUI extends JFrame implements logicObserver {
         payButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("paymentPanel");
+                guiLogicInstance.switchPanels("paymentPanel");
             }
         });
 
@@ -230,7 +231,7 @@ public class RunGUI extends JFrame implements logicObserver {
         payButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("paymentPanel");
+                guiLogicInstance.switchPanels("paymentPanel");
             }
         });
 
@@ -238,7 +239,7 @@ public class RunGUI extends JFrame implements logicObserver {
         payButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("paymentPanel");
+                guiLogicInstance.switchPanels("paymentPanel");
             }
         });
         // Attach buttons
@@ -303,7 +304,7 @@ public class RunGUI extends JFrame implements logicObserver {
         returnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("welcomePanel");
+                guiLogicInstance.switchPanels("welcomePanel");
             }
         });
         JLabel TY_receiptLabel = new JLabel("Thank you for Shopping, Please take your receipt.");
@@ -328,42 +329,42 @@ public class RunGUI extends JFrame implements logicObserver {
         payment_button_card.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("thankYouPanel");
+                guiLogicInstance.switchPanels("thankYouPanel");
             }
         });
         JButton payment_button_coins = new JButton("Coins");
         payment_button_coins.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("thankYouPanel");
+                guiLogicInstance.switchPanels("thankYouPanel");
             }
         });
         JButton payment_button_banknotes = new JButton("Banknotes");
         payment_button_banknotes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("thankYouPanel");
+                guiLogicInstance.switchPanels("thankYouPanel");
             }
         });
         JButton payment_button_mixed = new JButton("Mixed");
         payment_button_mixed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("thankYouPanel");
+                guiLogicInstance.switchPanels("thankYouPanel");
             }
         });
         JButton payment_button_leave_without_paying = new JButton("Leave Without Paying");
         payment_button_leave_without_paying.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("thankYouPanel");
+                guiLogicInstance.switchPanels("thankYouPanel");
             }
         });
         JButton BacktoCheckoutButton = new JButton("Back to Checkout");
         BacktoCheckoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("AddItemsPanel");
+                guiLogicInstance.switchPanels("AddItemsPanel");
             }
         });
         gbc.gridx = 1; gbc.gridy = 1;
@@ -442,14 +443,14 @@ public class RunGUI extends JFrame implements logicObserver {
         payment_button6.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("thankYouPanel");
+                guiLogicInstance.switchPanels("thankYouPanel");
             }
         });
         JButton payment_button7 = new JButton("Back to Checkout/Add More Items");
         payment_button7.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("AddItemsPanel");
+                guiLogicInstance.switchPanels("AddItemsPanel");
             }
         });
         gbc.gridx = 0; gbc.gridy = 0;
@@ -530,14 +531,14 @@ public class RunGUI extends JFrame implements logicObserver {
         payment_button6.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("thankYouPanel");
+                guiLogicInstance.switchPanels("thankYouPanel");
             }
         });
         JButton payment_button7 = new JButton("Back to Checkout/Add More Items");
         payment_button7.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                switchPanels("AddItemsPanel");
+                guiLogicInstance.switchPanels("AddItemsPanel");
             }
         });
         gbc.gridx = 0; gbc.gridy = 0;
@@ -804,9 +805,7 @@ public class RunGUI extends JFrame implements logicObserver {
         setGlassPane(overlayPanel);
         overlayPanel.setVisible(false);
     }
-    public void switchPanels(String string) {
-        cardLayout.show(cardPanel, string);
-    }
+
     @Override
     public void updateTotal(int total) {
         totalLabel.setText("Total: "+ total);

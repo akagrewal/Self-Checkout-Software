@@ -9,10 +9,13 @@ import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.Product;
 import com.thelocalmarketplace.software.database.CreateTestDatabases;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.swing.*;
 
 
 /*
@@ -22,6 +25,17 @@ import java.util.Set;
  */
 public class GUILogic {
 	private final Set<GUIListener> listeners = new HashSet<>();
+	CardLayout cardLayout;
+	JPanel cardPanel;
+
+	public GUILogic(JPanel panel, CardLayout layout) {
+		this.cardLayout = layout;
+		this.cardPanel = panel;
+	}
+
+	public void switchPanels(String string) {
+		cardLayout.show(cardPanel, string);
+	}
 
 	/**
 	 * Registers the given listener so that it will receive events from this
