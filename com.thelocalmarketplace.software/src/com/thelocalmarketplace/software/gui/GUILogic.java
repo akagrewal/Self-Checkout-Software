@@ -87,14 +87,14 @@ public class GUILogic {
 			listener.itemRemovedFromScale(this, weight);
 	}
 
-	protected void payWithCredit(String cardDetails) {
+	protected void payWithCredit(int cardNumber) {
 		for(GUIListener listener : listeners)
-			listener.paidWithCredit(this, cardDetails);
+			listener.paidWithCredit(this, cardNumber);
 	}
 
-	protected void payWithDebit(String cardDetails) {
+	protected void payWithDebit(int cardNumber) {
 		for(GUIListener listener : listeners)
-			listener.paidWithDebit(this, cardDetails);
+			listener.paidWithDebit(this, cardNumber);
 	}
 
 	protected void insertCoin(int coinAmount) {

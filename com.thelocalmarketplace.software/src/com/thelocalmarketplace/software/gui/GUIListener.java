@@ -30,9 +30,9 @@ public interface GUIListener {
 
     default void itemRemovedFromScale(GUILogic guiLogic, Mass weight) {}
 
-    default void paidWithCredit(GUILogic guiLogic, String cardDetails) {}
+    default void paidWithCredit(GUILogic guiLogic, int cardNumber) {}
 
-    default void paidWithDebit(GUILogic guiLogic, String cardDetails) {}
+    default void paidWithDebit(GUILogic guiLogic, int cardNumber) {}
 
     default void coinInserted(GUILogic guiLogic, int coinAmount) {}
 

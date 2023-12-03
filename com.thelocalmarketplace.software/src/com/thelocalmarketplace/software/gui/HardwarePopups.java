@@ -100,7 +100,7 @@ public class HardwarePopups {
 		Consumer<String> onSubmit = inputText -> {
 			int cardNumber = Integer.parseInt(inputText);
 			if (real) {
-				//TODO 
+				guiLogic.payWithCredit(cardNumber);
 			} else {
 				//TODO: can we just have an error message here?
 			}
@@ -113,7 +113,8 @@ public class HardwarePopups {
 		JDialog dialog = createDialog(parentFrame, "Pay With Debit");
 		JTextField textField = addTextField(dialog, "Enter debit card details:");
 		Consumer<String> onSubmit = inputText -> {
-			//TODO 
+            int cardNumber = Integer.parseInt(inputText);
+            guiLogic.payWithDebit(cardNumber);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
@@ -123,7 +124,8 @@ public class HardwarePopups {
 		JDialog dialog = createDialog(parentFrame, "Insert Coin");
 		JTextField textField = addTextField(dialog, "Enter coin value:");
 		Consumer<String> onSubmit = inputText -> {
-			//TODO 
+			int coinValue = Integer.parseInt(inputText);
+            guiLogic.insertCoin(coinValue);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
@@ -133,7 +135,8 @@ public class HardwarePopups {
 		JDialog dialog = createDialog(parentFrame, "Insert Banknote");
 		JTextField textField = addTextField(dialog, "Enter banknote value:");
 		Consumer<String> onSubmit = inputText -> {
-			//TODO 
+            int banknoteValue = Integer.parseInt(inputText);
+            guiLogic.insertBanknote(banknoteValue);
 		};
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
