@@ -76,6 +76,9 @@ public class RunGUI extends JFrame implements logicObserver {
         // Open Attendant Frame beside the Self CheckOut
         AttendantFrame attendantFrame = new AttendantFrame();
         attendantFrame.AttendantFrame();
+        
+        HardwareActionSimulations actionsFrame = new HardwareActionSimulations();
+        actionsFrame.setVisible(true);
        
     }
 
