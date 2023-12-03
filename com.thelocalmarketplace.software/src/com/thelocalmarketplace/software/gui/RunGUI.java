@@ -189,7 +189,7 @@ public class RunGUI extends JFrame implements logicObserver {
 
 
         // PANEL FOR ALL THE BUTTONS (USE CASES)
-        JPanel buttonsPanel = new JPanel();
+        JPanel buttonsPanel = new JPanel(new GridBagLayout());
 
         JButton addItemButton = new JButton("add an item");
         addItemButton.addActionListener(new ActionListener() {
@@ -201,9 +201,12 @@ public class RunGUI extends JFrame implements logicObserver {
 
         JButton payButton = new JButton("Finish and Pay");
 
+        JButton removeItem = new JButton("remove an item");
 
-        addComponent(buttonsPanel,addItemButton,0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        addComponent(buttonsPanel,payButton,0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+
+        addComponent(buttonsPanel,addItemButton,0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+        addComponent(buttonsPanel,removeItem,0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+        addComponent(buttonsPanel,payButton,0, 2, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE);
 
 
         addComponent(mainPanel,buttonsPanel,0, 0, 1, 3, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
