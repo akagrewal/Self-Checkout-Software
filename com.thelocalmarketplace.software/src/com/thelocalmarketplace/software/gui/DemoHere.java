@@ -6,8 +6,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
 
-import javax.swing.SwingUtilities;
-
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.Numeral;
 import com.jjjwelectronics.card.ICardReader;
@@ -19,9 +17,11 @@ import com.tdc.banknote.BanknoteValidator;
 import com.tdc.coin.CoinValidator;
 import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.SelfCheckoutStationBronze;
 import com.thelocalmarketplace.hardware.SelfCheckoutStationGold;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.database.CreateTestDatabases;
+import com.thelocalmarketplace.software.logic.AttendantLogic;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 import powerutility.PowerGrid;
@@ -96,15 +96,20 @@ public class DemoHere {
 		PowerGrid.instance().forcePowerRestore();
 		AbstractSelfCheckoutStation.resetConfigurationToDefaults();
 		
-    	SelfCheckoutStationGold  station = new SelfCheckoutStationGold();
-    	station.plugIn(PowerGrid.instance());
-		station.turnOn();
+    	SelfCheckoutStationGold station1 = new SelfCheckoutStationGold();
+		SelfCheckoutStationGold station2 = new SelfCheckoutStationGold();
+    	station1.plugIn(PowerGrid.instance());
+		station1.turnOn();
+		station2.plugIn(PowerGrid.instance());
+		station2.turnOn();
     	
-    	CentralStationLogic stationLogic1 = new CentralStationLogic(station);
+    	CentralStationLogic stationLogic1 = new CentralStationLogic(station1);
+		CentralStationLogic stationLogic2 = new CentralStationLogic(station2);
     	
-        AttendantFrame attendantFrame = new AttendantFrame();
-        attendantFrame.registerStationLogic(stationLogic1);
-        attendantFrame.createAttendantFrame();
+		AttendantLogic attendantLogic = new AttendantLogic();
+        attendantLogic.registerStationLogic(stationLogic1);
+		attendantLogic.registerStationLogic(stationLogic2);
+		attendantLogic.updateAttendantGUI();
         HardwareActionSimulations actionsFrame = new HardwareActionSimulations(stationLogic1);
         actionsFrame.setVisible(true);
     }

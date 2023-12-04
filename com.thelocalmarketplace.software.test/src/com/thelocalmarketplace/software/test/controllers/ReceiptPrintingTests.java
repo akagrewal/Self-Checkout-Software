@@ -144,8 +144,9 @@ public class ReceiptPrintingTests {
         assertEquals(this.session.stateLogic.getState(), States.SUSPENDED);
         
         station.getPrinter().addPaper(100);
-        AttendantLogic attendant = new AttendantLogic(session);
-        attendant.printDuplicateReceipt();
+        AttendantLogic attendant = new AttendantLogic();
+        attendant.registerStationLogic(session);
+        attendant.printDuplicateReceipt(session);
         assertEquals(this.session.stateLogic.getState(), States.NORMAL);
     }
 }

@@ -64,6 +64,7 @@ class Numpad extends JPanel {
         JButton buttonCLEAR = new JButton("CLEAR");
         JButton button0 = new JButton("0");
         JButton buttonENTER = new JButton("ENTER");
+        JButton buttonBACK = new JButton("BACK");
 
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -97,6 +98,10 @@ class Numpad extends JPanel {
         gbc.gridx = 2;
         add(buttonENTER, gbc);
 
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        add(buttonBACK, gbc);
+
         button1.addActionListener(createNumButtonActionListener("1"));
         button2.addActionListener(createNumButtonActionListener("2"));
         button3.addActionListener(createNumButtonActionListener("3"));
@@ -108,19 +113,11 @@ class Numpad extends JPanel {
         button9.addActionListener(createNumButtonActionListener("9"));
         button0.addActionListener(createNumButtonActionListener("0"));
 
-        buttonCLEAR.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                textField.setText("");
-            }
-        });
+        buttonCLEAR.addActionListener(e -> textField.setText(""));
 
-        buttonENTER.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                numpadEnter(textField.getText());
-            }
-        });
+        buttonENTER.addActionListener(e -> numpadEnter(textField.getText()));
+
+        buttonBACK.addActionListener(e -> closeNumPadPanel());
     }
 
     private ActionListener createNumButtonActionListener(String num) {
