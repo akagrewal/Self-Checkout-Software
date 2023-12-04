@@ -11,21 +11,35 @@ public class PredictionLogic extends AbstractLogicDependant {
 	}	
 	
 	public Boolean checkLowCoinPrediction() {
-		if (logic.hardware.getCoinStorage().getCoinCount() <= 100) {
-			predictionAction("Warning: Low Coins!");
-			return true;
-		} else {
-			return false;
-		}
+		var currentCoins = logic.hardware.getCoinStorage().getCoinCount();
+		var capacity = logic.hardware.getCoinStorage().getCapacity();
+    	var minCapacity = capacity * .15;
+    	
+      	if (currentCoins <= minCapacity) {
+   		
+    		//notify attendant and disable customer station
+    		predictionAction("Warning: Coin storage is almost empty.");
+		 
+    		return true;
+    		
+    	}
+    	return false;
 	}
 	
 	public Boolean checkCoinsFullPrediction() {
-		if (logic.hardware.getCoinStorage().getCoinCount() <= logic.hardware.getCoinStorage().getCapacity() - 100) {
-			predictionAction("Warning: Coins Full!");
-			return true;
-		} else {
-			return false;
-		}
+		var currentCoins = logic.hardware.getCoinStorage().getCoinCount();
+		var capacity = logic.hardware.getCoinStorage().getCapacity();
+    	var maxCapacity = capacity * .75;
+    	
+      	if (currentCoins <= maxCapacity) {
+   		
+    		//notify attendant and disable customer station
+    		predictionAction("Warning: Coin storage is almost full.");
+		 
+    		return true;
+    		
+    	}
+    	return false;
 	}
 	
 	public boolean checkPaperPrediction() {
