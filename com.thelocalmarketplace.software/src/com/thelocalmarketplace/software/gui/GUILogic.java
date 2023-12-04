@@ -1,16 +1,6 @@
 
 package com.thelocalmarketplace.software.gui;
 
-import com.jjjwelectronics.Item;
-import com.jjjwelectronics.Mass;
-import com.jjjwelectronics.scanner.BarcodedItem;
-import com.thelocalmarketplace.hardware.BarcodedProduct;
-import com.thelocalmarketplace.hardware.PLUCodedProduct;
-import com.thelocalmarketplace.hardware.Product;
-import com.thelocalmarketplace.software.database.CreateTestDatabases;
-import com.thelocalmarketplace.software.logic.CentralStationLogic;
-
-import java.awt.*;
 import java.awt.CardLayout;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,13 +12,12 @@ import java.util.Set;
 import javax.swing.JPanel;
 
 import com.jjjwelectronics.Mass;
-import com.jjjwelectronics.Numeral;
-import com.jjjwelectronics.scanner.Barcode;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.Product;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
+import com.thelocalmarketplace.software.database.CreateTestDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 /*
@@ -70,6 +59,7 @@ public class GUILogic {
 	private void updateItemsList() {
 		guiDisplay.itemListModel.clear();
 		Map<Product, Float> cart = centralLogic.cartLogic.getCart();
+		System.out.println("Size of cart: " + cart.size());
 		for (Map.Entry<Product, Float> entry : cart.entrySet()) {
 			Product product = entry.getKey();
 			Float count = entry.getValue();
@@ -142,7 +132,8 @@ public class GUILogic {
 
 //		if (productFound){
 		PLUCodedProduct product = ProductDatabases.PLU_PRODUCT_DATABASE.get(pluCode);
-		centralLogic.cartLogic.addProductToCart(product);
+		System.out.println("This is the PLU code of the item being added: " + product.getPLUCode());
+		centralLogic.addPLUProductController.addPLU(product.getPLUCode());
 		updateCartChanged();
 
 		return productFound;
