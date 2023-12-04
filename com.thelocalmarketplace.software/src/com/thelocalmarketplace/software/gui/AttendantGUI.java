@@ -42,6 +42,7 @@ public class AttendantGUI {
             JButton buttonDisable = new JButton("DisableStation " + i);
             JComboBox<String> searchBox = new JComboBox<>(itemsArray);
             JButton buttonConfirmSearch = new JButton("Confirm search");
+            stationLogic.attendantLogic.attendantGUI = this;
             tempPanel.add(buttonEnable);
             tempPanel.add(buttonDisable);
             tempPanel.add(searchBox);

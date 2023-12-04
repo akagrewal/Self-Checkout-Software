@@ -44,7 +44,7 @@ import static com.thelocalmarketplace.software.gui.SessionBlockedPopUp.*;
  * @author Anandita Mahika - 30097559
  */
 public class AttendantLogic {
-	private final AttendantGUI attendantGUI;
+	public AttendantGUI attendantGUI;
 	ArrayList<CentralStationLogic> stationLogicsList;
 
 	public AttendantLogic() {
@@ -198,7 +198,8 @@ public class AttendantLogic {
 	 *  Attendant being notified of weight discrepancy
 	 */
 	public void weightDiscrepancy(CentralStationLogic logic) {
-		discrepancyDetected(attendantGUI.getAttendantFrame());
+		discrepancyDetected(logic.stationGUI);
+		discrepancyDetected(attendantGUI.getAttendantFrame(), logic.stationNumber);
 	}
 	
 	/** Adds an item for a customer through text search
