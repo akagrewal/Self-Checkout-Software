@@ -49,8 +49,11 @@ public class AttendantGUI {
 
             buttonEnable.addActionListener(e -> stationLogic.attendantLogic.enableCustomerStation(stationLogic));
             buttonDisable.addActionListener(e -> stationLogic.attendantLogic.disableCustomerStation(stationLogic));
-            // buttonConfirmSearch.addActionListener(e -> textsearch());
-
+            buttonConfirmSearch.addActionListener(e -> {
+                	 String textSearch = (String)searchBox.getSelectedItem();
+                     stationLogic.attendantLogic.AddItemByTextSearch(stationLogic, textSearch);
+                });
+            
             tempPanel.add(buttonEnable);
             tempPanel.add(buttonDisable);
             tempPanel.add(searchBox);

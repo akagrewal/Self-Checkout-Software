@@ -1,6 +1,10 @@
 package com.thelocalmarketplace.software.logic;
 
 import com.jjjwelectronics.scanner.Barcode;
+import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.hardware.PriceLookUpCode;
+import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.gui.*;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
@@ -8,6 +12,7 @@ import ca.ucalgary.seng300.simulation.InvalidArgumentSimulationException;
 import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 import static com.thelocalmarketplace.software.gui.SessionBlockedPopUp.*;
 
@@ -200,4 +205,20 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 		
 		logic.stateLogic.gotoState(States.NORMAL);
 	}
+	
+	/** Adds an item for a customer through text search
+     
+@param itemName*/
+  public void AddItemByTextSearch(CentralStationLogic logic, String itemName) {
+      for (Entry<Barcode, BarcodedProduct> BarcodeEntry : ProductDatabases.BARCODED_PRODUCT_DATABASE.entrySet()) {
+          for (Entry<PriceLookUpCode, PLUCodedProduct> PLUCodeEntry : ProductDatabases.PLU_PRODUCT_DATABASE.entrySet()) {
+               String BDescription =  BarcodeEntry.getValue().getDescription();
+               String PDescription = PLUCodeEntry.getValue().getDescription();
+              if (Objects.equals(itemName, BDescription)) {
+                  logic.cartLogic.addBarcodedProductToCart(BarcodeEntry.getKey());
+                  logic.guiLogic.updateCartChanged();}
+              if (Objects.equals(itemName, PDescription)) {
+                  logic.cartLogic.addPLUCodedProductToCart(PLUCodeEntry.getKey());
+                  logic.guiLogic.updateCartChanged();}}}}
+	
 }
