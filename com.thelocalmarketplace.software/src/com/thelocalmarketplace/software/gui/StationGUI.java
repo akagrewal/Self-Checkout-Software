@@ -12,7 +12,7 @@ import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 
 
-public class StationGUI extends JFrame implements logicObserver {
+public class StationGUI extends JFrame {
     // Paneling on GUI
     public JPanel cardPanel;
     public CardLayout cardLayout;
@@ -527,12 +527,6 @@ public class StationGUI extends JFrame implements logicObserver {
 
         return panel;
     }
-
-    @Override
-    public void updateTotal(int total) {
-        totalLabel.setText("Total: "+ total);
-    }
-
 
     public GUILogic getLogicInstance(){
         return this.guiLogicInstance;

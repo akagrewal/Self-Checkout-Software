@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
-import com.thelocalmarketplace.software.gui.GUIListener;
 import com.thelocalmarketplace.software.gui.GUILogic;
 import org.junit.Before;
 import org.junit.Test;

@@ -43,7 +43,7 @@ import static com.thelocalmarketplace.software.gui.SessionBlockedPopUp.*;
  * @author Jincheng Li - 30172907
  * @author Anandita Mahika - 30097559
  */
-public class AttendantLogic implements GUIListener{
+public class AttendantLogic {
 	private final AttendantGUI attendantFrame;
 	ArrayList<CentralStationLogic> stationLogicsList;
 
@@ -73,33 +73,16 @@ public class AttendantLogic implements GUIListener{
 	
 	private boolean waitingToDisable = false;
 
-// listener stuff
-private final Set<AttendantFrameListener> listeners = new HashSet<>();
-
-	/**
-	 * Registers the given listener so that it will receive events from this
-	 * communication facade.
-	 *
-	 * @param listener The listener to be registered. If it is already registered, this
-	 *                 call has no effect.
-	 */
-	public void register(AttendantFrameListener listener) {
-		listeners.add(listener);
-	}
-
 	// LOGIC PANEL
 	// add logic for when attendant confirms call from customer
 	private void confirmCall(GUILogic guiLogic) {
-		for (AttendantFrameListener listener : listeners)
-			listener.confirmed(this, guiLogic);
+		// TODO: write code to basically close the popup on both ends
 	}
 
 	// add logic for when attendant overrides block on specific station
 	private void override(GUILogic guiLogic, String blockType) {
-		for (AttendantFrameListener listener : listeners)
-			listener.override(this, guiLogic, blockType);
+		// TODO: write code to override the station specified
 	}
-// listener end
 
 
 	
@@ -165,13 +148,12 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 	/**
 	 * Notify the attendant their aid is needed
 	 */
-	@ Override
-	public void attendantCalled(GUILogic guiLogic) {
+	public void callAttendant(GUILogic guiLogic) {
     	// set visible (or open) NotifyPopUp
 		NotifyPopUp notify = new NotifyPopUp();
         notify.notifyPopUp();
     }
-	
+
 	/** Method to notify the attendant station that the current session has ended */
 	public void notifySessionEnded(CentralStationLogic logic) {
 		if (waitingToDisable) {
