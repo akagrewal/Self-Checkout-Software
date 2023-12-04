@@ -9,6 +9,7 @@ import java.math.RoundingMode;
 import javax.swing.*;
 
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
+import com.thelocalmarketplace.software.logic.CentralStationLogic.PaymentMethods;
 
 
 
@@ -56,6 +57,7 @@ public class StationGUI extends JFrame {
         cardPanel.add(createVisual(), "visualCatalogue");
         cardPanel.add(createThankYouPanel(), "thankYouPanel");
         cardPanel.add(createPaymentPanel(), "paymentPanel");
+        cardPanel.add(createPOSPanel(), "POS_Panel");
         // cardPanel.add(createCashBillPanel(), "cashBillPanel");
         // cardPanel.add(createCashCoinPanel(), "cashCoinPanel");
 
@@ -325,12 +327,29 @@ public class StationGUI extends JFrame {
         buttonBackToCheckout.setPreferredSize(new Dimension(200,50));
         PaymentPanel.add(buttonBackToCheckout, gbc);
 
-        button_CardPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonCoinPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonCashPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonMixedPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonLeaveWithoutPaying.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonBackToCheckout.addActionListener(e -> guiLogicInstance.switchPanels("AddItemsPanel"));
+        button_CardPayment.addActionListener(e -> {
+        	centralStationLogic.selectPaymentMethod(PaymentMethods.DEBIT);
+        	guiLogicInstance.switchPanels("POS_Panel");	
+        });
+        buttonCoinPayment.addActionListener(e -> {
+        	centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
+			guiLogicInstance.switchPanels("POS_Panel");
+		});
+        buttonCashPayment.addActionListener(e -> {
+        	centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
+			guiLogicInstance.switchPanels("POS_Panel");
+		});
+        buttonMixedPayment.addActionListener(e -> {
+        	centralStationLogic.selectPaymentMethod(PaymentMethods.MIXED);
+			guiLogicInstance.switchPanels("POS_Panel");
+		});
+        
+        buttonLeaveWithoutPaying.addActionListener(e -> {
+			guiLogicInstance.switchPanels("POS_Panel");
+		});
+        buttonBackToCheckout.addActionListener(e -> {
+			guiLogicInstance.switchPanels("POS_Panel");
+		});
 
         return PaymentPanel;
     }
@@ -517,7 +536,28 @@ public class StationGUI extends JFrame {
     }
 
      */
+    private JPanel createPOSPanel()  {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
 
+        JButton returnButton = new JButton("Cancel");
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guiLogicInstance.switchPanels("paymentPanel");
+                guiLogicInstance.SessionOver();
+            }
+        });
+        JLabel POSLabel = new JLabel("Please complete the payment at the POS");
+        POSLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        gbc.gridy = 0;
+        panel.add(POSLabel, gbc);
+        gbc.gridy = 1;
+        panel.add(returnButton,gbc);
+
+        return panel;
+    }
 
     private JPanel createThankYouPanel()  {
         JPanel panel = new JPanel(new GridBagLayout());

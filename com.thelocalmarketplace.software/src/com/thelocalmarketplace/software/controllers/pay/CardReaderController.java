@@ -90,6 +90,7 @@ public class CardReaderController extends AbstractLogicDependant implements Card
 
             //if successful reduce amount owed by customer otherwise do nothing
             this.logic.cartLogic.modifyBalance(logic.cartLogic.getBalanceOwed().negate());
+            this.logic.guiLogic.switchPanels("thankYouPanel");
 
         }
 
