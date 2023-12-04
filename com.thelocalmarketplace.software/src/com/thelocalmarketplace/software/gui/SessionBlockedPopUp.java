@@ -25,6 +25,24 @@ public class SessionBlockedPopUp {
         popupDialog.setVisible(true);
     }
     
+    public static void discrepancyDetected(JFrame parentFrame, int stationNumber) {
+        popupDialog = new JDialog(parentFrame);
+        popupDialog.setUndecorated(true);
+        popupDialog.setSize(800, 700);
+        popupDialog.setLocationRelativeTo(null);
+
+        JLabel label = new JLabel("Weight discrepancy at: Station " + stationNumber);
+
+        // Set a larger font for the label
+        Font font = new Font("Arial", Font.PLAIN, 24);
+        label.setFont(font);
+
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        popupDialog.add(label);
+
+        popupDialog.setVisible(true);
+    }
+    
     public static void outOfOrder(JPanel parentPanel) {
         popupDialog = new JDialog();
         popupDialog.setUndecorated(true);
