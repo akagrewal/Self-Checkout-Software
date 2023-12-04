@@ -140,8 +140,11 @@ class Numpad extends JPanel {
     private void numpadEnter(String input) {
 
         if (mode == 0) {
-            this.closeNumPadPanel();
-            guiLogicInstance.checkMembership(input);
+            if (guiLogicInstance.checkMembership(input)) {
+                this.closeNumPadPanel();
+            } else {
+                textField.setText("Invalid Membership");
+            }
         } else if (mode == 1) {
             if (guiLogicInstance.checkPLU(input)) {
                 this.closeNumPadPanel();

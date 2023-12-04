@@ -17,7 +17,6 @@ import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.Product;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
-import com.thelocalmarketplace.software.database.CreateTestDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 /*
@@ -97,9 +96,13 @@ public class GUILogic {
 		return valid;
 	}
 
-	public void checkMembership(String membershipID) {
-		boolean valid = centralLogic.membershipLogic.isMembershipNumberValid(membershipID);
-		// do something
+	public boolean checkMembership(String membershipID) {
+		if (centralLogic.membershipLogic.isMembershipNumberValid(membershipID)) {
+			centralLogic.membershipLogic.setMembershipNumber(membershipID);
+		} else {
+			return false;
+		}
+		return true;
 	}
 
 
