@@ -43,16 +43,21 @@ public class GUILogic {
 	JPanel cardPanel;
 	RunGUI guiDisplay;
 
-	public GUILogic(RunGUI runGUI, JPanel panel, CardLayout layout, CentralStationLogic logic) {
+	public GUILogic(CentralStationLogic logic, RunGUI runGUI) {
 		this.guiDisplay = runGUI;
-		this.cardLayout = layout;
-		this.cardPanel = panel;
+		this.cardLayout = runGUI.cardLayout;
+		this.cardPanel = runGUI.cardPanel;
 		this.centralLogic = logic;
-		updateItemsList();
 	}
 
 	public void switchPanels(String string) {
 		cardLayout.show(cardPanel, string);
+	}
+	
+	/** Call when a change is made to the cart; Will cause the required changes on the GUI side **/
+	public void updateCartChanged() {
+		updateItemsList();
+		updateTotal();
 	}
 
 	/**
@@ -60,7 +65,7 @@ public class GUILogic {
 	 * of the cart
 	 *
 	 */
-	public void updateItemsList() {
+	private void updateItemsList() {
 		guiDisplay.itemListModel.clear();
 		updateTotal();
 		// FOR TESTING
@@ -96,7 +101,7 @@ public class GUILogic {
 	}
 
 	/** Call when a change to the price of items in the cart is made **/
-	public void updateTotal() {
+	private void updateTotal() {
 		BigDecimal owed = centralLogic.cartLogic.getBalanceOwed();
 		guiDisplay.setTotal(owed);
 	}

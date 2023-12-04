@@ -30,8 +30,8 @@ import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 public class RunGUI extends JFrame implements logicObserver {
     // Paneling on GUI
-    private JPanel cardPanel;
-    private CardLayout cardLayout;
+    public JPanel cardPanel;
+    public CardLayout cardLayout;
     // For logic testing - delete after all GUI is done
     private int total;
     private JLabel totalLabel;
@@ -52,7 +52,7 @@ public class RunGUI extends JFrame implements logicObserver {
 
         SelfCheckoutGUI();
 
-        this.guiLogicInstance = new GUILogic(this, cardPanel, cardLayout, centralStationLogic);
+        this.guiLogicInstance = new GUILogic(centralStationLogic,this);
     }
 
     /**
