@@ -145,8 +145,7 @@ public class GUILogic {
 
 		return productFound;
 	}
-	
-	
+
 	
 	
 // ENZOS CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
