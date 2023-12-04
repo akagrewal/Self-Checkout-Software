@@ -9,7 +9,7 @@ import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 public class HardwareActionSimulations extends JFrame {
 
-    private static final int WINDOW_WIDTH = 800;
+    private static final int WINDOW_WIDTH = 500;
     private static final int WINDOW_HEIGHT = 500;
     private static final int BUTTON_WIDTH = 225; // 75% of WINDOW_WIDTH
     private static final int BUTTON_HEIGHT = 50;
