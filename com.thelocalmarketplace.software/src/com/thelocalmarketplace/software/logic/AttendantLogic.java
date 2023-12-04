@@ -212,13 +212,14 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
   public void AddItemByTextSearch(CentralStationLogic logic, String itemName) {
       for (Entry<Barcode, BarcodedProduct> BarcodeEntry : ProductDatabases.BARCODED_PRODUCT_DATABASE.entrySet()) {
           for (Entry<PriceLookUpCode, PLUCodedProduct> PLUCodeEntry : ProductDatabases.PLU_PRODUCT_DATABASE.entrySet()) {
-               String BDescription =  BarcodeEntry.getValue().getDescription();
-               String PDescription = PLUCodeEntry.getValue().getDescription();
+              String BDescription =  BarcodeEntry.getValue().getDescription();
+			  String PDescription = PLUCodeEntry.getValue().getDescription();
               if (Objects.equals(itemName, BDescription)) {
                   logic.cartLogic.addBarcodedProductToCart(BarcodeEntry.getKey());
-                  logic.guiLogic.updateCartChanged();}
-              if (Objects.equals(itemName, PDescription)) {
+			  } else if (Objects.equals(itemName, PDescription)) {
                   logic.cartLogic.addPLUCodedProductToCart(PLUCodeEntry.getKey());
-                  logic.guiLogic.updateCartChanged();}}}}
-	
+			  }
+		  }
+	  }
+  }
 }
