@@ -122,9 +122,11 @@ public class GUILogic {
 
 	// START BUTTON
 	public void StartSessionButtonPressed() {
-		System.out.println("Start Session");
-		if (centralLogic.stateLogic.getState() != States.OUTOFORDER)
+		if (centralLogic.stateLogic.getState() != States.OUTOFORDER) {
+			System.out.println("Start Session");
 			centralLogic.startSession();
+			switchPanels("AddItemsPanel");
+		}
 	}
 	
 	public void SessionOver() {

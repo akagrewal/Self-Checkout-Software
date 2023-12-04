@@ -85,7 +85,6 @@ public class RunGUI extends JFrame implements logicObserver {
             @Override
             public void actionPerformed(ActionEvent e) {
                 guiLogicInstance.StartSessionButtonPressed();
-                guiLogicInstance.switchPanels("AddItemsPanel");
             }
         });
 
