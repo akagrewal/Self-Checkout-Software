@@ -56,12 +56,14 @@ public class AttendantLogic {
 		stationLogicsList.add(logic);
 		attendantFrame.stationToButtonMap.put(logic, null);
 		attendantFrame.stationLogicsList.add(logic);
+		updateAttendantGUI();
 	}
 
 	public void deregisterStationLogic(CentralStationLogic logic) {
 		stationLogicsList.remove(logic);
 		attendantFrame.stationToButtonMap.remove(logic);
 		attendantFrame.stationLogicsList.remove(logic);
+		updateAttendantGUI();
 	}
 
 	public void updateAttendantGUI() {
