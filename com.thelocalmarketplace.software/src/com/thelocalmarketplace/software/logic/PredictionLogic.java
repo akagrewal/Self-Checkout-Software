@@ -1,11 +1,13 @@
 package com.thelocalmarketplace.software.logic;
 
 import com.thelocalmarketplace.software.AbstractLogicDependant;
+import com.thelocalmarketplace.software.gui.NotifyPopUp;
+import com.thelocalmarketplace.software.gui.SessionBlockedPopUp;
 
 public class PredictionLogic extends AbstractLogicDependant {
 	final int MAXIMUM_PAPER = 1 << 10;
 	final int MAXIMUM_INK = 1 << 20;
-	
+		
 	public PredictionLogic(CentralStationLogic logic) throws NullPointerException {
 		super(logic);
 	}	
@@ -118,7 +120,15 @@ public class PredictionLogic extends AbstractLogicDependant {
 	
 	
 	public void predictionAction(String message) {
-		// need to notify attendant.
+		NotifyPopUp attendantPopUp = new NotifyPopUp();
+		notify();
+		SessionBlockedPopUp.issuePredicted(message);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		logic.attendantLogic.disableCustomerStation(); 
 	}	
 }
