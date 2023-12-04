@@ -52,12 +52,12 @@ public class BagsTooHeavyTest {
 }
 	@Test public void testBaggingDiscrepancyDetected() {
 		this.logic.addBagsLogic.approvedBagging = false;
-		this.logic.attendantLogic.baggingDiscrepencyDetected();
+		this.logic.attendantLogic.baggingDiscrepencyDetected(this.logic);
 		assertEquals(this.logic.stateLogic.getState(),States.BLOCKED);
 	}
 	@Test public void testBaggingDiscrepancyDetectedApproved() {
 		this.logic.addBagsLogic.approvedBagging = true;
-		this.logic.attendantLogic.baggingDiscrepencyDetected();
+		this.logic.attendantLogic.baggingDiscrepencyDetected(this.logic);
 		assertEquals(this.logic.stateLogic.getState(),States.NORMAL);
 	}
 }
