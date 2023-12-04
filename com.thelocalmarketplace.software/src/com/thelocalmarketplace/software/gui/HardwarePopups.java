@@ -48,11 +48,11 @@ public class HardwarePopups {
 	private BigDecimal[] billDenominations;
 
 	private static BigDecimal[] coindenominations = new BigDecimal[] {
-			new BigDecimal(0.05),
-			new BigDecimal(0.10),
-			new BigDecimal(0.25),
-			new BigDecimal(1.00),
-			new BigDecimal(2.00)
+			new BigDecimal("0.05"),
+			new BigDecimal("0.10"),
+			new BigDecimal("0.25"),
+			new BigDecimal("1.00"),
+			new BigDecimal("2.00")
 	};
 
 
@@ -448,7 +448,7 @@ public class HardwarePopups {
 		JButton toonie = new JButton("Toonie ($2.00)");
 
 		nikle.addActionListener(e -> {
-			Coin nickleCoin = new Coin(currency, new BigDecimal(0.05));
+			Coin nickleCoin = new Coin(currency, new BigDecimal("0.05"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().sink.receive(nickleCoin);
 			} catch (DisabledException e1) {
@@ -461,7 +461,7 @@ public class HardwarePopups {
 			selectionFrame.dispose();
 		});
 		dime.addActionListener(e -> {
-			Coin dimeCoin = new Coin(currency, new BigDecimal(0.10));
+			Coin dimeCoin = new Coin(currency, new BigDecimal("0.10"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().receive(dimeCoin);
 			} catch (DisabledException e1) {
@@ -474,7 +474,7 @@ public class HardwarePopups {
 			selectionFrame.dispose();
 		});
 		quarter.addActionListener(e -> {
-			Coin quarterCoin = new Coin(currency, new BigDecimal(0.25));
+			Coin quarterCoin = new Coin(currency, new BigDecimal("0.25"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().receive(quarterCoin);
 			} catch (DisabledException e1) {
@@ -487,7 +487,7 @@ public class HardwarePopups {
 			selectionFrame.dispose();
 		});
 		loonie.addActionListener(e -> {
-			Coin loonieCoin = new Coin(currency, new BigDecimal(1.00));
+			Coin loonieCoin = new Coin(currency, new BigDecimal("1.00"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().receive(loonieCoin);
 			} catch (DisabledException e1) {
@@ -500,7 +500,7 @@ public class HardwarePopups {
 			selectionFrame.dispose();
 		});
 		toonie.addActionListener(e -> {
-			Coin toonieCoin = new Coin(currency, new BigDecimal(2.00));
+			Coin toonieCoin = new Coin(currency, new BigDecimal("2.00"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().receive(toonieCoin);
 			} catch (DisabledException e1) {
