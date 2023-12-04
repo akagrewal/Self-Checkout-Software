@@ -125,7 +125,12 @@ public class CentralStationLogic {
 	 */
 	public AddBagsLogic addBagsLogic;
 	
-	/*
+	/**
+	 * Instance of purchase bags logic
+	 */
+	public PurchaseBagsLogic purchaseBagsLogic;
+
+	/**
 	 * Instance of logic that handles item removal
 	 */
 	public RemoveItemLogic removeItemLogic;
@@ -172,6 +177,11 @@ public class CentralStationLogic {
 	
 	
 	/**
+	 * Instance of logic for prediction
+	 */
+	public PredictionLogic predictionLogic;
+
+	/**
 	 * Current selected payment method
 	 */
 	private PaymentMethods paymentMethod;	
@@ -217,9 +227,11 @@ public class CentralStationLogic {
 		this.attendantLogic = new AttendantLogic();
 		this.attendantLogic.registerStationLogic(this);
 		this.addBagsLogic = new AddBagsLogic(this);
+		this.purchaseBagsLogic = new PurchaseBagsLogic(this);
 		this.removeItemLogic = new RemoveItemLogic(this);
+		this.predictionLogic = new PredictionLogic(this);
 		this.membershipLogic = new MembershipLogic(this);
-		
+
 		this.coinCurrencyLogic = new CurrencyLogic(this.hardware.getCoinDenominations());
 		this.banknoteCurrencyLogic = new CurrencyLogic(this.hardware.getBanknoteDenominations());
 		
@@ -340,6 +352,16 @@ public class CentralStationLogic {
 		System.out.println("Session ended");
 		
 		this.sessionStarted = false;
+		reset();
 		this.attendantLogic.notifySessionEnded(this);
+	}
+
+	/**
+	 * Resets the station after session ends
+	 */
+	public void reset() {
+		this.cartLogic = new CartLogic(this);
+		this.weightLogic = new WeightLogic(this);
+		this.stateLogic = new StateLogic(this);
 	}
 }

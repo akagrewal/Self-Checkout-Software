@@ -8,24 +8,30 @@ import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
 
 public class CreateTestDatabases {
+	
+	public static PLUCodedProduct banana;
+	public static PLUCodedProduct apple;
+	
+	public static BarcodedProduct soup;
+	public static BarcodedProduct pickles;
 
     public static void createDatabase() {
         // Populate PLU-coded products (fruits)
         PriceLookUpCode bananaPLU = new PriceLookUpCode("1001");
-        PLUCodedProduct banana = new PLUCodedProduct(bananaPLU, "Banana", 150);
+        banana = new PLUCodedProduct(bananaPLU, "Banana", 150);
         // price here is per kilogram
 
         PriceLookUpCode applePLU = new PriceLookUpCode("1002");
-        PLUCodedProduct apple = new PLUCodedProduct(applePLU, "Apple", 120);
+        apple = new PLUCodedProduct(applePLU, "Apple", 120);
         // price here is per kilogram
 
         // Populate barcoded products (canned goods)
         Barcode soupBarcode = new Barcode(new Numeral[]{Numeral.one, Numeral.two, Numeral.three, Numeral.four});
-        BarcodedProduct soup = new BarcodedProduct(soupBarcode, "Soup Can", 250, 400);
+        soup = new BarcodedProduct(soupBarcode, "Soup Can", (long)2.50, 400);
         // price here is per unit
 
         Barcode picklesBarcode = new Barcode(new Numeral[]{Numeral.five, Numeral.six, Numeral.seven, Numeral.eight});
-        BarcodedProduct pickles = new BarcodedProduct(picklesBarcode, "Pickles Jar", 180, 600);
+        pickles = new BarcodedProduct(picklesBarcode, "Pickles Jar", (long)1.80, 600);
         // price here is per unit
 
         // Add products to the databases

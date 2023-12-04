@@ -128,6 +128,8 @@ public class GUILogic {
 	public void SessionOver() {
 		System.out.println("Start Session");
 		centralLogic.stopSession();
+		updateItemsList();
+		updateTotal();
 	}
 	
 	
