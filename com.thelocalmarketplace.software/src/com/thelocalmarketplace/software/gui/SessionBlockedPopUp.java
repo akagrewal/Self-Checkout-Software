@@ -11,7 +11,7 @@ public class SessionBlockedPopUp {
         popupDialog = new JDialog(parentFrame);
         popupDialog.setUndecorated(true);
         popupDialog.setSize(800, 700);
-        popupDialog.setLocationRelativeTo(null);
+        popupDialog.setLocationRelativeTo(parentFrame);
 
         JLabel label = new JLabel("Session Blocked. Attendant Notified.");
 
@@ -29,7 +29,7 @@ public class SessionBlockedPopUp {
         popupDialog = new JDialog(parentFrame);
         popupDialog.setUndecorated(true);
         popupDialog.setSize(800, 700);
-        popupDialog.setLocationRelativeTo(null);
+        popupDialog.setLocationRelativeTo(parentFrame);
 
         JLabel label = new JLabel("Weight discrepancy at: Station " + stationNumber);
 
