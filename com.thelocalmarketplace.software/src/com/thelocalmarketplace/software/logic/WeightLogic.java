@@ -2,8 +2,10 @@ package com.thelocalmarketplace.software.logic;
 
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.Mass.MassDifference;
+import com.jjjwelectronics.bag.ReusableBag;
 import com.jjjwelectronics.OverloadedDevice;
 import com.jjjwelectronics.scale.AbstractElectronicScale;
+
 import com.jjjwelectronics.scanner.Barcode;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
@@ -116,6 +118,14 @@ public class WeightLogic extends AbstractLogicDependant {
 			throw new InvalidStateSimulationException("PLU not registered to product database");
 		}
 		this.expectedWeight = this.expectedWeight.sum(this.actualWeight);
+	}
+	
+	/** Adds to the expected weight the weight of Purchased bags
+	 * @param ReusableBag bag
+	 */
+	public void addExpectedPurchasedBagWeight(ReusableBag bag) {
+		Mass mass = bag.getMass();
+		this.expectedWeight = this.expectedWeight.sum(mass);
 	}
 	
 	/** Removes the weight of the product given from expectedWeight
