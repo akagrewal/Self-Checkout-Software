@@ -5,9 +5,11 @@ import com.thelocalmarketplace.software.AbstractLogicDependant;
 public class PredictionLogic extends AbstractLogicDependant {
 	final int MAXIMUM_PAPER = 1 << 10;
 	final int MAXIMUM_INK = 1 << 20;
+	private final CentralStationLogic logic;
 	
 	public PredictionLogic(CentralStationLogic logic) throws NullPointerException {
 		super(logic);
+		this.logic = logic;
 	}	
 	
 	public Boolean checkLowCoinPrediction() {
@@ -119,6 +121,6 @@ public class PredictionLogic extends AbstractLogicDependant {
 	
 	public void predictionAction(String message) {
 		// need to notify attendant.
-		logic.attendantLogic.disableCustomerStation(); 
+		logic.attendantLogic.disableCustomerStation(this.logic);
 	}	
 }
