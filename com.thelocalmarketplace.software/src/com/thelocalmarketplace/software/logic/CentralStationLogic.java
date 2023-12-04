@@ -214,7 +214,8 @@ public class CentralStationLogic {
 		this.weightDiscrepancyController = new WeightDiscrepancyController(this);
 		this.cardReaderController = new CardReaderController(this);
 		this.receiptPrintingController = new ReceiptPrintingController(this);
-		this.attendantLogic = new AttendantLogic(this);
+		this.attendantLogic = new AttendantLogic();
+		this.attendantLogic.registerStationLogic(this);
 		this.addBagsLogic = new AddBagsLogic(this);
 		this.removeItemLogic = new RemoveItemLogic(this);
 		
@@ -339,7 +340,7 @@ public class CentralStationLogic {
 		
 		this.sessionStarted = false;
 		reset();
-		this.attendantLogic.notifySessionEnded();
+		this.attendantLogic.notifySessionEnded(this);
 	}
 	
 	/**

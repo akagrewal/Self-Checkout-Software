@@ -7,9 +7,9 @@ public class SessionBlockedPopUp {
 
     private static JDialog popupDialog;
 
-    public static void discrepancyDetected() {
-        popupDialog = new JDialog();
-        popupDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+    public static void discrepancyDetected(JFrame parentFrame) {
+        popupDialog = new JDialog(parentFrame);
+        popupDialog.setUndecorated(true);
         popupDialog.setSize(800, 700);
         popupDialog.setLocationRelativeTo(null);
 
@@ -25,11 +25,11 @@ public class SessionBlockedPopUp {
         popupDialog.setVisible(true);
     }
     
-    public static void outOfOrder() {
+    public static void outOfOrder(JPanel parentPanel) {
         popupDialog = new JDialog();
-        popupDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        popupDialog.setUndecorated(true);
         popupDialog.setSize(800, 700);
-        popupDialog.setLocationRelativeTo(null);
+        popupDialog.setLocationRelativeTo(parentPanel);
 
         JLabel label = new JLabel("OUT OF ORDER");
 
@@ -38,6 +38,20 @@ public class SessionBlockedPopUp {
         label.setFont(font);
 
         label.setHorizontalAlignment(SwingConstants.CENTER);
+        popupDialog.add(label);
+
+        popupDialog.setVisible(true);
+    }
+
+    public static void maintenanceRequired(JFrame parentFrame, String issue) {
+        popupDialog = new JDialog(parentFrame);
+        popupDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        popupDialog.setSize(800, 700);
+        popupDialog.setLocationRelativeTo(parentFrame);
+
+        JLabel label = new JLabel("MAINTENANCE REQUIRED FOR "+issue);
+        label.setFont(new Font("Arial", Font.PLAIN, 24));
+
         popupDialog.add(label);
 
         popupDialog.setVisible(true);
