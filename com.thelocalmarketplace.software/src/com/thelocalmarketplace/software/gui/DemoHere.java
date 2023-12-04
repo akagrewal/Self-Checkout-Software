@@ -19,6 +19,7 @@ import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.SelfCheckoutStationGold;
 import com.thelocalmarketplace.software.database.CreateTestDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
+import powerutility.PowerGrid;
 
 public class DemoHere {
 
@@ -58,9 +59,12 @@ public class DemoHere {
     public static void main(String[] args) {
         // create example database for demo
         CreateTestDatabases.createDatabase();
-
         SelfCheckoutStationGold station1 = new SelfCheckoutStationGold();
         CentralStationLogic stationLogic1 = new CentralStationLogic(station1);
+        PowerGrid.engageUninterruptiblePowerSource();
+        PowerGrid grid = PowerGrid.instance();
+        station1.plugIn(grid);
+        station1.turnOn();
 
         AttendantFrame attendantFrame = new AttendantFrame();
         attendantFrame.registerStationLogic(stationLogic1);
