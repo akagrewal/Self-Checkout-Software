@@ -4,11 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 class Numpad extends JPanel {
     private JFrame parentFrame;
     private GUILogic guiLogicInstance;
     private JTextField textField;
+    private JTextField textFieldinvalid;
     // mode 0 = membership
     // mode 1 = weight
     private int mode;
@@ -122,11 +124,9 @@ class Numpad extends JPanel {
     }
 
     private ActionListener createNumButtonActionListener(String num) {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                textField.setText(textField.getText() + num);
-            }
+        return e -> {
+            String text = textField.getText().replaceAll("[^0-9]","");
+            textField.setText(text + num);
         };
     }
 
@@ -141,12 +141,18 @@ class Numpad extends JPanel {
     }
 
     private void numpadEnter(String input) {
-        this.closeNumPadPanel();
 
         if (mode == 0) {
+            this.closeNumPadPanel();
             guiLogicInstance.checkMembership(input);
         } else if (mode == 1) {
-            guiLogicInstance.checkPLU(input);
+            if (guiLogicInstance.checkPLU(input)) {
+                this.closeNumPadPanel();
+            } else {
+                textField.setText("Invalid PLU");
+            }
         }
+
+
     }
 }

@@ -37,7 +37,6 @@ public class GUILogic {
 		this.cardLayout = runGUI.cardLayout;
 		this.cardPanel = runGUI.cardPanel;
 		this.centralLogic = logic;
-		CreateTestDatabases.createDatabase();
 	}
 
 	public void switchPanels(String string) {
@@ -84,8 +83,16 @@ public class GUILogic {
 	}
 
 	public boolean checkPLU(String PLU) {
-		PriceLookUpCode plu = new PriceLookUpCode(PLU);
-		boolean valid = ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu);
+		boolean valid = false;
+
+		try {
+			PriceLookUpCode plu = new PriceLookUpCode(PLU);
+			valid = ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu);
+		} catch (Exception ignored) {}
+
+		if (valid) {
+			addProductPLU(PLU);
+		}
 
 		return valid;
 	}
