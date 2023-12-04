@@ -132,10 +132,11 @@ public class RunGUI extends JFrame implements logicObserver {
         });
 
         JButton membership = new JButton("Are you a member?");
-        nextButton.addActionListener(new ActionListener() {
+        membership.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // change all text to french when button pressed. not implemented yet
+                Numpad membershipNumpad = new Numpad(RunGUI.this, guiLogicInstance, 0); // this may need changes
+                membershipNumpad.openNumPadPanel();
             }
         });
 
@@ -216,6 +217,8 @@ public class RunGUI extends JFrame implements logicObserver {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // goto panel with options to add an item
+                Numpad pluNumpad = new Numpad(RunGUI.this, guiLogicInstance, 1); // this may need changes
+                pluNumpad.openNumPadPanel();
             }
         });
 
