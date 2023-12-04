@@ -1,14 +1,30 @@
 package com.thelocalmarketplace.software.gui;
-import com.thelocalmarketplace.software.logic.AttendantLogic;
-import com.thelocalmarketplace.software.logic.CentralStationLogic;
-import com.thelocalmarketplace.hardware.external.ProductDatabases;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 
 
@@ -22,6 +38,10 @@ public class RunGUI extends JFrame implements logicObserver {
 
     //This is what allows Logic to happen when I click a button
     private GUILogic guiLogicInstance;
+    
+    /** Stores the list of items being displayed on the screen (needs to be updated by GUI logic)**/
+	public DefaultListModel<String> itemListModel = new DefaultListModel<>();
+	public JList<String> itemList = new JList<>(itemListModel);
 
     private static final Insets insets = new Insets(0, 0, 0, 0);
 
@@ -29,7 +49,7 @@ public class RunGUI extends JFrame implements logicObserver {
     //For Testing Purposes - to run GUI
     public RunGUI(CentralStationLogic csLogic) {
         SelfCheckoutGUI();
-        this.guiLogicInstance = new GUILogic(cardPanel, cardLayout, csLogic);
+        this.guiLogicInstance = new GUILogic(this , cardPanel, cardLayout, csLogic);
     }
 
     /**
@@ -165,6 +185,10 @@ public class RunGUI extends JFrame implements logicObserver {
 
         return VCpanel;
     }
+    
+    public void setTotal(BigDecimal total) {
+        totalLabel.setText("Total: $" + total.setScale(2, RoundingMode.HALF_UP).toString());
+    }
 
 
     private JPanel createAddItemsPanel() {
@@ -243,14 +267,18 @@ public class RunGUI extends JFrame implements logicObserver {
         mainPanel.add(buttonsPanel, gbc);
 
         // current items panel
-        JPanel topMiddlePanel = new JPanel();
+        JPanel topMiddlePanel = new JPanel(new BorderLayout());
         topMiddlePanel.setBorder(BorderFactory.createTitledBorder("Current Items: "));
+        
+        itemList.setVisibleRowCount(10); // visible row count
+        itemList.setFixedCellHeight(20); // cell height
 
         // setup scroll pane
-        JScrollPane CurrentItemsPanel = new JScrollPane(topMiddlePanel);
-        CurrentItemsPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        CurrentItemsPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        CurrentItemsPanel.getVerticalScrollBar().setUnitIncrement(16);
+        JScrollPane scrollPane = new JScrollPane(itemList);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        topMiddlePanel.add(scrollPane, BorderLayout.CENTER);
 //        addComponent(mainPanel,CurrentItemsPanel,1, 0, 2, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -259,11 +287,12 @@ public class RunGUI extends JFrame implements logicObserver {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 0.7; // 70% horizontal
         gbc.weighty = 0.7; // 70% vertical
-        mainPanel.add(CurrentItemsPanel, gbc);
+        mainPanel.add(topMiddlePanel, gbc);
 
         JPanel totalPanel = new JPanel();
         totalPanel.setBorder(BorderFactory.createTitledBorder(" "));
-        addComponent(totalPanel,new JLabel("Total:"),0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        totalLabel = new JLabel("Total: $0.00");
+        addComponent(totalPanel, totalLabel,0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         gbc.gridx = 1;
         gbc.gridy = 2;
