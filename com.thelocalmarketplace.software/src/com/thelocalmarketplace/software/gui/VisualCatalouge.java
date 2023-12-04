@@ -1,5 +1,9 @@
 package com.thelocalmarketplace.software.gui;
 
+import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.hardware.PriceLookUpCode;
+import com.thelocalmarketplace.hardware.external.ProductDatabases;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,7 +22,7 @@ public class VisualCatalouge {
 
 
     public JScrollPane createVisualCatalouge() {
-        JPanel VisualCataloguePanel = new JPanel(new FlowLayout());
+        JPanel VisualCataloguePanel = new JPanel(new GridLayout(2, 2, 10, 10));
         VisualCataloguePanel.setBorder(BorderFactory.createTitledBorder("VISUAL CATALOGUE "));
         JScrollPane VCpanel = new JScrollPane(VisualCataloguePanel);
         VCpanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -47,6 +51,17 @@ public class VisualCatalouge {
         JButton button = new JButton(resizedIcon);
 
         button.setActionCommand(PLU);
+
+        PriceLookUpCode code = new PriceLookUpCode(PLU);
+
+        PLUCodedProduct product = ProductDatabases.PLU_PRODUCT_DATABASE.get(code);
+
+        String name = product.getDescription();
+
+        button.setText(name);
+
+        button.setHorizontalTextPosition(JButton.CENTER);
+        button.setVerticalTextPosition(JButton.CENTER);
 
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
