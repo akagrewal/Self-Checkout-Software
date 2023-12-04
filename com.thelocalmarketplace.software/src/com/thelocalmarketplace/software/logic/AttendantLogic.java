@@ -153,8 +153,8 @@ public class AttendantLogic {
 	/**
 	 * Notify the attendant their aid is needed
 	 */
-	public void callAttendant(GUILogic guiLogic) {
-    	// set visible (or open) NotifyPopUp
+	public void callAttendant(int stationNumber) {
+		System.out.println("Assisstance Required on Station "+stationNumber);
 		AttendantPopups notify = new AttendantPopups();
         notify.notifyPopUp();
     }
