@@ -113,7 +113,7 @@ public class StationGUI extends JFrame {
         help.setBackground(Color.decode("#B9AFCA"));  //Navy
         help.setForeground(Color.decode("#4A3D54"));
         help.setFont(new Font("Serif", Font.BOLD, 25));
-        nextButton.addActionListener(e -> {
+        help.addActionListener(e -> {
             centralStationLogic.attendantLogic.callAttendant(centralStationLogic.stationNumber);
         });
 

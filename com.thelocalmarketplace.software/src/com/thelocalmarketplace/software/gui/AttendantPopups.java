@@ -12,14 +12,15 @@ import javax.swing.*;
 public class AttendantPopups {
 	protected JFrame attendantFrame;
 
-	public void notifyPopUp() {
-		JFrame notifyPopUp = new JFrame("Assistance Requested");
+
+	public void notifyPopUp(int stationNumber) {
+		JFrame notifyPopUp = new JFrame("Assistance Requested: Station" + stationNumber);
 		notifyPopUp.setSize(400, 300);
 		notifyPopUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		JPanel popupPanel = createLabelPanel("A Customer Has Requested Assistance", 40, 50);
+		JPanel popupPanel = createLabelPanel("Assistance Requested: Station" + stationNumber, 40, 50);
 		JPanel buttonPanel = new JPanel();
-		JButton confirmButton1 = new JButton("Confirm");
+		JButton confirmButton1 = new JButton("Assistance Completed");
 		confirmButton1.addActionListener(e -> notifyPopUp.dispose());
 		buttonPanel.add(confirmButton1);
 		notifyPopUp.add(popupPanel, BorderLayout.NORTH);

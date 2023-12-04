@@ -156,7 +156,7 @@ public class AttendantLogic {
 	public void callAttendant(int stationNumber) {
 		System.out.println("Assisstance Required on Station "+stationNumber);
 		AttendantPopups notify = new AttendantPopups();
-        notify.notifyPopUp();
+        notify.notifyPopUp(stationNumber);
     }
 
 	/** Method to notify the attendant station that the current session has ended */
