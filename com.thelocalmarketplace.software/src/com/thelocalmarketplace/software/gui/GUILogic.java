@@ -1,10 +1,19 @@
 
 package com.thelocalmarketplace.software.gui;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -156,4 +165,28 @@ public class GUILogic {
 
 		return productFound;
 	}
+	
+	public void showCardPaymentInProgress(JFrame parentFrame) {
+		JDialog dialog = new JDialog(parentFrame, "Make card payment", true);
+		dialog.setLayout(new BorderLayout());
+		dialog.setSize(new Dimension(300, 200));
+		dialog.setLocationRelativeTo(parentFrame);
+		
+		JButton soupButton = new JButton("Soup");
+		JLabel message = new JLabel("Please use the card reader to make payment.");
+
+		soupButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+
+		dialog.add(message);
+		dialog.setVisible(true);
+	}
+	
+	
+	
+	
 }
+

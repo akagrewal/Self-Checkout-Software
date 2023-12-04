@@ -43,17 +43,7 @@ public class HardwarePopups {
 	private PLUCodedItem apples = new PLUCodedItem(CreateTestDatabases.apple.getPLUCode(), new Mass((double) 300.0));
 	private PLUCodedItem bananas = new PLUCodedItem(CreateTestDatabases.banana.getPLUCode(), new Mass((double) 500.0));
 
-	private static Currency currency = 	Currency.getInstance("CAD");
-
-	private BigDecimal[] billDenominations;
-
-	private static BigDecimal[] coindenominations = new BigDecimal[] {
-			new BigDecimal("0.05"),
-			new BigDecimal("0.10"),
-			new BigDecimal("0.25"),
-			new BigDecimal("1.00"),
-			new BigDecimal("2.00")
-	};
+	
 
 
 	private CentralStationLogic centralStationLogic;
@@ -80,12 +70,7 @@ public class HardwarePopups {
 		bank.addCardData("123456789", "Jane",expiry,"329",32.00);
 		bank.addCardData("123456787", "John",expiry,"327",32.00);
 
-		AbstractSelfCheckoutStation.resetConfigurationToDefaults();
-		AbstractSelfCheckoutStation.configureCoinDenominations(coindenominations);
-		AbstractSelfCheckoutStation.configureCoinDispenserCapacity(10);
-		AbstractSelfCheckoutStation.configureCoinStorageUnitCapacity(10);
-		AbstractSelfCheckoutStation.configureCoinTrayCapacity(10);
-		AbstractSelfCheckoutStation.configureCurrency(currency);
+		
 
 	}
 
@@ -448,7 +433,7 @@ public class HardwarePopups {
 		JButton toonie = new JButton("Toonie ($2.00)");
 
 		nikle.addActionListener(e -> {
-			Coin nickleCoin = new Coin(currency, new BigDecimal("0.05"));
+			Coin nickleCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("0.05"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().sink.receive(nickleCoin);
 			} catch (DisabledException e1) {
@@ -461,7 +446,7 @@ public class HardwarePopups {
 			selectionFrame.dispose();
 		});
 		dime.addActionListener(e -> {
-			Coin dimeCoin = new Coin(currency, new BigDecimal("0.10"));
+			Coin dimeCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("0.10"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().receive(dimeCoin);
 			} catch (DisabledException e1) {
@@ -474,7 +459,7 @@ public class HardwarePopups {
 			selectionFrame.dispose();
 		});
 		quarter.addActionListener(e -> {
-			Coin quarterCoin = new Coin(currency, new BigDecimal("0.25"));
+			Coin quarterCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("0.25"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().receive(quarterCoin);
 			} catch (DisabledException e1) {
@@ -487,7 +472,7 @@ public class HardwarePopups {
 			selectionFrame.dispose();
 		});
 		loonie.addActionListener(e -> {
-			Coin loonieCoin = new Coin(currency, new BigDecimal("1.00"));
+			Coin loonieCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("1.00"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().receive(loonieCoin);
 			} catch (DisabledException e1) {
@@ -500,7 +485,7 @@ public class HardwarePopups {
 			selectionFrame.dispose();
 		});
 		toonie.addActionListener(e -> {
-			Coin toonieCoin = new Coin(currency, new BigDecimal("2.00"));
+			Coin toonieCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("2.00"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().receive(toonieCoin);
 			} catch (DisabledException e1) {
@@ -533,6 +518,12 @@ public class HardwarePopups {
 		addSubmitButton(dialog, textField, onSubmit);
 		showDialog(dialog);
 	}
+	
+	
+
+	
+	
+	
 
 	// Pop-up creation logic
 

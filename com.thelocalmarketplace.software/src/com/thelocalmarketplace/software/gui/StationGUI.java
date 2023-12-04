@@ -338,8 +338,10 @@ public class StationGUI extends JFrame {
         gbc.gridx = 4; gbc.gridy = 3;
         buttonBackToCheckout.setPreferredSize(new Dimension(200,50));
         PaymentPanel.add(buttonBackToCheckout, gbc);
+        
+        buttonCoinPayment.addActionListener(e -> guiLogicInstance.showCardPaymentInProgress(this));
 
-        button_CardPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
+       
         buttonCoinPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
         buttonCashPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
         buttonMixedPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
