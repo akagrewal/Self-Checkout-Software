@@ -49,33 +49,29 @@ public class HardwarePopups {
 //	}
 	
 	public void showScanMainScannerPopup(JFrame parentFrame) {
-		JDialog dialog = createDialog(parentFrame, "Scan Main Scanner");
+		JFrame selectionFrame = new JFrame();
+		selectionFrame.setTitle("Scan Main Scanner");
+		selectionFrame.setSize(new Dimension(200, 300));
+		selectionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		selectionFrame.setLayout(new FlowLayout());
+
 		JButton apple = new JButton("Apple");
 		JButton orange = new JButton("Orange");
-		JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        apple.addActionListener(e -> {
+			BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass(10));
+            centralStationLogic.hardware.getMainScanner().scan(Apple);
+		  	selectionFrame.dispose();
+		});
+        orange.addActionListener(e -> {
+			BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass(10));
+			centralStationLogic.hardware.getMainScanner().scan(Orange);
+			selectionFrame.dispose();
+			});
         
-        apple.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass(10));
-            	centralStationLogic.hardware.getMainScanner().scan(Apple);
-            	//idk how to make the panel close
-            	parentFrame.remove(panel);
-            	}
-        });
-        orange.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass(10));
-            	centralStationLogic.hardware.getMainScanner().scan(Orange);
-            }
-        });
-        
-        dialog.add(panel);
-        panel.add(apple);
-        panel.add(orange);
-		showDialog(dialog);
+        selectionFrame.add(apple);
+        selectionFrame.add(orange);
+		selectionFrame.setLocationRelativeTo(parentFrame);
+		selectionFrame.setVisible(true);
 	}
 
 	public void showScanHandheldScannerPopup(JFrame parentFrame) {
