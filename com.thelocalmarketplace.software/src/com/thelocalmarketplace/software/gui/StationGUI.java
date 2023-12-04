@@ -12,7 +12,7 @@ import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 
 
-public class RunGUI extends JFrame implements logicObserver {
+public class StationGUI extends JFrame implements logicObserver {
     // Paneling on GUI
     public JPanel cardPanel;
     public CardLayout cardLayout;
@@ -20,18 +20,18 @@ public class RunGUI extends JFrame implements logicObserver {
     private int total;
     private JLabel totalLabel;
 
-    //This is what allows Logic to happen when I click a button
     public GUILogic guiLogicInstance;
-    
+    private final CentralStationLogic centralStationLogic;
+
     /** Stores the list of items being displayed on the screen (needs to be updated by GUI logic)**/
 	public DefaultListModel<String> itemListModel = new DefaultListModel<>();
 	public JList<String> itemList = new JList<>(itemListModel);
 
     private static final Insets insets = new Insets(0, 0, 0, 0);
-    private CentralStationLogic centralStationLogic;
+
 
     //For Testing Purposes - to run GUI
-    public RunGUI(CentralStationLogic centralStationLogic) {
+    public StationGUI(CentralStationLogic centralStationLogic) {
     	this.centralStationLogic = centralStationLogic;
 
         SelfCheckoutGUI();
@@ -82,49 +82,27 @@ public class RunGUI extends JFrame implements logicObserver {
 
         JButton nextButton = new JButton("Start adding items to cart");
         nextButton.setFont(new Font("Arial", Font.BOLD, 26));
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.StartSessionButtonPressed();
-            }
-        });
-
-        JButton frenchButton = new JButton("Français");
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // change all text to french when button pressed. not implemented yet
-            }
-        });
+        nextButton.addActionListener(e -> guiLogicInstance.StartSessionButtonPressed());
 
         JButton bags = new JButton("Have your own bags?");
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // change all text to french when button pressed. not implemented yet
-            }
+        nextButton.addActionListener(e -> {
+            // TODO: Implement
         });
 
         JButton help = new JButton("call for help");
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // change all text to french when button pressed. not implemented yet
-            }
+        nextButton.addActionListener(e -> {
+            //TODO: Implement
         });
 
         JButton membership = new JButton("Are you a member?");
-        membership.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Numpad membershipNumpad = new Numpad(RunGUI.this, guiLogicInstance, 0); // this may need changes
-                membershipNumpad.openNumPadPanel();
-            }
+        membership.addActionListener(e -> {
+            Numpad membershipNumpad = new Numpad(StationGUI.this, guiLogicInstance, 0); // this may need changes
+            membershipNumpad.openNumPadPanel();
         });
 
 
 
-        JLabel welcomeLabel = new JLabel("Welcome to the UofC market!");
+        JLabel welcomeLabel = new JLabel("Welcome to the UofC market! You are using station No. "+centralStationLogic.stationNumber);
         welcomeLabel.setFont(new Font("Serif", Font.BOLD, 20));
 
 
@@ -137,7 +115,6 @@ public class RunGUI extends JFrame implements logicObserver {
 
 
 
-        bottomPanel.add(frenchButton);
         bottomPanel.add(bags);
         bottomPanel.add(help);
         bottomPanel.add(membership);
@@ -191,7 +168,7 @@ public class RunGUI extends JFrame implements logicObserver {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // goto panel with options to add an item
-                Numpad pluNumpad = new Numpad(RunGUI.this, guiLogicInstance, 1); // this may need changes
+                Numpad pluNumpad = new Numpad(StationGUI.this, guiLogicInstance, 1); // this may need changes
                 pluNumpad.openNumPadPanel();
             }
         });

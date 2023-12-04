@@ -21,7 +21,7 @@ import com.thelocalmarketplace.software.controllers.pay.cash.CashPaymentControll
 import com.thelocalmarketplace.software.controllers.pay.cash.CoinDispenserController;
 import com.thelocalmarketplace.software.controllers.pay.cash.CoinPaymentController;
 import com.thelocalmarketplace.software.gui.GUILogic;
-import com.thelocalmarketplace.software.gui.RunGUI;
+import com.thelocalmarketplace.software.gui.StationGUI;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
@@ -64,7 +64,11 @@ public class CentralStationLogic {
 		DEBIT,
 		CASH
 	}
-	
+
+	/**
+	 * The number of the station in the real-world setting
+	 */
+	public int stationNumber;
 	
 	/**
 	 * Reference to physical hardware
@@ -198,7 +202,7 @@ public class CentralStationLogic {
 	private boolean sessionStarted;
 	
 	
-	public RunGUI runGUI; 
+	public StationGUI stationGUI;
 	
 	
 	/**
@@ -211,6 +215,7 @@ public class CentralStationLogic {
 		}
 		
 		this.hardware = hardware;
+		this.stationNumber = 0;
 		
 		this.sessionStarted = false;
 		this.paymentMethod = PaymentMethods.NONE;
@@ -219,8 +224,8 @@ public class CentralStationLogic {
 		this.cartLogic = new CartLogic(this);
 		this.weightLogic = new WeightLogic(this);
 		this.stateLogic = new StateLogic(this);
-		this.runGUI = new RunGUI(this);
-		this.guiLogic = runGUI.guiLogicInstance;
+		this.stationGUI = new StationGUI(this);
+		this.guiLogic = stationGUI.guiLogicInstance;
 
 		// Instantiate each controller
 		this.coinPaymentController = new CoinPaymentController(this);
@@ -246,11 +251,15 @@ public class CentralStationLogic {
 		this.setupBanknoteDispenserControllers(this.banknoteCurrencyLogic.getDenominationsAsList());
 		
 		SwingUtilities.invokeLater(() -> {
-            RunGUI GUIframe = runGUI;
-            GUIframe.setTitle("Welcome Screen");
+            StationGUI GUIframe = stationGUI;
+            GUIframe.setTitle("Customer Touchscreen "+this.stationNumber);
         });
 	}
-	
+
+	public void setStationNumber(int stationNumber) {
+		this.stationNumber = stationNumber;
+	}
+
 	/**
 	 * Gets the current selected payment method
 	 * @return the payment method

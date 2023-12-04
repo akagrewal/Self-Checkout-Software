@@ -30,12 +30,12 @@ public class GUILogic {
 	CentralStationLogic centralLogic;
 	CardLayout cardLayout;
 	JPanel cardPanel;
-	RunGUI guiDisplay;
+	StationGUI guiDisplay;
 
-	public GUILogic(CentralStationLogic logic, RunGUI runGUI) {
-		this.guiDisplay = runGUI;
-		this.cardLayout = runGUI.cardLayout;
-		this.cardPanel = runGUI.cardPanel;
+	public GUILogic(CentralStationLogic logic, StationGUI stationGUI) {
+		this.guiDisplay = stationGUI;
+		this.cardLayout = stationGUI.cardLayout;
+		this.cardPanel = stationGUI.cardPanel;
 		this.centralLogic = logic;
 	}
 

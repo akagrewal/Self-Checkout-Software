@@ -104,7 +104,9 @@ public class DemoHere {
 		station2.turnOn();
     	
     	CentralStationLogic stationLogic1 = new CentralStationLogic(station1);
+        stationLogic1.setStationNumber(1);
 		CentralStationLogic stationLogic2 = new CentralStationLogic(station2);
+        stationLogic2.setStationNumber(2);
     	
 		AttendantLogic attendantLogic = new AttendantLogic();
         attendantLogic.registerStationLogic(stationLogic1);

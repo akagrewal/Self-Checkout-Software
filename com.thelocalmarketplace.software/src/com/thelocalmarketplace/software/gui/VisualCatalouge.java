@@ -1,7 +1,5 @@
 package com.thelocalmarketplace.software.gui;
 
-import com.thelocalmarketplace.software.logic.CartLogic;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,11 +9,11 @@ public class VisualCatalouge {
 
     GUILogic guiLogicInstance;
 
-    RunGUI runGUI;
+    StationGUI stationGUI;
 
 
-    VisualCatalouge(RunGUI rungui){
-        this.runGUI = rungui;
+    VisualCatalouge(StationGUI rungui){
+        this.stationGUI = rungui;
     }
 
 
@@ -53,8 +51,8 @@ public class VisualCatalouge {
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String PLU = e.getActionCommand();
-                runGUI.getLogicInstance().addProductPLU(PLU);
-                runGUI.getLogicInstance().switchPanels("AddItemsPanel");
+                stationGUI.getLogicInstance().addProductPLU(PLU);
+                stationGUI.getLogicInstance().switchPanels("AddItemsPanel");
 
 
             }
