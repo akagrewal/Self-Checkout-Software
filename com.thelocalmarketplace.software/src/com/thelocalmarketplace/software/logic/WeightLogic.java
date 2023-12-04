@@ -147,6 +147,8 @@ public class WeightLogic extends AbstractLogicDependant {
 	/** Updates actual weight to the mass passed
 	 * @param mass - Mass to change the actual weight to */
 	public void updateActualWeight(Mass mass) {
+		System.out.println("Expected mass is: " + this.expectedWeight.toString());
+		System.out.println("Updating Actual Mass to: " + mass.toString());
 		this.actualWeight = mass;
 	}
 	
