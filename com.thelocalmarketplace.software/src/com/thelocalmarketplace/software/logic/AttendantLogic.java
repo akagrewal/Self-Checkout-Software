@@ -44,7 +44,7 @@ import static com.thelocalmarketplace.software.gui.SessionBlockedPopUp.*;
  * @author Anandita Mahika - 30097559
  */
 public class AttendantLogic {
-	private final AttendantGUI attendantGUI;
+	public AttendantGUI attendantGUI;
 	ArrayList<CentralStationLogic> stationLogicsList;
 
 	public AttendantLogic() {
