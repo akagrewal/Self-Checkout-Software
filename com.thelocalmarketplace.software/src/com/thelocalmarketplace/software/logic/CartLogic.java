@@ -82,14 +82,7 @@ public class CartLogic extends AbstractLogicDependant {
 			BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(product.getPrice()));
 			this.updateBalance(newPrice);
 		} else {
-			Mass weightOnScanningArea = Mass.ZERO;
-			do {
-				try {
-					weightOnScanningArea = logic.scanningAreaController.getScanningAreaMass();
-					// TODO: Popup to notify customer to place item on scale
-					TimeUnit.SECONDS.sleep(1);
-				} catch (InterruptedException ignored) {}
-			} while (weightOnScanningArea == Mass.ZERO);
+			Mass weightOnScanningArea = logic.scanningAreaController.getScanningAreaMass();
 
 			long weightValue = weightOnScanningArea.inGrams().longValue() / 1000;
 
