@@ -104,38 +104,29 @@ public class HardwarePopups {
 		showDialog(dialog);
 	}
 
-	public static void showVisualSearchPopup(JFrame parentFrame) {
-		JDialog dialog = createDialog(parentFrame, "Visual Search");
-		JTextField textField = addTextField(dialog, "Enter item details for visual search:");
-		Consumer<String> onSubmit = inputText -> {
-            PriceLookUpCode priceLookUpCode = new PriceLookUpCode(inputText);
-            PLUCodedProduct pk = ProductDatabases.PLU_PRODUCT_DATABASE.get(priceLookUpCode);
-            //guiLogic.notifyItemAdded(pk);
-		};
-		addSubmitButton(dialog, textField, onSubmit);
-		showDialog(dialog);
-	}
 
-	public static void showPluCodePopup(JFrame parentFrame) {
-		JDialog dialog = createDialog(parentFrame, "PLU Code");
-		JTextField textField = addTextField(dialog, "Enter PLU code:");
-		Consumer<String> onSubmit = inputText -> {
-            PriceLookUpCode priceLookUpCode = new PriceLookUpCode(inputText);
-            PLUCodedProduct pk = ProductDatabases.PLU_PRODUCT_DATABASE.get(priceLookUpCode);
-            //guiLogic.notifyItemAdded(pk);
-		};
-		addSubmitButton(dialog, textField, onSubmit);
-		showDialog(dialog);
-	}
+	public void showAddItemToScalePopup(JFrame parentFrame) {
+		JDialog dialog = createDialog(parentFrame, "Add an item to the scale");
+		JButton apple = new JButton("Apple");
+		JButton orange = new JButton("Orange");
 
-	public static void showAddItemToScalePopup(JFrame parentFrame) {
-		JDialog dialog = createDialog(parentFrame, "Add Item to Scale");
-		JTextField textField = addTextField(dialog, "Place item on scale and enter weight of item:");
-		Consumer<String> onSubmit = inputText -> {
-			Mass weight = new Mass(Double.parseDouble(inputText));
-            //guiLogic.addItemToScale(weight);
-		};
-		addSubmitButton(dialog, textField, onSubmit);
+        apple.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	centralStationLogic.hardware.getBaggingArea().addAnItem(Apple);
+            }
+        });
+        orange.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	centralStationLogic.hardware.getBaggingArea().addAnItem(Orange);            }
+        });
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        dialog.add(panel);
+        panel.add(apple);
+        panel.add(orange);
 		showDialog(dialog);
 	}
 
