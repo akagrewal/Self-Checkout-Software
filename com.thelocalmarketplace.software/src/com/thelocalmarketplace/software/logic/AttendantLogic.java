@@ -155,7 +155,7 @@ public class AttendantLogic {
 	 */
 	public void callAttendant(int stationNumber) {
 		System.out.println("Assisstance Required on Station "+stationNumber);
-		AttendantPopups notify = new AttendantPopups();
+		AttendantPopups notify = new AttendantPopups(attendantGUI.getAttendantFrame());
         notify.notifyPopUp(stationNumber);
     }
 
