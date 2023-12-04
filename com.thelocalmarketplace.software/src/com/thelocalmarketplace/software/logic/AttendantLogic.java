@@ -216,8 +216,10 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 			  String PDescription = PLUCodeEntry.getValue().getDescription();
               if (Objects.equals(itemName, BDescription)) {
                   logic.cartLogic.addBarcodedProductToCart(BarcodeEntry.getKey());
+				  return;
 			  } else if (Objects.equals(itemName, PDescription)) {
                   logic.cartLogic.addPLUCodedProductToCart(PLUCodeEntry.getKey());
+				  return;
 			  }
 		  }
 	  }
