@@ -18,6 +18,7 @@ import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.Product;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
+import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 /*
  * This is where Project 3 Logic will be entered 
@@ -122,7 +123,8 @@ public class GUILogic {
 	// START BUTTON
 	public void StartSessionButtonPressed() {
 		System.out.println("Start Session");
-		centralLogic.startSession();
+		if (centralLogic.stateLogic.getState() != States.OUTOFORDER)
+			centralLogic.startSession();
 	}
 	
 	public void SessionOver() {
