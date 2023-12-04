@@ -99,28 +99,28 @@ public class StationGUI extends JFrame {
         nextButton.addActionListener(e -> guiLogicInstance.StartSessionButtonPressed());
         nextButton.setBackground(Color.decode("#9DAF99"));  //Maroon
         nextButton.setForeground(Color.decode("#40543D"));
-        nextButton.setFont(new Font("Serif", Font.BOLD, 40));
+        nextButton.setFont(new Font("Serif", Font.BOLD, 42));
         
         JButton bags = new JButton("Have your own bags?");
         bags.setBackground(Color.decode("#B9AFCA"));  //Navy
         bags.setForeground(Color.decode("#4A3D54"));
-        bags.setFont(new Font("Serif", Font.BOLD, 25));
+        bags.setFont(new Font("Sans", Font.BOLD, 24));
         bags.addActionListener(e -> {
             // TODO: Implement
         });
 
-        JButton help = new JButton("call for help");
+        JButton help = new JButton("Call for assisstance");
         help.setBackground(Color.decode("#B9AFCA"));  //Navy
         help.setForeground(Color.decode("#4A3D54"));
-        help.setFont(new Font("Serif", Font.BOLD, 25));
+        help.setFont(new Font("Sans", Font.BOLD, 24));
         help.addActionListener(e -> {
             centralStationLogic.attendantLogic.callAttendant(centralStationLogic.stationNumber);
         });
 
-        JButton membership = new JButton("Are you a member?");
+        JButton membership = new JButton("Enter Membership No.");
         membership.setBackground(Color.decode("#B9AFCA"));  //Navy
         membership.setForeground(Color.decode("#4A3D54"));
-        membership.setFont(new Font("Serif", Font.BOLD, 25));
+        membership.setFont(new Font("Sans", Font.BOLD, 24));
         membership.addActionListener(e -> {
             Numpad membershipNumpad = new Numpad(StationGUI.this, guiLogicInstance, 0); // this may need changes
             membershipNumpad.openNumPadPanel();
