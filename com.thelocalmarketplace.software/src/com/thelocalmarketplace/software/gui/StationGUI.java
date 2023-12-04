@@ -10,6 +10,7 @@ import javax.swing.*;
 
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 import com.thelocalmarketplace.software.logic.CentralStationLogic.PaymentMethods;
+import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 
 
@@ -202,7 +203,14 @@ public class StationGUI extends JFrame {
         payButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("paymentPanel");
+            	
+            	System.out.println(centralStationLogic.stateLogic.getState());
+            	centralStationLogic.stateLogic.gotoState(States.CHECKOUT);
+            	if (centralStationLogic.cartLogic.getBalanceOwed().compareTo(BigDecimal.ZERO) <= 0) {
+            		guiLogicInstance.switchPanels("thankYouPanel");
+            	}else {
+            		guiLogicInstance.switchPanels("paymentPanel");
+            	}
             }
         });
 
@@ -328,7 +336,7 @@ public class StationGUI extends JFrame {
         PaymentPanel.add(buttonBackToCheckout, gbc);
 
         button_CardPayment.addActionListener(e -> {
-        	centralStationLogic.selectPaymentMethod(PaymentMethods.DEBIT);
+        	centralStationLogic.selectPaymentMethod(PaymentMethods.CREDIT);
         	guiLogicInstance.switchPanels("POS_Panel");	
         });
         buttonCoinPayment.addActionListener(e -> {
@@ -345,10 +353,9 @@ public class StationGUI extends JFrame {
 		});
         
         buttonLeaveWithoutPaying.addActionListener(e -> {
-			guiLogicInstance.switchPanels("POS_Panel");
 		});
         buttonBackToCheckout.addActionListener(e -> {
-			guiLogicInstance.switchPanels("POS_Panel");
+        	guiLogicInstance.switchPanels("AddItemsPanel");
 		});
 
         return PaymentPanel;

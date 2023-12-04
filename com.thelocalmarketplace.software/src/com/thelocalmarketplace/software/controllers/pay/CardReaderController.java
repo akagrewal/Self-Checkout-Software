@@ -71,7 +71,6 @@ public class CardReaderController extends AbstractLogicDependant implements Card
   	
     @Override
     public void theDataFromACardHasBeenRead(CardData data) {
-    	PaymentMethods t = this.logic.cardLogic.getCardPaymentType(data.getType());
    
         this.logic.cardLogic.setDataRead(true);
 
@@ -81,8 +80,8 @@ public class CardReaderController extends AbstractLogicDependant implements Card
         else if (!this.logic.stateLogic.inState(States.CHECKOUT)) {
             throw new InvalidStateSimulationException("Not ready for checkout");
         }
-        else if (!this.logic.getSelectedPaymentMethod().equals(t)) {
-        	throw new InvalidStateSimulationException("Pay by " + t.toString() + " not selected");
+        else if (this.logic.getSelectedPaymentMethod().equals(PaymentMethods.CREDIT) || this.logic.getSelectedPaymentMethod().equals(PaymentMethods.MIXED) || this.logic.getSelectedPaymentMethod().equals(PaymentMethods.DEBIT)) {
+        	throw new InvalidStateSimulationException("Pay by Card not selected");
         }
 
         //check if transaction successful
