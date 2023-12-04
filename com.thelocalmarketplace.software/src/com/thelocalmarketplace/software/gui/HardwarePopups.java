@@ -193,7 +193,7 @@ public class HardwarePopups {
 
 		apple.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {                
+            public void actionPerformed(ActionEvent e) {
             	JDialog scaleDialog = createDialog(parentFrame, "Number of items");
                 JTextField textField = addTextField(scaleDialog, "Total weight of items:");
         		Consumer<String> onSubmit = inputText -> {
@@ -207,10 +207,19 @@ public class HardwarePopups {
             }
         });
 		banana.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                centralStationLogic.hardware.getBaggingArea().removeAnItem(pickles);            
-            }
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JDialog scaleDialog = createDialog(parentFrame, "Number of items");
+				JTextField textField = addTextField(scaleDialog, "Total weight of items:");
+				Consumer<String> onSubmit = inputText -> {
+					int massOfItems = Integer.parseInt(inputText);
+					centralStationLogic.hardware.getScanningArea().addAnItem(bananas);
+					centralStationLogic.cartLogic.addProductToCart(CreateTestDatabases.banana);;
+
+				};
+				addSubmitButton(scaleDialog, textField, onSubmit);
+				showDialog(scaleDialog);
+			}
         });
         
         JPanel panel = new JPanel();

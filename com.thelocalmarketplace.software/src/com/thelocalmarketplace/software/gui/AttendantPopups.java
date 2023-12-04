@@ -9,8 +9,9 @@ import java.awt.Insets;
 
 import javax.swing.*;
 
-public class NotifyPopUp {
-	
+public class AttendantPopups {
+	protected JFrame attendantFrame;
+
 	public void notifyPopUp() {
 		JFrame notifyPopUp = new JFrame("Assistance Requested");
 		notifyPopUp.setSize(400, 300);

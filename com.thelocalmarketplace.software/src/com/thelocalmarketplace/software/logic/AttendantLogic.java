@@ -6,7 +6,7 @@ import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.gui.*;
-import com.thelocalmarketplace.software.gui.NotifyPopUp;
+import com.thelocalmarketplace.software.gui.AttendantPopups;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 import ca.ucalgary.seng300.simulation.InvalidArgumentSimulationException;
@@ -155,7 +155,7 @@ public class AttendantLogic {
 	 */
 	public void callAttendant(GUILogic guiLogic) {
     	// set visible (or open) NotifyPopUp
-		NotifyPopUp notify = new NotifyPopUp();
+		AttendantPopups notify = new AttendantPopups();
         notify.notifyPopUp();
     }
 
