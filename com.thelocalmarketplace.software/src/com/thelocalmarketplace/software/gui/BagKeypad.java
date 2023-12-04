@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.jjjwelectronics.EmptyDevice;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 import java.awt.BorderLayout;
@@ -45,7 +46,9 @@ public class BagKeypad {
 
         if (result == JOptionPane.OK_OPTION) {
             int bags = Integer.parseInt(bagsTextField.getText());
-            station.purchaseBagsLogic.dispensePurchasedBags(bags);
+            try {
+                station.purchaseBagsLogic.dispensePurchasedBags(bags);
+            } catch (EmptyDevice ignored) {};
         }
     }
 
