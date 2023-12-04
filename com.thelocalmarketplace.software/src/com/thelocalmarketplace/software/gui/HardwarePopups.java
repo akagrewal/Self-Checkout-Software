@@ -199,8 +199,7 @@ public class HardwarePopups {
         		Consumer<String> onSubmit = inputText -> {
 					int massOfItems = Integer.parseInt(inputText);
 					centralStationLogic.hardware.getScanningArea().addAnItem(apples);
-					centralStationLogic.cartLogic.addProductToCart(CreateTestDatabases.apple);;
-
+					centralStationLogic.cartLogic.addProductToCart(CreateTestDatabases.apple);
         		};
         		addSubmitButton(scaleDialog, textField, onSubmit);
                 showDialog(scaleDialog);
@@ -214,8 +213,7 @@ public class HardwarePopups {
 				Consumer<String> onSubmit = inputText -> {
 					int massOfItems = Integer.parseInt(inputText);
 					centralStationLogic.hardware.getScanningArea().addAnItem(bananas);
-					centralStationLogic.cartLogic.addProductToCart(CreateTestDatabases.banana);;
-
+					centralStationLogic.cartLogic.addProductToCart(CreateTestDatabases.banana);
 				};
 				addSubmitButton(scaleDialog, textField, onSubmit);
 				showDialog(scaleDialog);
