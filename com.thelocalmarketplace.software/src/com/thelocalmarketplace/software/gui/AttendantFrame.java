@@ -13,7 +13,7 @@ import javax.swing.*;
 
 
 public class AttendantFrame {
-    HashMap<CentralStationLogic, JPanel> stationLogicsMap;
+    public HashMap<CentralStationLogic, JPanel> stationLogicsMap;
     Vector<String> itemsArray;
 
     public AttendantFrame() {
