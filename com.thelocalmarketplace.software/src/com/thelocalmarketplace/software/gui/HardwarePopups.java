@@ -1,21 +1,9 @@
 package com.thelocalmarketplace.software.gui;
 
-import com.jjjwelectronics.Mass;
-import com.jjjwelectronics.Numeral;
-import com.jjjwelectronics.card.Card;
-import com.jjjwelectronics.scanner.Barcode;
-import com.jjjwelectronics.scanner.BarcodedItem;
-import com.thelocalmarketplace.hardware.PLUCodedProduct;
-import com.thelocalmarketplace.hardware.PriceLookUpCode;
-import com.thelocalmarketplace.hardware.external.CardIssuer;
-import com.thelocalmarketplace.hardware.external.ProductDatabases;
-import com.thelocalmarketplace.software.logic.CentralStationLogic;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -31,7 +19,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.jjjwelectronics.Mass;
+import com.jjjwelectronics.Numeral;
+import com.jjjwelectronics.card.Card;
+import com.jjjwelectronics.scanner.Barcode;
+import com.jjjwelectronics.scanner.BarcodedItem;
+import com.thelocalmarketplace.hardware.external.CardIssuer;
+import com.thelocalmarketplace.software.database.CreateTestDatabases;
+import com.thelocalmarketplace.software.logic.CentralStationLogic;
+
 public class HardwarePopups {
+	
+	private BarcodedItem soup = new BarcodedItem(CreateTestDatabases.soup.getBarcode(), new Mass(CreateTestDatabases.soup.getExpectedWeight()));
+	private BarcodedItem pickles = new BarcodedItem(CreateTestDatabases.pickles.getBarcode(), new Mass(CreateTestDatabases.pickles.getExpectedWeight()));
+	
 
     private CentralStationLogic centralStationLogic;
     
@@ -66,107 +67,99 @@ public class HardwarePopups {
 		selectionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		selectionFrame.setLayout(new FlowLayout());
 
-		JButton apple = new JButton("Apple");
-		JButton orange = new JButton("Orange");
-        apple.addActionListener(e -> {
-			BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass((double)1000));
-            centralStationLogic.hardware.getMainScanner().scan(Apple);
+		JButton soupButton = new JButton("Soup");
+		JButton picklesButton = new JButton("Pickle Jar");
+        soupButton.addActionListener(e -> {
+			centralStationLogic.hardware.getMainScanner().scan(soup);
 		  	selectionFrame.dispose();
 		});
-        orange.addActionListener(e -> {
-			BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass((double)1000));
-			centralStationLogic.hardware.getMainScanner().scan(Orange);
+        picklesButton.addActionListener(e -> {
+			centralStationLogic.hardware.getMainScanner().scan(pickles);
 			selectionFrame.dispose();
 			});
         
-        selectionFrame.add(apple);
-        selectionFrame.add(orange);
+        selectionFrame.add(soupButton);
+        selectionFrame.add(picklesButton);
 		selectionFrame.setLocationRelativeTo(parentFrame);
 		selectionFrame.setVisible(true);
 	}
 
 	public void showScanHandheldScannerPopup(JFrame parentFrame) {
 		JDialog dialog = createDialog(parentFrame, "Scan Handheld Scanner");
-		JButton apple = new JButton("Apple");
-		JButton orange = new JButton("Orange");
+		JButton soupButton = new JButton("Soup");
+		JButton picklesButton = new JButton("Pickle Jar");
 
-        apple.addActionListener(new ActionListener() {
+        soupButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass((double)1000));
-            	centralStationLogic.hardware.getHandheldScanner().scan(Apple);
+                centralStationLogic.hardware.getHandheldScanner().scan(soup);
             }
         });
-        orange.addActionListener(new ActionListener() {
+        picklesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass((double)1000));
-            	centralStationLogic.hardware.getHandheldScanner().scan(Orange);
+                centralStationLogic.hardware.getHandheldScanner().scan(pickles);
             }
         });
         
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         dialog.add(panel);
-        panel.add(apple);
-        panel.add(orange);
+        panel.add(soupButton);
+        panel.add(picklesButton);
 		showDialog(dialog);
 	}
 
 
 	public void showAddItemToScalePopup(JFrame parentFrame) {
 		JDialog dialog = createDialog(parentFrame, "Add an item to the scale");
-		JButton apple = new JButton("Apple");
-		JButton orange = new JButton("Orange");
+		JButton soupButton = new JButton("Soup");
+		JButton pickleButton = new JButton("Pickle Jar");
 
-        apple.addActionListener(new ActionListener() {
+        soupButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass((double)1000));
-            	centralStationLogic.hardware.getBaggingArea().addAnItem(Apple);
+                centralStationLogic.hardware.getBaggingArea().addAnItem(soup);
             }
         });
-        orange.addActionListener(new ActionListener() {
+        pickleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass((double)1000));
-            	centralStationLogic.hardware.getBaggingArea().addAnItem(Orange);            
+                centralStationLogic.hardware.getBaggingArea().addAnItem(pickles);            
             }
         });
         
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         dialog.add(panel);
-        panel.add(apple);
-        panel.add(orange);
+        panel.add(soupButton);
+        panel.add(pickleButton);
 		showDialog(dialog);
 	}
 
 	public void showRemoveItemFromScalePopup(JFrame parentFrame) {
 		JDialog dialog = createDialog(parentFrame, "Remove an item from the scale");
-		JButton apple = new JButton("Apple");
-		JButton orange = new JButton("Orange");
+		JButton soupButton = new JButton("Soup");
+		JButton pickleButton = new JButton("Pickle Jar");
 
-        apple.addActionListener(new ActionListener() {
+        soupButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass((double)1000));
-            	centralStationLogic.hardware.getBaggingArea().removeAnItem(Apple);;
+                centralStationLogic.hardware.getBaggingArea().removeAnItem(soup);;
             }
         });
-        orange.addActionListener(new ActionListener() {
+        pickleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass((double)1000));
-            	centralStationLogic.hardware.getBaggingArea().removeAnItem(Orange);            
+                centralStationLogic.hardware.getBaggingArea().removeAnItem(pickles);            
             }
         });
         
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         dialog.add(panel);
-        panel.add(apple);
-        panel.add(orange);
+        panel.add(soupButton);
+        panel.add(pickleButton);
 		showDialog(dialog);
 	}
 
