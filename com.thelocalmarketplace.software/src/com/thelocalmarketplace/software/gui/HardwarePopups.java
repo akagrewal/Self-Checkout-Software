@@ -61,6 +61,7 @@ public class HardwarePopups {
             @Override
             public void actionPerformed(ActionEvent e) {
             	centralStationLogic.hardware.getMainScanner().scan(Apple);
+            	//idk how to make the panel close
             	parentFrame.remove(panel);
             	}
         });
