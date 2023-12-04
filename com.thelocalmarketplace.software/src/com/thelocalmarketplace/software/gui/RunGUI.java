@@ -548,6 +548,7 @@ public class RunGUI extends JFrame implements logicObserver {
             @Override
             public void actionPerformed(ActionEvent e) {
                 guiLogicInstance.switchPanels("welcomePanel");
+                guiLogicInstance.SessionOver();
             }
         });
         JLabel TY_receiptLabel = new JLabel("Thank you for Shopping, Please take your receipt.");
