@@ -84,8 +84,12 @@ public class GUILogic {
 	}
 
 	public boolean checkPLU(String PLU) {
-		PriceLookUpCode plu = new PriceLookUpCode(PLU);
-		boolean valid = ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu);
+		boolean valid = false;
+
+		try {
+			PriceLookUpCode plu = new PriceLookUpCode(PLU);
+			valid = ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu);
+		} catch (Exception ignored) {}
 
 		if (valid) {
 			addProductPLU(PLU);
