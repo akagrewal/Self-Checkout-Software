@@ -5,12 +5,11 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
-import com.jjjwelectronics.Item;
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.scanner.Barcode;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
-import com.thelocalmarketplace.hardware.PLUCodedItem;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.Product;
@@ -23,7 +22,7 @@ import ca.ucalgary.seng300.simulation.SimulationException;
 
 /**
  * Handles all logical operations on the customer's cart
- * 
+ *
  * Adapted from Project Iteration 2 - Group 5
  * 
  * @author Jaimie Marchuk - 30112841
@@ -50,7 +49,7 @@ import ca.ucalgary.seng300.simulation.SimulationException;
  */
 public class CartLogic extends AbstractLogicDependant {
 	/**
-	 * Tracks all of the products that are in the customer's cart Includes products
+	 * Tracks all the products that are in the customer's cart Includes products
 	 * without barcodes Maps a product to its count If product is by weight, count
 	 * is weight in kg
 	 */
@@ -68,26 +67,8 @@ public class CartLogic extends AbstractLogicDependant {
 	public CartLogic(CentralStationLogic logic) {
 		super(logic);
 		// Initialization
-		this.cart = new HashMap<Product, Float>();
+		this.cart = new HashMap<>();
 		this.balanceOwed = BigDecimal.ZERO;
-	}
-
-	/**
-	 * Adds a Barcodedproduct to customer's cart. Calculates the price and updates
-	 * the balance owed by the customer.
-	 * 
-	 * @param product The Barcoded product added.
-	 * @throws SimulationException If the product is not in the cart
-	 */
-
-	public void addProductToCart(BarcodedProduct product) {
-		// Update balance owed
-		if (product.isPerUnit()) {
-			Utilities.modifyCountMapping(cart, product, 1);
-			BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(product.getPrice()));
-			this.updateBalance(newPrice);
-		}
-		logic.guiLogic.updateCartChanged();
 	}
 
 	/**
@@ -95,21 +76,36 @@ public class CartLogic extends AbstractLogicDependant {
 	 * @param product The PLUCodedproduct added
 	 * @throws SimulationException If the product is not in the cart
 	 */
-	public void addProductToCart(PLUCodedProduct product) {
-		 long weightOnScanningArea = logic.scanningAreaController.getScanningAreaMass().inGrams().longValue()/1000;
-		 // Update weight in cart
-		 Utilities.modifyCountMapping(cart, product, (int) 1);
-		 long Price = product.getPrice()* weightOnScanningArea;
-		 // Update balance owed
-		 BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(Price));
-		 this.updateBalance(newPrice);
-		 logic.guiLogic.updateCartChanged();
+	public void addProductToCart(Product product) {
+		if (product.isPerUnit()) {
+			Utilities.modifyCountMapping(cart, product, 1);
+			BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(product.getPrice()));
+			this.updateBalance(newPrice);
+		} else {
+			Mass weightOnScanningArea = Mass.ZERO;
+			do {
+				try {
+					weightOnScanningArea = logic.scanningAreaController.getScanningAreaMass();
+					// TODO: Popup to notify customer to place item on scale
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException ignored) {}
+			} while (weightOnScanningArea == Mass.ZERO);
+
+			long weightValue = weightOnScanningArea.inGrams().longValue() / 1000;
+
+			Utilities.modifyCountMapping(cart, product, 1);
+			long Price = product.getPrice() * weightValue;
+			// Update balance owed
+			BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(Price));
+			this.updateBalance(newPrice);
+		}
+		logic.guiLogic.updateCartChanged();
 	}
 
 	/**
 	 * Adds purchased bags to the total cost
 	 * not actually added to cart 
-	 * @param int the number of bags to add
+	 * @param numOfBags the number of bags to add
 	 */
 	public void addReusableBagToCart(int numOfBags) {
 		double cost = 1.25 * numOfBags;
