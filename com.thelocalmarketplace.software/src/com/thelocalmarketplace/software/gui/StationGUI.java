@@ -208,6 +208,7 @@ public class StationGUI extends JFrame {
         buyBagsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	new BagKeypad(StationGUI.this, buyBagsButton, centralStationLogic);
                 guiLogicInstance.switchPanels("paymentPanel");
             }
         });
