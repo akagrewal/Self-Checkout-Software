@@ -16,7 +16,9 @@ import com.jjjwelectronics.Numeral;
 import com.jjjwelectronics.scanner.Barcode;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.Product;
+import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 /*
@@ -88,6 +90,20 @@ public class GUILogic {
 		BigDecimal owed = centralLogic.cartLogic.getBalanceOwed();
 		guiDisplay.setTotal(owed);
 	}
+
+	public void checkPLU(String PLU) {
+		PriceLookUpCode plu = new PriceLookUpCode(PLU);
+		boolean valid = ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu);
+		// do something
+	}
+
+	public void checkMembership(String membershipID) {
+		boolean valid = centralLogic.membershipLogic.isMembershipNumberValid(membershipID);
+		// do something
+	}
+
+
+
 
 	/**
 	 * Registers the given listener so that it will receive events from this
