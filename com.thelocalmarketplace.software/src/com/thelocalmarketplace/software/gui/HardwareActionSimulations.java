@@ -36,6 +36,7 @@ public class HardwareActionSimulations extends JFrame {
         add(createHeader("Scale"));
         add(createButton("Add Item to Scale", e -> hardwarePopups.showAddItemToScalePopup(this)));
         add(createButton("Remove Item from Scale", e -> hardwarePopups.showRemoveItemFromScalePopup(this)));
+        add(createButton("Place iteams on Scanner Scale", e -> hardwarePopups.showMeasureItemsOnPLUScalePopup(this)));
 
         // Pay Section
         add(createHeader("Pay"));

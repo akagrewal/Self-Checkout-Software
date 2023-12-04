@@ -24,6 +24,7 @@ import com.jjjwelectronics.Numeral;
 import com.jjjwelectronics.card.Card;
 import com.jjjwelectronics.scanner.Barcode;
 import com.jjjwelectronics.scanner.BarcodedItem;
+import com.thelocalmarketplace.hardware.PLUCodedItem;
 import com.thelocalmarketplace.hardware.external.CardIssuer;
 import com.thelocalmarketplace.software.database.CreateTestDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
@@ -32,7 +33,9 @@ public class HardwarePopups {
 	
 	private BarcodedItem soup = new BarcodedItem(CreateTestDatabases.soup.getBarcode(), new Mass(CreateTestDatabases.soup.getExpectedWeight()));
 	private BarcodedItem pickles = new BarcodedItem(CreateTestDatabases.pickles.getBarcode(), new Mass(CreateTestDatabases.pickles.getExpectedWeight()));
-	
+	private PLUCodedItem apples = new PLUCodedItem(CreateTestDatabases.apple.getPLUCode(), new Mass((double) 300.0));
+	private PLUCodedItem bananas = new PLUCodedItem(CreateTestDatabases.banana.getPLUCode(), new Mass((double) 500.0));
+
 
     private CentralStationLogic centralStationLogic;
     
@@ -160,6 +163,40 @@ public class HardwarePopups {
         dialog.add(panel);
         panel.add(soupButton);
         panel.add(pickleButton);
+		showDialog(dialog);
+	}
+	public void showMeasureItemsOnPLUScalePopup(JFrame parentFrame) {
+		JDialog dialog = createDialog(parentFrame, "Please place items onto scale");
+		JButton apple = new JButton("Apples");
+		JButton banana = new JButton("Bananas");
+
+		apple.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {                
+            	JDialog scaleDialog = createDialog(parentFrame, "Number of items");
+                JTextField textField = addTextField(scaleDialog, "Total weight of items:");
+        		Consumer<String> onSubmit = inputText -> {
+					int massOfItems = Integer.parseInt(inputText);
+					centralStationLogic.hardware.getScanningArea().addAnItem(apples);
+					centralStationLogic.cartLogic.addProductToCart(CreateTestDatabases.apple);;
+
+        		};
+        		addSubmitButton(scaleDialog, textField, onSubmit);
+                showDialog(scaleDialog);
+            }
+        });
+		banana.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                centralStationLogic.hardware.getBaggingArea().removeAnItem(pickles);            
+            }
+        });
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        dialog.add(panel);
+        panel.add(apple);
+        panel.add(banana);
 		showDialog(dialog);
 	}
 

@@ -30,6 +30,7 @@ public class ScanningAreaController extends AbstractLogicDependant implements El
     @Override
     public void theMassOnTheScaleHasChanged(IElectronicScale scale, Mass mass) {
         scanningAreaMass = mass;
+                
     }
 
     @Override public void aDeviceHasBeenEnabled(IDevice<? extends IDeviceListener> device) {}
