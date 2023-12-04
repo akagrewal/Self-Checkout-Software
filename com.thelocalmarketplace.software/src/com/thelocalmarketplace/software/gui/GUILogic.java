@@ -87,6 +87,10 @@ public class GUILogic {
 		PriceLookUpCode plu = new PriceLookUpCode(PLU);
 		boolean valid = ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu);
 
+		if (valid) {
+			addProductPLU(PLU);
+		}
+
 		return valid;
 	}
 
