@@ -37,7 +37,6 @@ public class GUILogic {
 		this.cardLayout = runGUI.cardLayout;
 		this.cardPanel = runGUI.cardPanel;
 		this.centralLogic = logic;
-		CreateTestDatabases.createDatabase();
 	}
 
 	public void switchPanels(String string) {
