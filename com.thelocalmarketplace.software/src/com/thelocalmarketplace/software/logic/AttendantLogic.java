@@ -164,7 +164,7 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 		//TODO: change the logic do be able to disable only a specific customer station
 		//TODO GUI: GUI should display out of order when disabled for maintenance
 		
-		if (!logic.isSessionStarted()) {
+		if (!logic.isSessionStarted() && logic.stateLogic.getState() != States.OUTOFORDER) {
 			// once the station is out of the session
 			logic.stateLogic.gotoState(States.OUTOFORDER);
 			
