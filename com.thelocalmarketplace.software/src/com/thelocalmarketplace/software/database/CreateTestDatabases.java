@@ -27,11 +27,11 @@ public class CreateTestDatabases {
 
         // Populate barcoded products (canned goods)
         Barcode soupBarcode = new Barcode(new Numeral[]{Numeral.one, Numeral.two, Numeral.three, Numeral.four});
-        soup = new BarcodedProduct(soupBarcode, "Soup Can", 250, 400);
+        soup = new BarcodedProduct(soupBarcode, "Soup Can", (long)2.50, 400);
         // price here is per unit
 
         Barcode picklesBarcode = new Barcode(new Numeral[]{Numeral.five, Numeral.six, Numeral.seven, Numeral.eight});
-        pickles = new BarcodedProduct(picklesBarcode, "Pickles Jar", 180, 600);
+        pickles = new BarcodedProduct(picklesBarcode, "Pickles Jar", (long)1.80, 600);
         // price here is per unit
 
         // Add products to the databases
