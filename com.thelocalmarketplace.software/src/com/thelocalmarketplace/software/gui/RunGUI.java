@@ -23,6 +23,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
@@ -238,17 +240,32 @@ public class RunGUI extends JFrame implements logicObserver {
         });
 
         JButton buyBagsButton = new JButton("Purchase Bags");
-        payButton.addActionListener(new ActionListener() {
+        buyBagsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 guiLogicInstance.switchPanels("paymentPanel");
             }
         });
 
-        JButton ownBagButtons = new JButton("Have your own bags? ");
-        payButton.addActionListener(new ActionListener() {
+        JButton ownBagsButton = new JButton("Have your own bags? ");
+        ownBagsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	centralStationLogic.addBagsLogic.startAddBags();
+            	//opens dialog to end Add Bags
+            	int choice = JOptionPane.showOptionDialog(ownBagsButton,
+                        "Please press 'DONE' when done adding bags.",
+                        "Add Own Bags",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        new Object[]{"DONE", "Cancel"},
+                        "DONE");
+            	
+            	if (choice == JOptionPane.YES_OPTION) {
+                    centralStationLogic.addBagsLogic.endAddBags();
+                }
+
                 guiLogicInstance.switchPanels("paymentPanel");
             }
         });
@@ -257,7 +274,7 @@ public class RunGUI extends JFrame implements logicObserver {
         buttonsPanel.add(PLUButton);
         buttonsPanel.add(removeItemButton);
         buttonsPanel.add(buyBagsButton);
-        buttonsPanel.add(ownBagButtons);
+        buttonsPanel.add(ownBagsButton);
         buttonsPanel.add(payButton);
 
         gbc.gridx = 0;
