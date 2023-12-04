@@ -1,28 +1,11 @@
 package com.thelocalmarketplace.software.gui;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
@@ -69,7 +52,7 @@ public class RunGUI extends JFrame implements logicObserver {
         cardPanel = new JPanel(cardLayout);
         cardPanel.add(StartSessionPanel(), "welcomePanel");
         cardPanel.add(createAddItemsPanel(), "AddItemsPanel");
-        cardPanel.add(createVisualCatalogue(), "visualCatalogue");
+        cardPanel.add(createVisual(), "visualCatalogue");
         cardPanel.add(createThankYouPanel(), "thankYouPanel");
         cardPanel.add(createPaymentPanel(), "paymentPanel");
         // cardPanel.add(createCashBillPanel(), "cashBillPanel");
@@ -172,20 +155,12 @@ public class RunGUI extends JFrame implements logicObserver {
         return panel;
     }
 
-    private JScrollPane createVisualCatalogue() {
-        JPanel VisualCataloguePanel = new JPanel(new FlowLayout());
-        VisualCataloguePanel.setBorder(BorderFactory.createTitledBorder("VISUAL CATALOGUE "));
-        JScrollPane VCpanel = new JScrollPane(VisualCataloguePanel);
-        VCpanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        VCpanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    private JScrollPane createVisual() {
+        JScrollPane vc = new VisualCatalouge(this).createVisualCatalouge();
 
 
-        // for (ITEM : inverntory){
-        // VC pan
-        //}
 
-
-        return VCpanel;
+        return vc;
     }
     
     public void setTotal(BigDecimal total) {
@@ -564,5 +539,10 @@ public class RunGUI extends JFrame implements logicObserver {
     @Override
     public void updateTotal(int total) {
         totalLabel.setText("Total: "+ total);
+    }
+
+
+    public GUILogic getLogicInstance(){
+        return this.guiLogicInstance;
     }
 }

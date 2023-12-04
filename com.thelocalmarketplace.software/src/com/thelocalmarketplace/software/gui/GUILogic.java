@@ -48,6 +48,7 @@ public class GUILogic {
 		this.cardLayout = runGUI.cardLayout;
 		this.cardPanel = runGUI.cardPanel;
 		this.centralLogic = logic;
+		CreateTestDatabases.createDatabase();
 	}
 
 	public void switchPanels(String string) {
@@ -92,10 +93,11 @@ public class GUILogic {
 		guiDisplay.setTotal(owed);
 	}
 
-	public void checkPLU(String PLU) {
+	public boolean checkPLU(String PLU) {
 		PriceLookUpCode plu = new PriceLookUpCode(PLU);
 		boolean valid = ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu);
-		// do something
+
+		return valid;
 	}
 
 	public void checkMembership(String membershipID) {
@@ -129,14 +131,22 @@ public class GUILogic {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
 
-	
+	public boolean addProductPLU(String PLU){
+		boolean productFound = false;
+
+//		productFound = checkPLU(PLU);
+
+		PriceLookUpCode pluCode = new PriceLookUpCode(PLU);
+
+
+//		if (productFound){
+		PLUCodedProduct product = ProductDatabases.PLU_PRODUCT_DATABASE.get(pluCode);
+		centralLogic.cartLogic.addProductToCart(product);
+		updateCartChanged();
+
+		return productFound;
+	}
 	
 	
 	
