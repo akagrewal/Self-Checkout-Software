@@ -168,8 +168,7 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 			// once the station is out of the session
 			logic.stateLogic.gotoState(States.OUTOFORDER);
 			
-			// test
-			discrepancyDetected();
+			outOfOrder();
 		} else {
 			waitingToDisable = true;
 		}
