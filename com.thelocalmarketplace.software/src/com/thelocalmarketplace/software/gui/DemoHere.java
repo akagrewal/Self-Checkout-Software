@@ -103,7 +103,7 @@ public class DemoHere {
         AttendantFrame attendantFrame = new AttendantFrame();
         attendantFrame.registerStationLogic(stationLogic1);
         attendantFrame.createAttendantFrame();
-        HardwareActionSimulations actionsFrame = new HardwareActionSimulations();
+        HardwareActionSimulations actionsFrame = new HardwareActionSimulations(stationLogic1);
         actionsFrame.setVisible(true);
     }
 

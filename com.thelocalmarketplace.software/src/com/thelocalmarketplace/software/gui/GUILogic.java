@@ -129,7 +129,7 @@ public class GUILogic {
 	// START BUTTON
 	public void StartSessionButtonPressed() {
 		System.out.println("Start Session");
-		centralStationLogic.startSession();
+		centralLogic.startSession();
 	}
 	
 	
