@@ -13,6 +13,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Consumer;
@@ -30,7 +31,7 @@ public class HardwarePopups {
 
     private CentralStationLogic centralStationLogic;
     private static BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass(10));
-    private static BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.four,Numeral.five, Numeral.six}), new Mass(10));
+    private static BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass(10));
 
     public HardwarePopups(CentralStationLogic centralStationLogic) {
     	
@@ -53,12 +54,15 @@ public class HardwarePopups {
 		JDialog dialog = createDialog(parentFrame, "Scan Main Scanner");
 		JButton apple = new JButton("Apple");
 		JButton orange = new JButton("Orange");
-
+		JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        
         apple.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             	centralStationLogic.hardware.getMainScanner().scan(Apple);
-            }
+            	parentFrame.remove(panel);
+            	}
         });
         orange.addActionListener(new ActionListener() {
             @Override
@@ -67,21 +71,35 @@ public class HardwarePopups {
             }
         });
         
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         dialog.add(panel);
         panel.add(apple);
         panel.add(orange);
 		showDialog(dialog);
 	}
 
-	public static void showScanHandheldScannerPopup(JFrame parentFrame) {
+	public void showScanHandheldScannerPopup(JFrame parentFrame) {
 		JDialog dialog = createDialog(parentFrame, "Scan Handheld Scanner");
-		JTextField textField = addTextField(dialog, "Scan barcode using the handheld scanner:");
-		Consumer<String> onSubmit = inputText -> {
-			//TODO 
-		};
-		addSubmitButton(dialog, textField, onSubmit);
+		JButton apple = new JButton("Apple");
+		JButton orange = new JButton("Orange");
+
+        apple.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	centralStationLogic.hardware.getHandheldScanner().scan(Apple);
+            }
+        });
+        orange.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	centralStationLogic.hardware.getHandheldScanner().scan(Orange);
+            }
+        });
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        dialog.add(panel);
+        panel.add(apple);
+        panel.add(orange);
 		showDialog(dialog);
 	}
 

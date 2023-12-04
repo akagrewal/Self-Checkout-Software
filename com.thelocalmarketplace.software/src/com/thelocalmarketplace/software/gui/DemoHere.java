@@ -17,6 +17,7 @@ import com.jjjwelectronics.scanner.BarcodedItem;
 import com.jjjwelectronics.scanner.IBarcodeScanner;
 import com.tdc.banknote.BanknoteValidator;
 import com.tdc.coin.CoinValidator;
+import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.SelfCheckoutStationGold;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
@@ -78,8 +79,8 @@ public class DemoHere {
 		barcode = new Barcode(barcode_numeral);
 		barcode2 = new Barcode(barcode_numeral2);
 		b_test = new Barcode(barcode_numeral3);
-		product = new BarcodedProduct(barcode, "some item",5,(double)3.0);
-		product2 = new BarcodedProduct(barcode2, "some item 2",(long)1.00,(double)300.0);
+		product = new BarcodedProduct(barcode, "apple",5,(double)3.0);
+		product2 = new BarcodedProduct(barcode2, "orange",(long)1.00,(double)300.0);
 		product3 = new BarcodedProduct(b_test, "some item 3",(long)1.00,(double)3.0);
 		
 		ProductDatabases.BARCODED_PRODUCT_DATABASE.clear();
@@ -89,6 +90,10 @@ public class DemoHere {
 		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode2, product2);
 		ProductDatabases.INVENTORY.put(product2, 1);
     	
+		PowerGrid.engageUninterruptiblePowerSource();
+		PowerGrid.instance().forcePowerRestore();
+		AbstractSelfCheckoutStation.resetConfigurationToDefaults();
+		
     	SelfCheckoutStationGold  station = new SelfCheckoutStationGold();
     	station.plugIn(PowerGrid.instance());
 		station.turnOn();

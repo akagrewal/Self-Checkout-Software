@@ -30,7 +30,7 @@ public class HardwareActionSimulations extends JFrame {
         // Add Item Section
         add(createHeader("Add Item"));
         add(createButton("Scan Main Scanner", e -> hardwarePopups.showScanMainScannerPopup(this)));
-        add(createButton("Scan Handheld Scanner", e -> HardwarePopups.showScanHandheldScannerPopup(this)));
+        add(createButton("Scan Handheld Scanner", e -> hardwarePopups.showScanHandheldScannerPopup(this)));
         add(createButton("Visual Search", e -> HardwarePopups.showVisualSearchPopup(this)));
         add(createButton("PLU Code", e -> HardwarePopups.showPluCodePopup(this)));
 
