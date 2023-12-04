@@ -96,10 +96,10 @@ public class CartLogic extends AbstractLogicDependant {
 	 * @throws SimulationException If the product is not in the cart
 	 */
 	public void addProductToCart(PLUCodedProduct product) {
-		 long actualWeight = logic.weightLogic.getActualWeight().inGrams().longValue()/1000;
+		 long weightOnScanningArea = logic.scanningAreaController.getScanningAreaMass().inGrams().longValue()/1000;
 		 // Update weight in cart
 		 Utilities.modifyCountMapping(cart, product, (int) 1);
-		 long Price = product.getPrice()* actualWeight;
+		 long Price = product.getPrice()* weightOnScanningArea;
 		 // Update balance owed
 		 BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(Price));
 		 this.updateBalance(newPrice);

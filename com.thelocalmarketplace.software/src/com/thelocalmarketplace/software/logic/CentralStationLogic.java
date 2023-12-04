@@ -11,6 +11,7 @@ import javax.swing.SwingUtilities;
 import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
 import com.thelocalmarketplace.hardware.external.CardIssuer;
 import com.thelocalmarketplace.software.controllers.ReceiptPrintingController;
+import com.thelocalmarketplace.software.controllers.ScanningAreaController;
 import com.thelocalmarketplace.software.controllers.WeightDiscrepancyController;
 import com.thelocalmarketplace.software.controllers.item.AddBarcodedItemController;
 import com.thelocalmarketplace.software.controllers.item.AddPLUItemController;
@@ -114,7 +115,12 @@ public class CentralStationLogic {
 	 * Instance of the controller that handles adding PLU product
 	 */
 	public AddPLUItemController addPLUProductController;
-	
+
+	/**
+	 * Instance of the controller that handles the scanning area scale
+	 */
+	public ScanningAreaController scanningAreaController;
+
 	/** 
 	 * Instance of weight logic 
 	 */
@@ -224,6 +230,7 @@ public class CentralStationLogic {
 		this.weightDiscrepancyController = new WeightDiscrepancyController(this);
 		this.cardReaderController = new CardReaderController(this);
 		this.receiptPrintingController = new ReceiptPrintingController(this);
+		this.scanningAreaController = new ScanningAreaController(this);
 		this.attendantLogic = new AttendantLogic();
 		this.attendantLogic.registerStationLogic(this);
 		this.addBagsLogic = new AddBagsLogic(this);
