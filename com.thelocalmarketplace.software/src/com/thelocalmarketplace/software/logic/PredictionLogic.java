@@ -3,6 +3,8 @@ package com.thelocalmarketplace.software.logic;
 import com.thelocalmarketplace.software.AbstractLogicDependant;
 
 public class PredictionLogic extends AbstractLogicDependant {
+	final int MAXIMUM_PAPER = 1 << 10;
+	final int MAXIMUM_INK = 1 << 20;
 	
 	public PredictionLogic(CentralStationLogic logic) throws NullPointerException {
 		super(logic);
@@ -28,10 +30,11 @@ public class PredictionLogic extends AbstractLogicDependant {
 	
 	public boolean checkPaperPrediction() {
         int currentLinesRemaining = logic.hardware.getPrinter().paperRemaining();
+        double lowPaperLevel = MAXIMUM_PAPER * 0.15;
         boolean isLow = false;
         
-        // Warning is triggered at 175 lines remaining, should permit for 1-2 receipts before empty.
-        if (currentLinesRemaining <= 175) {
+        // Warning is triggered when 15% of the machines capacity is reached, should permit for 1-2 receipts before empty.
+        if (currentLinesRemaining <= lowPaperLevel) {
             // low paper!!
             predictionAction("Warning: Low Paper!");
             isLow = true;
@@ -42,10 +45,11 @@ public class PredictionLogic extends AbstractLogicDependant {
     
     public boolean checkInkPrediction() {
         int currentInkRemaining = logic.hardware.getPrinter().inkRemaining();
+        double lowInkLevel = MAXIMUM_INK * 0.15;
         boolean isLow = false;
 
-        // Warning is made when 20 units of ink remain in the machine, should permit for 1-2 more receipts before empty.
-        if (currentInkRemaining <= 20) {       	
+        // Warning is made when 15% of the machines capacity is reached, should permit for 1-2 more receipts before empty.
+        if (currentInkRemaining <= lowInkLevel) {       	
             // low ink!!
             predictionAction("Warning: Low Ink!"); 
             isLow = true;
