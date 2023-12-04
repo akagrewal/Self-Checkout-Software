@@ -2,7 +2,6 @@
 
 package com.thelocalmarketplace.software.gui;
 
-//
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -10,15 +9,19 @@ import java.util.Currency;
 import javax.swing.SwingUtilities;
 
 import com.jjjwelectronics.Mass;
+import com.jjjwelectronics.Numeral;
 import com.jjjwelectronics.card.ICardReader;
 import com.jjjwelectronics.scale.IElectronicScale;
+import com.jjjwelectronics.scanner.Barcode;
+import com.jjjwelectronics.scanner.BarcodedItem;
 import com.jjjwelectronics.scanner.IBarcodeScanner;
 import com.tdc.banknote.BanknoteValidator;
 import com.tdc.coin.CoinValidator;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.SelfCheckoutStationGold;
-import com.thelocalmarketplace.software.database.CreateTestDatabases;
+import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
+
 import powerutility.PowerGrid;
 
 public class DemoHere {
@@ -54,29 +57,49 @@ public class DemoHere {
     private static final BigDecimal value_nickel = new BigDecimal("0.05");
     private static final BigDecimal value_penny = new BigDecimal("0.01");
 
-
     //For Testing Purposes - to run GUI (main)
     public static void main(String[] args) {
-        // create example database for demo
-        CreateTestDatabases.createDatabase();
-        SelfCheckoutStationGold station1 = new SelfCheckoutStationGold();
-        CentralStationLogic stationLogic1 = new CentralStationLogic(station1);
-        PowerGrid.engageUninterruptiblePowerSource();
-        PowerGrid grid = PowerGrid.instance();
-        station1.plugIn(grid);
-        station1.turnOn();
+    	Barcode barcode;
+    	 Numeral digits;
+    	
+    	 BarcodedItem bitem;
 
+    	 Numeral[] barcode_numeral;
+    	 Numeral[] barcode_numeral2;
+    	 Numeral[] barcode_numeral3;
+    	 Barcode b_test;
+    	 Barcode barcode2;
+    	 BarcodedProduct product;
+    	 BarcodedProduct product2;
+    	 BarcodedProduct product3;
+    	barcode_numeral = new Numeral[]{Numeral.one,Numeral.two, Numeral.three};
+		barcode_numeral2 = new Numeral[]{Numeral.three,Numeral.two, Numeral.three};
+		barcode_numeral3 = new Numeral[]{Numeral.three,Numeral.three, Numeral.three};
+		barcode = new Barcode(barcode_numeral);
+		barcode2 = new Barcode(barcode_numeral2);
+		b_test = new Barcode(barcode_numeral3);
+		product = new BarcodedProduct(barcode, "some item",5,(double)3.0);
+		product2 = new BarcodedProduct(barcode2, "some item 2",(long)1.00,(double)300.0);
+		product3 = new BarcodedProduct(b_test, "some item 3",(long)1.00,(double)3.0);
+		
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.clear();
+		ProductDatabases.INVENTORY.clear();
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode, product);
+		ProductDatabases.INVENTORY.put(product, 1);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode2, product2);
+		ProductDatabases.INVENTORY.put(product2, 1);
+    	
+    	SelfCheckoutStationGold  station = new SelfCheckoutStationGold();
+    	station.plugIn(PowerGrid.instance());
+		station.turnOn();
+    	
+    	CentralStationLogic stationLogic1 = new CentralStationLogic(station);
+    	
         AttendantFrame attendantFrame = new AttendantFrame();
         attendantFrame.registerStationLogic(stationLogic1);
         attendantFrame.createAttendantFrame();
         HardwareActionSimulations actionsFrame = new HardwareActionSimulations();
         actionsFrame.setVisible(true);
-
-        RunGUI guiFrame = new RunGUI(new CentralStationLogic(new SelfCheckoutStationGold()));
-    	//To open GUI
-        SwingUtilities.invokeLater(() -> {
-            guiFrame.setTitle("Welcome Screen");
-        });
     }
 
 }

@@ -1,6 +1,16 @@
 
 package com.thelocalmarketplace.software.gui;
 
+import com.jjjwelectronics.Item;
+import com.jjjwelectronics.Mass;
+import com.jjjwelectronics.scanner.BarcodedItem;
+import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.hardware.Product;
+import com.thelocalmarketplace.software.database.CreateTestDatabases;
+import com.thelocalmarketplace.software.logic.CentralStationLogic;
+
+import java.awt.*;
 import java.awt.CardLayout;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -100,6 +110,26 @@ public class GUILogic {
 		listeners.add(listener);
 	}
 
+	// START BUTTON
+	public void StartSessionButtonPressed() {
+		System.out.println("Start Session");
+		centralStationLogic.startSession();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+// ENZOS CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 // LISTENER METHODS
 	// add logic for when customer adds item via PLU/Visual Search
 	protected void notifyItemAdded(PLUCodedProduct pk) {
@@ -175,12 +205,12 @@ public class GUILogic {
 
 //----------------------------------------------------------------
 //Start Session Panel, 
-
-	// when Customer presses [Start Session]
-	public void StartSessionButtonPressed() {
-		System.out.println("Start Session");
-	}
-
+	
+	//when Customer presses [Start Session] 
+//	public void StartSessionButtonPressed() {
+//		System.out.println("Start Session");
+//	}
+	
 //----------------------------------------------------------------
 //Add Items Panel
 

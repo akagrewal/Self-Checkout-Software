@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.swing.SwingUtilities;
+
 import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
 import com.thelocalmarketplace.hardware.external.CardIssuer;
 import com.thelocalmarketplace.software.controllers.*;
@@ -14,6 +16,7 @@ import com.thelocalmarketplace.software.controllers.pay.cash.BanknoteDispenserCo
 import com.thelocalmarketplace.software.controllers.pay.cash.CashPaymentController;
 import com.thelocalmarketplace.software.controllers.pay.cash.CoinDispenserController;
 import com.thelocalmarketplace.software.controllers.pay.cash.CoinPaymentController;
+import com.thelocalmarketplace.software.gui.RunGUI;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 import com.thelocalmarketplace.software.controllers.item.*;
 
@@ -170,6 +173,9 @@ public class CentralStationLogic {
 	private boolean sessionStarted;
 	
 	
+	public RunGUI runGUI; 
+	
+	
 	/**
 	 * Base constructor for a new CentralStationLogic instance
 	 * @throws NullPointerException If hardware is null
@@ -188,6 +194,7 @@ public class CentralStationLogic {
 		this.cartLogic = new CartLogic(this);
 		this.weightLogic = new WeightLogic(this);
 		this.stateLogic = new StateLogic(this);
+		this.runGUI = new RunGUI(this);
 
 		// Instantiate each controller
 		this.coinPaymentController = new CoinPaymentController(this);
@@ -206,6 +213,11 @@ public class CentralStationLogic {
 		
 		this.setupCoinDispenserControllers(this.coinCurrencyLogic.getDenominationsAsList());
 		this.setupBanknoteDispenserControllers(this.banknoteCurrencyLogic.getDenominationsAsList());
+		
+		SwingUtilities.invokeLater(() -> {
+            RunGUI GUIframe = runGUI;
+            GUIframe.setTitle("Welcome Screen");
+        });
 	}
 	
 	/**

@@ -9,14 +9,18 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import com.thelocalmarketplace.software.logic.CentralStationLogic;
+
 public class HardwareActionSimulations extends JFrame {
 
     private static final int WINDOW_WIDTH = 300;
     private static final int WINDOW_HEIGHT = 800;
     private static final int BUTTON_WIDTH = 225; // 75% of WINDOW_WIDTH
     private static final int BUTTON_HEIGHT = 50;
+    
+    HardwarePopups hardwarePopups;
 
-    public HardwareActionSimulations() {
+    public HardwareActionSimulations(CentralStationLogic centralStationLogic) {
         // Initialize the JFrame
         setTitle("Hardware Action Simulations");
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT); // Set the size of the window
@@ -25,7 +29,7 @@ public class HardwareActionSimulations extends JFrame {
 
         // Add Item Section
         add(createHeader("Add Item"));
-        add(createButton("Scan Main Scanner", e -> HardwarePopups.showScanMainScannerPopup(this)));
+        add(createButton("Scan Main Scanner", e -> hardwarePopups.showScanMainScannerPopup(this)));
         add(createButton("Scan Handheld Scanner", e -> HardwarePopups.showScanHandheldScannerPopup(this)));
         add(createButton("Visual Search", e -> HardwarePopups.showVisualSearchPopup(this)));
         add(createButton("PLU Code", e -> HardwarePopups.showPluCodePopup(this)));
@@ -44,6 +48,8 @@ public class HardwareActionSimulations extends JFrame {
         add(createButton("Insert Banknote", e -> HardwarePopups.showInsertBanknotePopup(this)));
 
         setLocationRelativeTo(null); // Center the window on the screen
+    	hardwarePopups = new HardwarePopups(centralStationLogic);
+
     }
 
     private JLabel createHeader(String text) {

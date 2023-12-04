@@ -44,12 +44,15 @@ public class RunGUI extends JFrame implements logicObserver {
 	public JList<String> itemList = new JList<>(itemListModel);
 
     private static final Insets insets = new Insets(0, 0, 0, 0);
-
+    private CentralStationLogic centralStationLogic;
 
     //For Testing Purposes - to run GUI
-    public RunGUI(CentralStationLogic csLogic) {
+    public RunGUI(CentralStationLogic centralStationLogic) {
+    	this.centralStationLogic = centralStationLogic;
+
         SelfCheckoutGUI();
-        this.guiLogicInstance = new GUILogic(this , cardPanel, cardLayout, csLogic);
+
+        this.guiLogicInstance = new GUILogic(this, cardPanel, cardLayout, centralStationLogic);
     }
 
     /**
@@ -81,7 +84,6 @@ public class RunGUI extends JFrame implements logicObserver {
         //Or use method guiLogicInstance.switchPanels("welcomePanel")
 
         setVisible(true);
-
     }
 
     private static void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
