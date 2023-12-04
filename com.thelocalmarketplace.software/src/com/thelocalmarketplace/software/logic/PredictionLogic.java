@@ -53,15 +53,17 @@ public class PredictionLogic extends AbstractLogicDependant {
         return isLow;
     }
     
-    /**
+   /**
      * Predict issue with low banknotes
-     * In an average sized store, low bank notes would be considered less than 50 banknotes
+     * Prediction issues follow a range of 15% of capacity for both min and max 
      */
     public boolean PredictLowBanknotes() {
 	 
     	var currentBankNotes = logic.hardware.getBanknoteStorage().getBanknoteCount();
+    	var capacity = logic.hardware.getBanknoteStorage().getCapacity();
+    	var minCapacity = capacity * .15;
 	 
-    	if (currentBankNotes <= 50) {
+    	if (currentBankNotes <= minCapacity) {
 		 
     		//notify attendant and disable customer station
     		predictionAction("Warning: Banknote storage is almost empty.");
@@ -74,17 +76,18 @@ public class PredictionLogic extends AbstractLogicDependant {
  
     /**
      * Predict issue with full banknotes
+     * Prediction issues follow a range of 15% of capacity for both min and max 
      */
     public boolean PredictFullBanknotes() {
 	 
     	var currentBankNotes = logic.hardware.getBanknoteStorage().getBanknoteCount();
     	var capacity = logic.hardware.getBanknoteStorage().getCapacity();
+    	var maxCapacity = capacity * .75;
 	 
-    	if ((capacity - currentBankNotes) <= 50) {
+    	if (currentBankNotes >= maxCapacity) {
 		 
     		//notify attendant and disable customer station
     		predictionAction("Warning: Banknote storage is almost full.");
-	
 	
 	
     		return true;
@@ -94,6 +97,7 @@ public class PredictionLogic extends AbstractLogicDependant {
     	return false;
 	 
     }
+	
 	
 	public void predictionAction(String message) {
 		// need to notify attendant.
