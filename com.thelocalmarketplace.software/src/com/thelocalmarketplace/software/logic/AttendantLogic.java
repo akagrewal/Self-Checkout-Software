@@ -198,7 +198,8 @@ public class AttendantLogic {
 	 *  Attendant being notified of weight discrepancy
 	 */
 	public void weightDiscrepancy(CentralStationLogic logic) {
-		discrepancyDetected(attendantGUI.getAttendantFrame());
+		discrepancyDetected(logic.stationGUI);
+		discrepancyDetected(attendantGUI.getAttendantFrame(), stationLogicsList.indexOf(logic));
 	}
 	
 	/** Adds an item for a customer through text search
