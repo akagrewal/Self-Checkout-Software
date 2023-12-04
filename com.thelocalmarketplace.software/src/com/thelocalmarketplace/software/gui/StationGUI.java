@@ -59,6 +59,7 @@ public class StationGUI extends JFrame {
         cardPanel.add(createThankYouPanel(), "thankYouPanel");
         cardPanel.add(createPaymentPanel(), "paymentPanel");
         cardPanel.add(createPOSPanel(), "POS_Panel");
+        cardPanel.add(createCashPaymentPanel(), "CashPaymentPanel");
         // cardPanel.add(createCashBillPanel(), "cashBillPanel");
         // cardPanel.add(createCashCoinPanel(), "cashCoinPanel");
 
@@ -341,15 +342,15 @@ public class StationGUI extends JFrame {
         });
         buttonCoinPayment.addActionListener(e -> {
         	centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
-			guiLogicInstance.switchPanels("POS_Panel");
+			guiLogicInstance.switchPanels("CashPaymentPanel");
 		});
         buttonCashPayment.addActionListener(e -> {
         	centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
-			guiLogicInstance.switchPanels("POS_Panel");
+			guiLogicInstance.switchPanels("CashPaymentPanel");
 		});
         buttonMixedPayment.addActionListener(e -> {
         	centralStationLogic.selectPaymentMethod(PaymentMethods.MIXED);
-			guiLogicInstance.switchPanels("POS_Panel");
+			guiLogicInstance.switchPanels("CashPaymentPanel");
 		});
         
         buttonLeaveWithoutPaying.addActionListener(e -> {
@@ -565,6 +566,30 @@ public class StationGUI extends JFrame {
 
         return panel;
     }
+    
+    private JPanel createCashPaymentPanel()  {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        JButton returnButton = new JButton("Cancel");
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guiLogicInstance.switchPanels("paymentPanel");
+                guiLogicInstance.SessionOver();
+            }
+        });
+        JLabel POSLabel = new JLabel("Balance: " + centralStationLogic.cartLogic.getBalanceOwed());
+        POSLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        gbc.gridy = 0;
+        panel.add(POSLabel, gbc);
+        gbc.gridy = 1;
+        panel.add(returnButton,gbc);
+
+        return panel;
+    }
+    
 
     private JPanel createThankYouPanel()  {
         JPanel panel = new JPanel(new GridBagLayout());
