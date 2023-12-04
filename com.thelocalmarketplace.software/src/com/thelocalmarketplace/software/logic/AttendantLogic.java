@@ -194,6 +194,13 @@ public class AttendantLogic {
 		logic.stateLogic.gotoState(States.NORMAL);
 	}
 	
+	/** 
+	 *  Attendant being notified of weight discrepancy
+	 */
+	public void weightDiscrepancy(CentralStationLogic logic) {
+		discrepancyDetected(attendantGUI.getAttendantFrame());
+	}
+	
 	/** Adds an item for a customer through text search
      
 @param itemName*/

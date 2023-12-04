@@ -183,6 +183,8 @@ public class WeightLogic extends AbstractLogicDependant {
 		// Checks for discrepancy and calls notifier if needed 
 		if (actualWeight.difference(expectedWeight).abs().compareTo(this.sensitivity) <= 0 ) {
 			return false;
+		} else {
+			logic.attendantLogic.weightDiscrepancy(logic);
 		}
 	
 		if (actualWeight.compareTo(expectedWeight) > 0) this.logic.weightDiscrepancyController.notifyOverload();
