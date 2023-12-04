@@ -338,6 +338,16 @@ public class CentralStationLogic {
 		System.out.println("Session ended");
 		
 		this.sessionStarted = false;
+		reset();
 		this.attendantLogic.notifySessionEnded();
+	}
+	
+	/**
+	 * Resets the station after session ends
+	 */
+	public void reset() {
+		this.cartLogic = new CartLogic(this);
+		this.weightLogic = new WeightLogic(this);
+		this.stateLogic = new StateLogic(this);
 	}
 }
