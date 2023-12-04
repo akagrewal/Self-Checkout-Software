@@ -6,7 +6,8 @@ import java.awt.*;
 public class SessionBlockedPopUp {
 
     private static JDialog popupDialog;
-
+    
+    /** popup for customer */
     public static void discrepancyDetected(JFrame parentFrame) {
         popupDialog = new JDialog(parentFrame);
         popupDialog.setUndecorated(true);
@@ -25,9 +26,9 @@ public class SessionBlockedPopUp {
         popupDialog.setVisible(true);
     }
     
+    /** popup for attendant */
     public static void discrepancyDetected(JFrame parentFrame, int stationNumber) {
         popupDialog = new JDialog(parentFrame);
-        popupDialog.setUndecorated(true);
         popupDialog.setSize(800, 700);
         popupDialog.setLocationRelativeTo(parentFrame);
 
