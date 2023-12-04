@@ -47,50 +47,11 @@ public class DemoHere {
 	private ArrayList<BarcodedProduct> barcodedProductsInOrder;
 	private ArrayList<BarcodedProduct> baggedProducts;
 
-    private ArrayList<BigDecimal> coindenominations;
-    private Currency CAD;
-    private BigDecimal[] billDenominations;
-	
-    private static final Currency CAD_Currency = Currency.getInstance("CAD");
-    private static final BigDecimal value_toonie = new BigDecimal("2.00");
-    private static final BigDecimal value_loonie = new BigDecimal("1.00");
-    private static final BigDecimal value_quarter = new BigDecimal("0.25");
-    private static final BigDecimal value_dime = new BigDecimal("0.10");
-    private static final BigDecimal value_nickel = new BigDecimal("0.05");
-    private static final BigDecimal value_penny = new BigDecimal("0.01");
+    
 
     //For Testing Purposes - to run GUI (main)
     public static void main(String[] args) {
-//    	Barcode barcode;
-//    	 Numeral digits;
-//
-//    	 BarcodedItem bitem;
-//
-//    	 Numeral[] barcode_numeral;
-//    	 Numeral[] barcode_numeral2;
-//    	 Numeral[] barcode_numeral3;
-//    	 Barcode b_test;
-//    	 Barcode barcode2;
-//    	 BarcodedProduct product;
-//    	 BarcodedProduct product2;
-//    	 BarcodedProduct product3;
-//    	barcode_numeral = new Numeral[]{Numeral.one,Numeral.two, Numeral.three};
-//		barcode_numeral2 = new Numeral[]{Numeral.three,Numeral.two, Numeral.three};
-//		barcode_numeral3 = new Numeral[]{Numeral.three,Numeral.three, Numeral.three};
-//		barcode = new Barcode(barcode_numeral);
-//		barcode2 = new Barcode(barcode_numeral2);
-//		b_test = new Barcode(barcode_numeral3);
-//		product = new BarcodedProduct(barcode, "apple",5,(double)3.0);
-//		product2 = new BarcodedProduct(barcode2, "orange",(long)1.00,(double)300.0);
-//		product3 = new BarcodedProduct(b_test, "some item 3",(long)1.00,(double)3.0);
-//
-//		ProductDatabases.BARCODED_PRODUCT_DATABASE.clear();
-//		ProductDatabases.INVENTORY.clear();
-//		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode, product);
-//		ProductDatabases.INVENTORY.put(product, 1);
-//		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode2, product2);
-//		ProductDatabases.INVENTORY.put(product2, 1);
-//
+
 		CreateTestDatabases.createDatabase();
 		PowerGrid.engageUninterruptiblePowerSource();
 		PowerGrid.instance().forcePowerRestore();
@@ -104,9 +65,10 @@ public class DemoHere {
 		station2.turnOn();
     	
     	CentralStationLogic stationLogic1 = new CentralStationLogic(station1);
-        stationLogic1.setStationNumber(1);
+    	stationLogic1.setStationNumber(1);
 		CentralStationLogic stationLogic2 = new CentralStationLogic(station2);
-        stationLogic2.setStationNumber(2);
+		stationLogic1.setStationNumber(2);
+
     	
 		AttendantLogic attendantLogic = new AttendantLogic();
         attendantLogic.registerStationLogic(stationLogic1);
@@ -114,6 +76,8 @@ public class DemoHere {
 		attendantLogic.updateAttendantGUI();
         HardwareActionSimulations actionsFrame = new HardwareActionSimulations(stationLogic1);
         actionsFrame.setVisible(true);
+        
+       
     }
 
 }

@@ -7,7 +7,9 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.function.Consumer;
 
 import javax.swing.Box;
@@ -24,6 +26,7 @@ import com.jjjwelectronics.Numeral;
 import com.jjjwelectronics.card.Card;
 import com.jjjwelectronics.scanner.Barcode;
 import com.jjjwelectronics.scanner.BarcodedItem;
+import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
 import com.thelocalmarketplace.hardware.PLUCodedItem;
 import com.thelocalmarketplace.hardware.external.CardIssuer;
 import com.thelocalmarketplace.software.database.CreateTestDatabases;
@@ -35,6 +38,17 @@ public class HardwarePopups {
 	private BarcodedItem pickles = new BarcodedItem(CreateTestDatabases.pickles.getBarcode(), new Mass(CreateTestDatabases.pickles.getExpectedWeight()));
 	private PLUCodedItem apples = new PLUCodedItem(CreateTestDatabases.apple.getPLUCode(), new Mass((double) 300.0));
 	private PLUCodedItem bananas = new PLUCodedItem(CreateTestDatabases.banana.getPLUCode(), new Mass((double) 500.0));
+	
+	private static Currency currency = 	Currency.getInstance("CAD");
+	private BigDecimal[] billDenominations;
+		
+	private static BigDecimal[] coindenominations = new BigDecimal[] {
+		new BigDecimal(0.05),
+		new BigDecimal(0.10),
+		new BigDecimal(0.25),
+		new BigDecimal(1.00),
+		new BigDecimal(2.00)
+	};
 
 
     private CentralStationLogic centralStationLogic;
@@ -60,6 +74,13 @@ public class HardwarePopups {
         // adding REAL cards' data so bank's database
         bank.addCardData("123456789", "Jane",expiry,"329",32.00);
         bank.addCardData("123456787", "John",expiry,"327",32.00);
+        
+        AbstractSelfCheckoutStation.resetConfigurationToDefaults();
+		AbstractSelfCheckoutStation.configureCoinDenominations(coindenominations);
+		AbstractSelfCheckoutStation.configureCoinDispenserCapacity(10);
+		AbstractSelfCheckoutStation.configureCoinStorageUnitCapacity(10);
+		AbstractSelfCheckoutStation.configureCoinTrayCapacity(10);
+		AbstractSelfCheckoutStation.configureCurrency(currency);
 
     }
 	
