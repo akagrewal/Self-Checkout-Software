@@ -37,7 +37,7 @@ public class RunGUI extends JFrame implements logicObserver {
     private JLabel totalLabel;
 
     //This is what allows Logic to happen when I click a button
-    private GUILogic guiLogicInstance;
+    public GUILogic guiLogicInstance;
     
     /** Stores the list of items being displayed on the screen (needs to be updated by GUI logic)**/
 	public DefaultListModel<String> itemListModel = new DefaultListModel<>();
@@ -51,7 +51,6 @@ public class RunGUI extends JFrame implements logicObserver {
     	this.centralStationLogic = centralStationLogic;
 
         SelfCheckoutGUI();
-
         this.guiLogicInstance = new GUILogic(centralStationLogic,this);
     }
 

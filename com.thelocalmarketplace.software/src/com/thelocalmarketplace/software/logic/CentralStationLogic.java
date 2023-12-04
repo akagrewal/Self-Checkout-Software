@@ -10,15 +10,18 @@ import javax.swing.SwingUtilities;
 
 import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
 import com.thelocalmarketplace.hardware.external.CardIssuer;
-import com.thelocalmarketplace.software.controllers.*;
+import com.thelocalmarketplace.software.controllers.ReceiptPrintingController;
+import com.thelocalmarketplace.software.controllers.WeightDiscrepancyController;
+import com.thelocalmarketplace.software.controllers.item.AddBarcodedItemController;
+import com.thelocalmarketplace.software.controllers.item.AddPLUItemController;
 import com.thelocalmarketplace.software.controllers.pay.CardReaderController;
 import com.thelocalmarketplace.software.controllers.pay.cash.BanknoteDispenserController;
 import com.thelocalmarketplace.software.controllers.pay.cash.CashPaymentController;
 import com.thelocalmarketplace.software.controllers.pay.cash.CoinDispenserController;
 import com.thelocalmarketplace.software.controllers.pay.cash.CoinPaymentController;
+import com.thelocalmarketplace.software.gui.GUILogic;
 import com.thelocalmarketplace.software.gui.RunGUI;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
-import com.thelocalmarketplace.software.controllers.item.*;
 
 import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
 import ca.ucalgary.seng300.simulation.SimulationException;
@@ -163,6 +166,12 @@ public class CentralStationLogic {
 	public MembershipLogic membershipLogic;
 	
 	/**
+	 * Instance of logic for GUI
+	 */
+	public GUILogic guiLogic;
+	
+	
+	/**
 	 * Current selected payment method
 	 */
 	private PaymentMethods paymentMethod;	
@@ -195,6 +204,7 @@ public class CentralStationLogic {
 		this.weightLogic = new WeightLogic(this);
 		this.stateLogic = new StateLogic(this);
 		this.runGUI = new RunGUI(this);
+		this.guiLogic = runGUI.guiLogicInstance;
 
 		// Instantiate each controller
 		this.coinPaymentController = new CoinPaymentController(this);

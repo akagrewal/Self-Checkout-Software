@@ -56,6 +56,7 @@ public class GUILogic {
 	
 	/** Call when a change is made to the cart; Will cause the required changes on the GUI side **/
 	public void updateCartChanged() {
+		System.out.println("Updated Cart Changed");
 		updateItemsList();
 		updateTotal();
 	}
@@ -67,22 +68,7 @@ public class GUILogic {
 	 */
 	private void updateItemsList() {
 		guiDisplay.itemListModel.clear();
-		updateTotal();
-		// FOR TESTING
-		Numeral[] num = new Numeral[] { Numeral.one };
-		Numeral[] num2 = new Numeral[] { Numeral.two };
-		Barcode testBarcode = new Barcode(num);
-		Barcode test2 = new Barcode(num2);
-		BarcodedProduct testProduct = new BarcodedProduct(testBarcode, "test", 3, 3);
-		BarcodedProduct t2 = new BarcodedProduct(test2, "two", 5, 5);
-		centralLogic.cartLogic.addProductToCart(testProduct);
-		centralLogic.cartLogic.addProductToCart(testProduct);
-		centralLogic.cartLogic.addProductToCart(t2);
 		Map<Product, Float> cart = centralLogic.cartLogic.getCart();
-		System.out.println(cart.size());
-		updateTotal();
-		// END OF TESTING
-
 		for (Map.Entry<Product, Float> entry : cart.entrySet()) {
 			Product product = entry.getKey();
 			Float count = entry.getValue();

@@ -84,7 +84,7 @@ public class CartLogic extends AbstractLogicDependant{
 			Utilities.modifyCountMapping(cart, product, 1);
 			BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(product.getPrice()));
 			this.updateBalance(newPrice);}
-
+		logic.guiLogic.updateCartChanged();
 		}
 	/**
 	 * Adds a PLUCodedproduct to customer's cart. Calculates the price and updates the balance owed by the customer.
@@ -99,7 +99,7 @@ public class CartLogic extends AbstractLogicDependant{
 		 // Update balance owed
 		 BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(Price));
 		 this.updateBalance(newPrice);
-		
+		 logic.guiLogic.updateCartChanged();
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class CartLogic extends AbstractLogicDependant{
 			this.updateBalance(newPrice);
 			Utilities.modifyCountMapping(cart, product, -(productWeight));
 		}
-
+		logic.guiLogic.updateCartChanged();
 	}
 	
 	/**
@@ -146,6 +146,7 @@ public class CartLogic extends AbstractLogicDependant{
 		}
 		
 		this.addProductToCart(toadd);
+		logic.guiLogic.updateCartChanged();
 	}
 	/**
 	 * Takes a PLU code, looks it up in product database, then adds it to customer cart
@@ -163,6 +164,7 @@ public class CartLogic extends AbstractLogicDependant{
 			throw new InvalidStateSimulationException("No items of this type are in inventory");
 		}		
 		this.addProductToCart(toadd);
+		logic.guiLogic.updateCartChanged();
 	}
 	
 	
@@ -217,6 +219,7 @@ public class CartLogic extends AbstractLogicDependant{
 	 */
 	public void updateBalance(BigDecimal balance) {
 		this.balanceOwed = balance;
+		logic.guiLogic.updateCartChanged();
 	}
 	
 	
