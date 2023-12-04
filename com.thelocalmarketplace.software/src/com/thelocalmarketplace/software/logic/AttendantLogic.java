@@ -199,7 +199,7 @@ public class AttendantLogic {
 	 */
 	public void weightDiscrepancy(CentralStationLogic logic) {
 		discrepancyDetected(logic.stationGUI);
-		discrepancyDetected(attendantGUI.getAttendantFrame(), stationLogicsList.indexOf(logic));
+		discrepancyDetected(attendantGUI.getAttendantFrame(), logic.stationNumber);
 	}
 	
 	/** Adds an item for a customer through text search
