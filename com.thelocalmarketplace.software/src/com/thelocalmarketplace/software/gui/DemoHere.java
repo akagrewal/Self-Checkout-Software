@@ -58,7 +58,6 @@ public class DemoHere {
 		AbstractSelfCheckoutStation.resetConfigurationToDefaults();
 		
     	SelfCheckoutStationGold station1 = new SelfCheckoutStationGold();
-		SelfCheckoutStationGold station2 = new SelfCheckoutStationGold();
     	station1.plugIn(PowerGrid.instance());
 		station1.turnOn();
 

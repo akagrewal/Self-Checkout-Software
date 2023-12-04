@@ -237,7 +237,6 @@ public class CentralStationLogic {
 		this.receiptPrintingController = new ReceiptPrintingController(this);
 		this.scanningAreaController = new ScanningAreaController(this);
 		this.attendantLogic = new AttendantLogic();
-		this.attendantLogic.registerStationLogic(this);
 		this.addBagsLogic = new AddBagsLogic(this);
 		this.purchaseBagsLogic = new PurchaseBagsLogic(this);
 		this.removeItemLogic = new RemoveItemLogic(this);

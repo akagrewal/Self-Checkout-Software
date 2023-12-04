@@ -44,30 +44,33 @@ import static com.thelocalmarketplace.software.gui.SessionBlockedPopUp.*;
  * @author Anandita Mahika - 30097559
  */
 public class AttendantLogic {
-	private final AttendantGUI attendantFrame;
+	private final AttendantGUI attendantGUI;
 	ArrayList<CentralStationLogic> stationLogicsList;
 
 	public AttendantLogic() {
-		this.attendantFrame = new AttendantGUI();
+		this.attendantGUI = new AttendantGUI();
 		this.stationLogicsList = new ArrayList<>();
 	}
 
 	public void registerStationLogic(CentralStationLogic logic) {
 		stationLogicsList.add(logic);
-		attendantFrame.stationToButtonMap.put(logic, null);
-		attendantFrame.stationLogicsList.add(logic);
+		attendantGUI.stationToButtonMap.put(logic, null);
+		attendantGUI.stationLogicsList.add(logic);
 		updateAttendantGUI();
 	}
 
 	public void deregisterStationLogic(CentralStationLogic logic) {
 		stationLogicsList.remove(logic);
-		attendantFrame.stationToButtonMap.remove(logic);
-		attendantFrame.stationLogicsList.remove(logic);
+		attendantGUI.stationToButtonMap.remove(logic);
+		attendantGUI.stationLogicsList.remove(logic);
 		updateAttendantGUI();
 	}
 
 	public void updateAttendantGUI() {
-		attendantFrame.createAttendantFrame();
+		if (attendantGUI.getAttendantFrame() != null) {
+			attendantGUI.getAttendantFrame().dispose();
+		}
+		attendantGUI.createAttendantFrame();
 	}
 
 	/** tracks weather or not a bagging discrepency has been found */
@@ -101,7 +104,7 @@ public class AttendantLogic {
 	 * approveBaggingArea() */
 	public void baggingDiscrepencyDetected(CentralStationLogic logic) {
 		//TODO GUI: display that customer is awaiting approval to attendant
-		discrepancyDetected(attendantFrame.getAttendantFrame());
+		discrepancyDetected(attendantGUI.getAttendantFrame());
 
 		this.inBaggingDiscrepency = true;
 		logic.stateLogic.gotoState(States.BLOCKED);
