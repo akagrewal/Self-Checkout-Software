@@ -117,7 +117,8 @@ public class WeightLogic extends AbstractLogicDependant {
 		if (!ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu)) {
 			throw new InvalidStateSimulationException("PLU not registered to product database");
 		}
-		this.expectedWeight = this.expectedWeight.sum(this.actualWeight);
+		System.out.println("Scanning area mass to be added: " + logic.scanningAreaController.getScanningAreaMass().toString());
+		this.expectedWeight = this.expectedWeight.sum(logic.scanningAreaController.getScanningAreaMass());
 	}
 	
 	/** Adds to the expected weight the weight of Purchased bags

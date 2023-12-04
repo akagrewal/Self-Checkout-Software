@@ -143,6 +143,8 @@ public class HardwarePopups {
 		JDialog dialog = createDialog(parentFrame, "Add an item to the scale");
 		JButton soupButton = new JButton("Soup");
 		JButton pickleButton = new JButton("Pickle Jar");
+		JButton appleButton = new JButton("Apple");
+		JButton bananaButton = new JButton("Banana");
 
 		soupButton.addActionListener(new ActionListener() {
 			@Override
@@ -156,12 +158,26 @@ public class HardwarePopups {
 				centralStationLogic.hardware.getBaggingArea().addAnItem(pickles);
 			}
 		});
+		appleButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				centralStationLogic.hardware.getBaggingArea().addAnItem(apples);
+			}
+		});
+		bananaButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				centralStationLogic.hardware.getBaggingArea().addAnItem(bananas);
+			}
+		});
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		dialog.add(panel);
 		panel.add(soupButton);
 		panel.add(pickleButton);
+		panel.add(appleButton);
+		panel.add(bananaButton);
 		showDialog(dialog);
 	}
 

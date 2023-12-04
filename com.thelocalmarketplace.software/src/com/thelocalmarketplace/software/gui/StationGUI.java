@@ -80,7 +80,7 @@ public class StationGUI extends JFrame {
     
     private void createBlockingPanel() {
         blockingPanel = new JPanel(new GridBagLayout());
-        blockingPanel.setBackground(Color.GRAY); // or any other color you prefer
+        blockingPanel.setBackground(Color.GRAY); 
         JLabel blockingLabel = new JLabel("Blocking");
         blockingLabel.setFont(new Font("Arial", Font.BOLD, 30));
         blockingPanel.add(blockingLabel);
