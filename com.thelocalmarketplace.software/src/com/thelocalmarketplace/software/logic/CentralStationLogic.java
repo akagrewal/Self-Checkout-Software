@@ -103,6 +103,11 @@ public class CentralStationLogic {
 	 * Instance of the controller that handles adding barcoded product
 	 */
 	public AddBarcodedItemController addBarcodedProductController;
+
+	/**
+	 * Instance of the controller that handles adding PLU product
+	 */
+	public AddPLUItemController addPLUProductController;
 	
 	/** 
 	 * Instance of weight logic 
@@ -160,6 +165,11 @@ public class CentralStationLogic {
 	public MembershipLogic membershipLogic;
 	
 	/**
+	 * Instance of logic for prediction
+	 */
+	public PredictionLogic predictionLogic;
+	
+	/**
 	 * Current selected payment method
 	 */
 	private PaymentMethods paymentMethod;	
@@ -185,7 +195,7 @@ public class CentralStationLogic {
 		this.paymentMethod = PaymentMethods.NONE;
 		
 		// Reference to logic objects
-		this.cartLogic = new CartLogic();
+		this.cartLogic = new CartLogic(this);
 		this.weightLogic = new WeightLogic(this);
 		this.stateLogic = new StateLogic(this);
 
@@ -193,6 +203,7 @@ public class CentralStationLogic {
 		this.coinPaymentController = new CoinPaymentController(this);
 		this.cashPaymentController = new CashPaymentController(this);
 		this.addBarcodedProductController = new AddBarcodedItemController(this);
+		this.addPLUProductController = new AddPLUItemController(this);
 		this.weightDiscrepancyController = new WeightDiscrepancyController(this);
 		this.cardReaderController = new CardReaderController(this);
 		this.receiptPrintingController = new ReceiptPrintingController(this);
@@ -200,6 +211,7 @@ public class CentralStationLogic {
 		this.addBagsLogic = new AddBagsLogic(this);
 		this.purchaseBagsLogic = new PurchaseBagsLogic(this);
 		this.removeItemLogic = new RemoveItemLogic(this);
+		this.predictionLogic = new PredictionLogic(this);
 		
 		this.coinCurrencyLogic = new CurrencyLogic(this.hardware.getCoinDenominations());
 		this.banknoteCurrencyLogic = new CurrencyLogic(this.hardware.getBanknoteDenominations());

@@ -1,3 +1,4 @@
+
 package com.thelocalmarketplace.software.logic;
 
 import java.math.BigDecimal;
@@ -5,10 +6,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.jjjwelectronics.Item;
+import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.scanner.Barcode;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.PLUCodedItem;
+import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.Product;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
+import com.thelocalmarketplace.software.AbstractLogicDependant;
 import com.thelocalmarketplace.software.Utilities;
 
 import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
@@ -40,44 +47,61 @@ import ca.ucalgary.seng300.simulation.SimulationException;
  * @author Jincheng Li - 30172907
  * @author Anandita Mahika - 30097559
  */
-public class CartLogic {
-	
+public class CartLogic extends AbstractLogicDependant{
 	/**
 	 * Tracks all of the products that are in the customer's cart
 	 * Includes products without barcodes
 	 * Maps a product to its count
+	 * If product is by weight, count is weight in kg
 	 */
-	private Map<Product, Integer> cart;
-	
+	protected Map<Product,Float> cart;
+
 	/**
 	 * Tracks how much money the customer owes
 	 */
 	private BigDecimal balanceOwed;
+
 	
 	/**
 	 * Constructor for a new CartLogic instance
 	 */
-	public CartLogic() {
-		
+
+	public CartLogic(CentralStationLogic logic){
+		super(logic);
 		// Initialization
-		this.cart = new HashMap<Product, Integer>();
-		
+		this.cart = new HashMap<Product, Float>();
 		this.balanceOwed = BigDecimal.ZERO;
 	}
-	
-	
+	/**
+	 * Adds a Barcodedproduct to customer's cart. Calculates the price and updates the balance owed by the customer.
+	 * @param product The Barcoded product added.
+	 * @throws SimulationException If the product is not in the cart
+	 */
+
 	public void addProductToCart(BarcodedProduct product) {
-		Utilities.modifyCountMapping(cart, product, 1);
-		
 		// Update balance owed
-		//if (product.isPerUnit()) {
-		BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(product.getPrice()));
-		this.updateBalance(newPrice);
-		//} else {
-			
-		//}
+		if (product.isPerUnit()) {
+			Utilities.modifyCountMapping(cart, product, 1);
+			BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(product.getPrice()));
+			this.updateBalance(newPrice);}
+
+		}
+	/**
+	 * Adds a PLUCodedproduct to customer's cart. Calculates the price and updates the balance owed by the customer.
+	 * @param product The PLUCodedproduct added
+	 * @throws SimulationException If the product is not in the cart
+	 */
+	public void addProductToCart(PLUCodedProduct product) {
+		 long actualWeight = logic.weightLogic.getActualWeight().inGrams().longValue()/1000;
+		 // Update weight in cart
+		 Utilities.modifyCountMapping(cart, product, (float)actualWeight);
+		 long Price = product.getPrice()* actualWeight;
+		 // Update balance owed
+		 BigDecimal newPrice = this.balanceOwed.add(new BigDecimal(Price));
+		 this.updateBalance(newPrice);
+		
 	}
-	
+
 	/**
 	 * Adds purchased bags to the total cost
 	 * not actually added to cart 
@@ -97,20 +121,26 @@ public class CartLogic {
 	 * @param product The product to remove
 	 * @throws SimulationException If the product is not in the cart
 	 */
-	public void removeProductFromCart(BarcodedProduct product) throws SimulationException {
+	public void removeProductFromCart(Product product) throws SimulationException {
 		if (!this.getCart().containsKey(product)) {
 			throw new InvalidStateSimulationException("Product not in cart");
 		}
-		
-		Utilities.modifyCountMapping(cart, product, -1);
-		
 		// Update balance owed
-		//if (product.isPerUnit()) {
-		BigDecimal newPrice = this.balanceOwed.subtract(new BigDecimal(product.getPrice()));
-		this.updateBalance(newPrice);
-		//} else {
-			
-		//}
+		if (product.isPerUnit()) {
+			BigDecimal newPrice = this.balanceOwed.subtract(new BigDecimal(product.getPrice()));
+			this.updateBalance(newPrice);
+			Utilities.modifyCountMapping(cart, product, -1);
+
+		} else {
+			// Get weight from cart hashmap using product key
+			float productWeight = cart.get(product);
+			// Get total price of item by multiplying weight and price/kg
+			long productPrice = (product.getPrice() * (long)productWeight);
+			BigDecimal newPrice = this.balanceOwed.subtract(new BigDecimal(productPrice));
+			this.updateBalance(newPrice);
+			Utilities.modifyCountMapping(cart, product, -(productWeight));
+		}
+
 	}
 	
 	/**
@@ -131,12 +161,30 @@ public class CartLogic {
 		
 		this.addProductToCart(toadd);
 	}
+	/**
+	 * Takes a PLU code, looks it up in product database, then adds it to customer cart
+	 * @param pluCode, The PLU code to use
+	 * @throws SimulationException If PLU code is not registered to product database
+	 * @throws SimulationException If PLU code is not registered in available inventory
+	 */
+	public void addPLUCodedProductToCart(PriceLookUpCode pluCode) throws SimulationException {
+		PLUCodedProduct toadd = ProductDatabases.PLU_PRODUCT_DATABASE.get(pluCode);
+		
+		if (!ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(pluCode)) {
+			throw new InvalidStateSimulationException("PLU Code not registered to product database");
+		}
+		else if (!ProductDatabases.INVENTORY.containsKey(toadd) || ProductDatabases.INVENTORY.get(toadd) < 1) {
+			throw new InvalidStateSimulationException("No items of this type are in inventory");
+		}		
+		this.addProductToCart(toadd);
+	}
+	
 	
 	/**
 	 * Gets the customer's cart
 	 * @return A list of products that represent the cart
 	 */
-	public Map<Product, Integer> getCart() {
+	public Map<Product, Float> getCart() {
 		return this.cart;
 	}
 	
@@ -147,9 +195,9 @@ public class CartLogic {
 	public BigDecimal calculateTotalCost() {
 		long balance = 0;
 		
-		for (Entry<Product, Integer> productAndCount : this.getCart().entrySet()) {
+		for (Entry<Product, Float> productAndCount : this.getCart().entrySet()) {
 			Product product = productAndCount.getKey();
-			int count = productAndCount.getValue();
+			Float count = productAndCount.getValue();
 			
 			balance += product.getPrice() * count;
 		}
@@ -184,4 +232,6 @@ public class CartLogic {
 	public void updateBalance(BigDecimal balance) {
 		this.balanceOwed = balance;
 	}
+	
+	
 }

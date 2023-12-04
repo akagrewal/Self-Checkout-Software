@@ -59,19 +59,21 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
      */
     public String createPaymentRecord(BigDecimal change) {
         StringBuilder paymentRecord = new StringBuilder();
-        Map<Product, Integer> cartItems = this.logic.cartLogic.getCart();
-        BigDecimal totalCost = BigDecimal.ZERO;
+
+        Map<Product, Float> cartItems = this.logic.cartLogic.getCart();
+        BigDecimal totalCost = BigDecimal.ZERO; 
         String membershipNumber = this.logic.membershipLogic.getMembershipNumber();
         String membershipName = this.logic.membershipLogic.getAccountName();
+
         //Begin the receipt.
         paymentRecord.append("Customer Receipt\n");
         paymentRecord.append("=========================\n");
         
         int i = 0;
         // Iterate through each item in the cart, adding printing them on the receipt.
-        for (Entry<Product, Integer> entry : cartItems.entrySet()) {
+        for (Entry<Product, Float> entry : cartItems.entrySet()) {
             Product product = entry.getKey();
-            Integer quantity = entry.getValue();
+            Float quantity = entry.getValue();
             
             BigDecimal price = new BigDecimal(product.getPrice());
             BigDecimal totalItemCost = price.multiply(new BigDecimal(quantity));
