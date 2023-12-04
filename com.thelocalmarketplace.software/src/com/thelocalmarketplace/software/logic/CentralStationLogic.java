@@ -328,5 +328,6 @@ public class CentralStationLogic {
 		System.out.println("Session ended");
 		
 		this.sessionStarted = false;
+		this.attendantLogic.notifySessionEnded();
 	}
 }

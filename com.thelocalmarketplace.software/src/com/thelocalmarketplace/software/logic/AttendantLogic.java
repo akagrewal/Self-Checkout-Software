@@ -152,7 +152,7 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
     }
 	
 	/** Method to notify the attendant station that the current session has ended */
-	public void notifyAttendantSessionEnded() {
+	public void notifySessionEnded() {
 		if (waitingToDisable) {
 			disableCustomerStation();
 			waitingToDisable = false;
