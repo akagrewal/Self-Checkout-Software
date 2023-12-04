@@ -22,6 +22,8 @@ public class StationGUI extends JFrame {
 
     public GUILogic guiLogicInstance;
     private final CentralStationLogic centralStationLogic;
+    
+    public JPanel blockingPanel;
 
     /** Stores the list of items being displayed on the screen (needs to be updated by GUI logic)**/
 	public DefaultListModel<String> itemListModel = new DefaultListModel<>();
@@ -67,12 +69,23 @@ public class StationGUI extends JFrame {
         //Or use method guiLogicInstance.switchPanels("welcomePanel")
 
         setVisible(true);
+        createBlockingPanel();
     }
 
     private static void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
         Insets insets = new Insets(0, 0, 0, 0);
         GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, gridheight, 1.0, 1.0, anchor, fill, insets, 0, 0);
         container.add(component, gbc);
+    }
+    
+    private void createBlockingPanel() {
+        blockingPanel = new JPanel(new GridBagLayout());
+        blockingPanel.setBackground(Color.GRAY); // or any other color you prefer
+        JLabel blockingLabel = new JLabel("Blocking");
+        blockingLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        blockingPanel.add(blockingLabel);
+        blockingPanel.setVisible(false); // Initially hidden
+        this.add(blockingPanel, BorderLayout.CENTER);
     }
 
     // Customer Screen 1
