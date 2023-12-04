@@ -180,26 +180,28 @@ public class HardwarePopups {
 		JButton apple = new JButton("Apples");
 		JButton banana = new JButton("Bananas");
 
-		apple.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JDialog scaleDialog = createDialog(parentFrame, "Number of items");
-				JTextField textField = addTextField(scaleDialog, "Total weight of items:");
-				Consumer<String> onSubmit = inputText -> {
-					int massOfItems = Integer.parseInt(inputText);
-					centralStationLogic.hardware.getScanningArea().addAnItem(apples);
-
-				};
-				addSubmitButton(scaleDialog, textField, onSubmit);
-				showDialog(scaleDialog);
-			}
-		});
-		banana.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				centralStationLogic.hardware.getBaggingArea().removeAnItem(pickles);
-			}
-		});
+		apple.addActionListener(e -> {
+            JDialog scaleDialog = createDialog(parentFrame, "Number of items");
+            JTextField textField = addTextField(scaleDialog, "Total weight of items:");
+            Consumer<String> onSubmit = inputText -> {
+                double massOfItems = Integer.parseInt(inputText);
+                PLUCodedItem currentItem = new PLUCodedItem(CreateTestDatabases.apple.getPLUCode(), new Mass(massOfItems));
+                centralStationLogic.hardware.getScanningArea().addAnItem(currentItem);
+            };
+            addSubmitButton(scaleDialog, textField, onSubmit);
+            showDialog(scaleDialog);
+        });
+		banana.addActionListener(e -> {
+            JDialog scaleDialog = createDialog(parentFrame, "Number of items");
+            JTextField textField = addTextField(scaleDialog, "Total weight of items:");
+            Consumer<String> onSubmit = inputText -> {
+                double massOfItems = Integer.parseInt(inputText);
+                PLUCodedItem currentItem = new PLUCodedItem(CreateTestDatabases.banana.getPLUCode(), new Mass(massOfItems));
+                centralStationLogic.hardware.getScanningArea().addAnItem(currentItem);
+            };
+            addSubmitButton(scaleDialog, textField, onSubmit);
+            showDialog(scaleDialog);
+        });
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
