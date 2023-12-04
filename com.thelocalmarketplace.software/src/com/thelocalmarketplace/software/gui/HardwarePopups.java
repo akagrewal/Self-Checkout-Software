@@ -69,12 +69,12 @@ public class HardwarePopups {
 		JButton apple = new JButton("Apple");
 		JButton orange = new JButton("Orange");
         apple.addActionListener(e -> {
-			BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass(10));
+			BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass((double)1000));
             centralStationLogic.hardware.getMainScanner().scan(Apple);
 		  	selectionFrame.dispose();
 		});
         orange.addActionListener(e -> {
-			BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass(10));
+			BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass((double)1000));
 			centralStationLogic.hardware.getMainScanner().scan(Orange);
 			selectionFrame.dispose();
 			});
@@ -93,14 +93,14 @@ public class HardwarePopups {
         apple.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass(10));
+                BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass((double)1000));
             	centralStationLogic.hardware.getHandheldScanner().scan(Apple);
             }
         });
         orange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass(10));
+                BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass((double)1000));
             	centralStationLogic.hardware.getHandheldScanner().scan(Orange);
             }
         });
@@ -122,14 +122,14 @@ public class HardwarePopups {
         apple.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass(10));
+                BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass((double)1000));
             	centralStationLogic.hardware.getBaggingArea().addAnItem(Apple);
             }
         });
         orange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass(10));
+                BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass((double)1000));
             	centralStationLogic.hardware.getBaggingArea().addAnItem(Orange);            
             }
         });
@@ -150,14 +150,14 @@ public class HardwarePopups {
         apple.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass(10));
+                BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass((double)1000));
             	centralStationLogic.hardware.getBaggingArea().removeAnItem(Apple);;
             }
         });
         orange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass(10));
+                BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass((double)1000));
             	centralStationLogic.hardware.getBaggingArea().removeAnItem(Orange);            
             }
         });
