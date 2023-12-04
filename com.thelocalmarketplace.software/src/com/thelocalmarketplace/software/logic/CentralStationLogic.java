@@ -125,7 +125,12 @@ public class CentralStationLogic {
 	 */
 	public AddBagsLogic addBagsLogic;
 	
-	/*
+	/**
+	 * Instance of purchase bags logic 
+	 */
+	public PurchaseBagsLogic purchaseBagsLogic;
+	
+	/**
 	 * Instance of logic that handles item removal
 	 */
 	public RemoveItemLogic removeItemLogic;
@@ -170,6 +175,11 @@ public class CentralStationLogic {
 	 */
 	public GUILogic guiLogic;
 	
+	
+	/**
+	 * Instance of logic for prediction
+	 */
+	public PredictionLogic predictionLogic;
 	
 	/**
 	 * Current selected payment method
@@ -217,7 +227,9 @@ public class CentralStationLogic {
 		this.attendantLogic = new AttendantLogic();
 		this.attendantLogic.registerStationLogic(this);
 		this.addBagsLogic = new AddBagsLogic(this);
+		this.purchaseBagsLogic = new PurchaseBagsLogic(this);
 		this.removeItemLogic = new RemoveItemLogic(this);
+		this.predictionLogic = new PredictionLogic(this);
 		
 		this.coinCurrencyLogic = new CurrencyLogic(this.hardware.getCoinDenominations());
 		this.banknoteCurrencyLogic = new CurrencyLogic(this.hardware.getBanknoteDenominations());

@@ -123,7 +123,7 @@ public class HandleBulkyItemTests {
 	public void testAttendantApprovalReducesExceptedWeight() {
 		scanUntilAdded();
 		session.weightLogic.skipBaggingRequest(barcodedItem.getBarcode());
-		session.attendantLogic.grantApprovalSkipBagging(barcodedItem.getBarcode());
+		session.attendantLogic.grantApprovalSkipBagging(this.session, barcodedItem.getBarcode());
 		assertFalse(session.weightLogic.checkWeightDiscrepancy());
 	}
 	
@@ -131,7 +131,7 @@ public class HandleBulkyItemTests {
 	public void testAttendantApprovalUnblocksStation() {
 		scanUntilAdded();
 		session.weightLogic.skipBaggingRequest(barcodedItem.getBarcode());
-		session.attendantLogic.grantApprovalSkipBagging(barcodedItem.getBarcode());
+		session.attendantLogic.grantApprovalSkipBagging(this.session, barcodedItem.getBarcode());
 		assertFalse(this.session.stateLogic.inState(States.BLOCKED)); // Ensures no longer blocked
 	}
 	
@@ -139,21 +139,26 @@ public class HandleBulkyItemTests {
 	public void testAttendantApprovalStaysBlockedIfDiscrepancyRemains() {
 		scanUntilAdded();
 		session.weightLogic.skipBaggingRequest(barcodedItem.getBarcode());
-		session.attendantLogic.grantApprovalSkipBagging(barcodedItem.getBarcode());
+		session.attendantLogic.grantApprovalSkipBagging(this.session, barcodedItem.getBarcode());
 	}
 	
 	@Test (expected = InvalidArgumentSimulationException.class)
 	public void testAttendantApprovalNullBarcode() {
-		session.attendantLogic.grantApprovalSkipBagging(null);
+		session.attendantLogic.grantApprovalSkipBagging(this.session, null);
 	}
 
 	
 	private class AttendantLogicStub extends AttendantLogic {
 		public boolean requestApprovalCalled = false;
+		private CentralStationLogic logic;
 		
-		public AttendantLogicStub(CentralStationLogic l) {super(l);}
+		public AttendantLogicStub(CentralStationLogic l) {
+			super();
+			this.logic = l;
+			this.registerStationLogic(l);
+		}
 		@Override 
-		public void requestApprovalSkipBagging(Barcode barcode) {
+		public void requestApprovalSkipBagging(CentralStationLogic logic, Barcode barcode) {
 			requestApprovalCalled = true;
 		}
 		
