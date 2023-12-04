@@ -6,8 +6,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
 
-import javax.swing.SwingUtilities;
-
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.Numeral;
 import com.jjjwelectronics.card.ICardReader;
@@ -19,8 +17,11 @@ import com.tdc.banknote.BanknoteValidator;
 import com.tdc.coin.CoinValidator;
 import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.SelfCheckoutStationBronze;
 import com.thelocalmarketplace.hardware.SelfCheckoutStationGold;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
+import com.thelocalmarketplace.software.database.CreateTestDatabases;
+import com.thelocalmarketplace.software.logic.AttendantLogic;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 import powerutility.PowerGrid;
@@ -60,49 +61,55 @@ public class DemoHere {
 
     //For Testing Purposes - to run GUI (main)
     public static void main(String[] args) {
-    	Barcode barcode;
-    	 Numeral digits;
-    	
-    	 BarcodedItem bitem;
-
-    	 Numeral[] barcode_numeral;
-    	 Numeral[] barcode_numeral2;
-    	 Numeral[] barcode_numeral3;
-    	 Barcode b_test;
-    	 Barcode barcode2;
-    	 BarcodedProduct product;
-    	 BarcodedProduct product2;
-    	 BarcodedProduct product3;
-    	barcode_numeral = new Numeral[]{Numeral.one,Numeral.two, Numeral.three};
-		barcode_numeral2 = new Numeral[]{Numeral.three,Numeral.two, Numeral.three};
-		barcode_numeral3 = new Numeral[]{Numeral.three,Numeral.three, Numeral.three};
-		barcode = new Barcode(barcode_numeral);
-		barcode2 = new Barcode(barcode_numeral2);
-		b_test = new Barcode(barcode_numeral3);
-		product = new BarcodedProduct(barcode, "apple",5,(double)3.0);
-		product2 = new BarcodedProduct(barcode2, "orange",(long)1.00,(double)300.0);
-		product3 = new BarcodedProduct(b_test, "some item 3",(long)1.00,(double)3.0);
-		
-		ProductDatabases.BARCODED_PRODUCT_DATABASE.clear();
-		ProductDatabases.INVENTORY.clear();
-		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode, product);
-		ProductDatabases.INVENTORY.put(product, 1);
-		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode2, product2);
-		ProductDatabases.INVENTORY.put(product2, 1);
-    	
+//    	Barcode barcode;
+//    	 Numeral digits;
+//
+//    	 BarcodedItem bitem;
+//
+//    	 Numeral[] barcode_numeral;
+//    	 Numeral[] barcode_numeral2;
+//    	 Numeral[] barcode_numeral3;
+//    	 Barcode b_test;
+//    	 Barcode barcode2;
+//    	 BarcodedProduct product;
+//    	 BarcodedProduct product2;
+//    	 BarcodedProduct product3;
+//    	barcode_numeral = new Numeral[]{Numeral.one,Numeral.two, Numeral.three};
+//		barcode_numeral2 = new Numeral[]{Numeral.three,Numeral.two, Numeral.three};
+//		barcode_numeral3 = new Numeral[]{Numeral.three,Numeral.three, Numeral.three};
+//		barcode = new Barcode(barcode_numeral);
+//		barcode2 = new Barcode(barcode_numeral2);
+//		b_test = new Barcode(barcode_numeral3);
+//		product = new BarcodedProduct(barcode, "apple",5,(double)3.0);
+//		product2 = new BarcodedProduct(barcode2, "orange",(long)1.00,(double)300.0);
+//		product3 = new BarcodedProduct(b_test, "some item 3",(long)1.00,(double)3.0);
+//
+//		ProductDatabases.BARCODED_PRODUCT_DATABASE.clear();
+//		ProductDatabases.INVENTORY.clear();
+//		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode, product);
+//		ProductDatabases.INVENTORY.put(product, 1);
+//		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(barcode2, product2);
+//		ProductDatabases.INVENTORY.put(product2, 1);
+//
+		CreateTestDatabases.createDatabase();
 		PowerGrid.engageUninterruptiblePowerSource();
 		PowerGrid.instance().forcePowerRestore();
 		AbstractSelfCheckoutStation.resetConfigurationToDefaults();
 		
-    	SelfCheckoutStationGold  station = new SelfCheckoutStationGold();
-    	station.plugIn(PowerGrid.instance());
-		station.turnOn();
+    	SelfCheckoutStationGold station1 = new SelfCheckoutStationGold();
+		SelfCheckoutStationGold station2 = new SelfCheckoutStationGold();
+    	station1.plugIn(PowerGrid.instance());
+		station1.turnOn();
+		station2.plugIn(PowerGrid.instance());
+		station2.turnOn();
     	
-    	CentralStationLogic stationLogic1 = new CentralStationLogic(station);
+    	CentralStationLogic stationLogic1 = new CentralStationLogic(station1);
+		CentralStationLogic stationLogic2 = new CentralStationLogic(station2);
     	
-        AttendantFrame attendantFrame = new AttendantFrame();
-        attendantFrame.registerStationLogic(stationLogic1);
-        attendantFrame.createAttendantFrame();
+		AttendantLogic attendantLogic = new AttendantLogic();
+        attendantLogic.registerStationLogic(stationLogic1);
+		attendantLogic.registerStationLogic(stationLogic2);
+		attendantLogic.updateAttendantGUI();
         HardwareActionSimulations actionsFrame = new HardwareActionSimulations(stationLogic1);
         actionsFrame.setVisible(true);
     }

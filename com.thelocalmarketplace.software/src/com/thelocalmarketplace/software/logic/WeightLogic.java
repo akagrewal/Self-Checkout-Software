@@ -2,8 +2,10 @@ package com.thelocalmarketplace.software.logic;
 
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.Mass.MassDifference;
+import com.jjjwelectronics.bag.ReusableBag;
 import com.jjjwelectronics.OverloadedDevice;
 import com.jjjwelectronics.scale.AbstractElectronicScale;
+
 import com.jjjwelectronics.scanner.Barcode;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
@@ -118,6 +120,14 @@ public class WeightLogic extends AbstractLogicDependant {
 		this.expectedWeight = this.expectedWeight.sum(this.actualWeight);
 	}
 	
+	/** Adds to the expected weight the weight of Purchased bags
+	 * @param ReusableBag bag
+	 */
+	public void addExpectedPurchasedBagWeight(ReusableBag bag) {
+		Mass mass = bag.getMass();
+		this.expectedWeight = this.expectedWeight.sum(mass);
+	}
+	
 	/** Removes the weight of the product given from expectedWeight
 	 * @param barcode - barcode of item to remove weight of */
 	public void removeExpectedWeight(Barcode barcode) {
@@ -147,6 +157,8 @@ public class WeightLogic extends AbstractLogicDependant {
 	/** Updates actual weight to the mass passed
 	 * @param mass - Mass to change the actual weight to */
 	public void updateActualWeight(Mass mass) {
+		System.out.println("Expected mass is: " + this.expectedWeight.toString());
+		System.out.println("Updating Actual Mass to: " + mass.toString());
 		this.actualWeight = mass;
 	}
 	
@@ -155,7 +167,7 @@ public class WeightLogic extends AbstractLogicDependant {
 	 * @throws InvalidArgumentSimulationException - when skipBagging is called on a product not in the cart */
 	public void skipBaggingRequest(Barcode barcode) {
 		if (!this.logic.cartLogic.getCart().containsKey(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode))) throw new InvalidArgumentSimulationException("Cannot skip bagging an item that has not been added to cart");
-		logic.attendantLogic.requestApprovalSkipBagging(barcode);
+		logic.attendantLogic.requestApprovalSkipBagging(logic, barcode);
 		
 	}
 	

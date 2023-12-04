@@ -1,14 +1,18 @@
 package com.thelocalmarketplace.software.logic;
 
 import com.jjjwelectronics.scanner.Barcode;
+import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.PLUCodedProduct;
+import com.thelocalmarketplace.hardware.PriceLookUpCode;
+import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.gui.*;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 import ca.ucalgary.seng300.simulation.InvalidArgumentSimulationException;
 import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.Map.Entry;
 
 import static com.thelocalmarketplace.software.gui.SessionBlockedPopUp.*;
 
@@ -39,9 +43,30 @@ import static com.thelocalmarketplace.software.gui.SessionBlockedPopUp.*;
  * @author Anandita Mahika - 30097559
  */
 public class AttendantLogic implements GUIListener{
-	/** tracks the station logic being monitored */
-	private CentralStationLogic logic;
-	
+	private final AttendantGUI attendantFrame;
+	ArrayList<CentralStationLogic> stationLogicsList;
+
+	public AttendantLogic() {
+		this.attendantFrame = new AttendantGUI();
+		this.stationLogicsList = new ArrayList<>();
+	}
+
+	public void registerStationLogic(CentralStationLogic logic) {
+		stationLogicsList.add(logic);
+		attendantFrame.stationToButtonMap.put(logic, null);
+		attendantFrame.stationLogicsList.add(logic);
+	}
+
+	public void deregisterStationLogic(CentralStationLogic logic) {
+		stationLogicsList.remove(logic);
+		attendantFrame.stationToButtonMap.remove(logic);
+		attendantFrame.stationLogicsList.remove(logic);
+	}
+
+	public void updateAttendantGUI() {
+		attendantFrame.createAttendantFrame();
+	}
+
 	/** tracks weather or not a bagging discrepency has been found */
 	private boolean inBaggingDiscrepency;
 	
@@ -75,33 +100,28 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 	}
 // listener end
 
-	public AttendantLogic(CentralStationLogic l) {
-		this.logic = l;
-	}
-
-
 
 	
 	/** simulates attendant signifying they approve the bagging area 
 	 * @throws Exception if the add bags state cannot be exited*/
-	public void approveBaggingArea() throws Exception {
-		this.logic.weightLogic.overrideDiscrepancy();
-		this.logic.addBagsLogic.approvedBagging = true;
-		this.logic.addBagsLogic.endAddBags();
+	public void approveBaggingArea(CentralStationLogic logic) throws Exception {
+		logic.weightLogic.overrideDiscrepancy();
+		logic.addBagsLogic.approvedBagging = true;
+		logic.addBagsLogic.endAddBags();
 	}
 	
 	/** simulates attendant being notified that a bagging discrepancy has occurred 
 	 * The only way for customer to transition out of ADDBAGS state is for attendant to call
 	 * approveBaggingArea() */
-	public void baggingDiscrepencyDetected() {
+	public void baggingDiscrepencyDetected(CentralStationLogic logic) {
 		//TODO GUI: display that customer is awaiting approval to attendant
-		discrepancyDetected();
+		discrepancyDetected(attendantFrame.getAttendantFrame());
 
 		this.inBaggingDiscrepency = true;
-		this.logic.stateLogic.gotoState(States.BLOCKED);
-		if(this.logic.addBagsLogic.approvedBagging) {
-			this.logic.weightLogic.overrideDiscrepancy();
-			this.logic.stateLogic.gotoState(States.NORMAL);
+		logic.stateLogic.gotoState(States.BLOCKED);
+		if(logic.addBagsLogic.approvedBagging) {
+			logic.weightLogic.overrideDiscrepancy();
+			logic.stateLogic.gotoState(States.NORMAL);
 		}
 	}
 	
@@ -120,9 +140,9 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 	/** Notifies attendant of request to skip bagging a particular product with given barcode 
 	 * @param barcode - barcode of item the customer is requesting to skip bagging 
 	 * @throws InvalidArgumentSimulationException if barcode is null */
-	public void requestApprovalSkipBagging(Barcode barcode) {
+	public void requestApprovalSkipBagging(CentralStationLogic logic, Barcode barcode) {
 		if (barcode == null) throw new InvalidArgumentSimulationException("Cannot skip bagging with null barcode");
-		if (!this.logic.stateLogic.inState(States.BLOCKED)) throw new InvalidStateSimulationException("Skip bagging request should only occur in a blocked state");
+		if (!logic.stateLogic.inState(States.BLOCKED)) throw new InvalidStateSimulationException("Skip bagging request should only occur in a blocked state");
 		///TODO GUI: set alert for customer to wait for attendant approval
 	}
 	
@@ -131,14 +151,14 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 	 * unblocks station only if no weight discrepancy remains after expected weight is removed
 	 * @param barcode - barcode of item that the attendant is approving to skip bagging 
 	 * @throws InvalidArgumentSimulationException if barcode is null */
-	public void grantApprovalSkipBagging(Barcode barcode) {
+	public void grantApprovalSkipBagging(CentralStationLogic logic, Barcode barcode) {
 		if (barcode == null) throw new InvalidArgumentSimulationException("Cannot skip bagging with null barcode");
 		logic.weightLogic.removeExpectedWeight(barcode);
 		logic.weightLogic.handleWeightDiscrepancy();
 	}
 	
-	public void printDuplicateReceipt() {
-		this.logic.receiptPrintingController.printDuplicateReceipt();
+	public void printDuplicateReceipt(CentralStationLogic logic) {
+		logic.receiptPrintingController.printDuplicateReceipt();
 	}
 	
 	/**
@@ -152,15 +172,15 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
     }
 	
 	/** Method to notify the attendant station that the current session has ended */
-	public void notifySessionEnded() {
+	public void notifySessionEnded(CentralStationLogic logic) {
 		if (waitingToDisable) {
-			disableCustomerStation();
+			disableCustomerStation(logic);
 			waitingToDisable = false;
 		}
 	}
 	
 	/** Method to disable a customer station for maintenance and display out of order */
-	public void disableCustomerStation() {
+	public void disableCustomerStation(CentralStationLogic logic) {
 		//TODO: change the logic do be able to disable only a specific customer station
 		//TODO GUI: GUI should display out of order when disabled for maintenance
 		
@@ -168,7 +188,7 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 			// once the station is out of the session
 			logic.stateLogic.gotoState(States.OUTOFORDER);
 			
-			outOfOrder();
+			outOfOrder(logic.runGUI.cardPanel);
 		} else {
 			waitingToDisable = true;
 		}
@@ -176,7 +196,7 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 	}
 	
 	/** Method to take a customer station out of maintenance mode */
-	public void enableCustomerStation() {
+	public void enableCustomerStation(CentralStationLogic logic) {
 		//TODO: change the logic do be able to enable only a specific customer station
 
 
@@ -185,4 +205,21 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
 		
 		logic.stateLogic.gotoState(States.NORMAL);
 	}
+	
+	/** Adds an item for a customer through text search
+     
+@param itemName*/
+  public void AddItemByTextSearch(CentralStationLogic logic, String itemName) {
+      for (Entry<Barcode, BarcodedProduct> BarcodeEntry : ProductDatabases.BARCODED_PRODUCT_DATABASE.entrySet()) {
+          for (Entry<PriceLookUpCode, PLUCodedProduct> PLUCodeEntry : ProductDatabases.PLU_PRODUCT_DATABASE.entrySet()) {
+              String BDescription =  BarcodeEntry.getValue().getDescription();
+			  String PDescription = PLUCodeEntry.getValue().getDescription();
+              if (Objects.equals(itemName, BDescription)) {
+                  logic.cartLogic.addBarcodedProductToCart(BarcodeEntry.getKey());
+			  } else if (Objects.equals(itemName, PDescription)) {
+                  logic.cartLogic.addPLUCodedProductToCart(PLUCodeEntry.getKey());
+			  }
+		  }
+	  }
+  }
 }

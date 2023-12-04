@@ -1,16 +1,6 @@
 
 package com.thelocalmarketplace.software.gui;
 
-import com.jjjwelectronics.Item;
-import com.jjjwelectronics.Mass;
-import com.jjjwelectronics.scanner.BarcodedItem;
-import com.thelocalmarketplace.hardware.BarcodedProduct;
-import com.thelocalmarketplace.hardware.PLUCodedProduct;
-import com.thelocalmarketplace.hardware.Product;
-import com.thelocalmarketplace.software.database.CreateTestDatabases;
-import com.thelocalmarketplace.software.logic.CentralStationLogic;
-
-import java.awt.*;
 import java.awt.CardLayout;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,14 +12,13 @@ import java.util.Set;
 import javax.swing.JPanel;
 
 import com.jjjwelectronics.Mass;
-import com.jjjwelectronics.Numeral;
-import com.jjjwelectronics.scanner.Barcode;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.Product;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
+import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 /*
  * This is where Project 3 Logic will be entered 
@@ -69,6 +58,7 @@ public class GUILogic {
 	private void updateItemsList() {
 		guiDisplay.itemListModel.clear();
 		Map<Product, Float> cart = centralLogic.cartLogic.getCart();
+		System.out.println("Size of cart: " + cart.size());
 		for (Map.Entry<Product, Float> entry : cart.entrySet()) {
 			Product product = entry.getKey();
 			Float count = entry.getValue();
@@ -92,15 +82,28 @@ public class GUILogic {
 		guiDisplay.setTotal(owed);
 	}
 
-	public void checkPLU(String PLU) {
-		PriceLookUpCode plu = new PriceLookUpCode(PLU);
-		boolean valid = ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu);
-		// do something
+	public boolean checkPLU(String PLU) {
+		boolean valid = false;
+
+		try {
+			PriceLookUpCode plu = new PriceLookUpCode(PLU);
+			valid = ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu);
+		} catch (Exception ignored) {}
+
+		if (valid) {
+			addProductPLU(PLU);
+		}
+
+		return valid;
 	}
 
-	public void checkMembership(String membershipID) {
-		boolean valid = centralLogic.membershipLogic.isMembershipNumberValid(membershipID);
-		// do something
+	public boolean checkMembership(String membershipID) {
+		if (centralLogic.membershipLogic.isMembershipNumberValid(membershipID)) {
+			centralLogic.membershipLogic.setMembershipNumber(membershipID);
+		} else {
+			return false;
+		}
+		return true;
 	}
 
 
@@ -119,26 +122,39 @@ public class GUILogic {
 
 	// START BUTTON
 	public void StartSessionButtonPressed() {
-		System.out.println("Start Session");
-		centralLogic.startSession();
+		if (centralLogic.stateLogic.getState() != States.OUTOFORDER) {
+			System.out.println("Start Session");
+			centralLogic.startSession();
+			switchPanels("AddItemsPanel");
+		}
 	}
 	
 	public void SessionOver() {
 		System.out.println("Start Session");
 		centralLogic.stopSession();
+		updateItemsList();
+		updateTotal();
 	}
 	
 	
-	
-	
-	
-	
-	
-	
 
-	
-	
-	
+	public boolean addProductPLU(String PLU){
+		boolean productFound = false;
+
+//		productFound = checkPLU(PLU);
+
+		PriceLookUpCode pluCode = new PriceLookUpCode(PLU);
+
+
+//		if (productFound){
+		PLUCodedProduct product = ProductDatabases.PLU_PRODUCT_DATABASE.get(pluCode);
+		System.out.println("This is the PLU code of the item being added: " + product.getPLUCode());
+		centralLogic.addPLUProductController.addPLU(product.getPLUCode());
+		updateCartChanged();
+
+		return productFound;
+	}
+
 	
 	
 // ENZOS CODE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
