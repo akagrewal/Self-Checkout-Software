@@ -102,7 +102,7 @@ public class StationGUI extends JFrame implements logicObserver {
 
 
 
-        JLabel welcomeLabel = new JLabel("Welcome to the UofC market! You are using station No. "+centralStationLogic.stationNumber);
+        JLabel welcomeLabel = new JLabel("Welcome to the UofC market!");
         welcomeLabel.setFont(new Font("Serif", Font.BOLD, 20));
 
 
