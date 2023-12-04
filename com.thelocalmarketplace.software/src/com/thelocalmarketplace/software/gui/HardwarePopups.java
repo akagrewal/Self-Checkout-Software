@@ -2,10 +2,12 @@ package com.thelocalmarketplace.software.gui;
 
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.Numeral;
+import com.jjjwelectronics.card.Card;
 import com.jjjwelectronics.scanner.Barcode;
 import com.jjjwelectronics.scanner.BarcodedItem;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
+import com.thelocalmarketplace.hardware.external.CardIssuer;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
@@ -16,6 +18,8 @@ import java.awt.FlowLayout;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Calendar;
 import java.util.function.Consumer;
 
 import javax.swing.Box;
@@ -30,52 +34,55 @@ import javax.swing.JTextField;
 public class HardwarePopups {
 
     private CentralStationLogic centralStationLogic;
-    private static BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass(10));
-    private static BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass(10));
+    
+    // creating cards
+    CardIssuer bank= new CardIssuer("Scotia Bank",3);
+    
+    Card realCreditCard = new Card("CREDIT","123456789","Jane","329", "1234", true, true);
+    Card fakeCreditCard = new Card("CREDIT","123456788","John","328", "1233", true, true);
+
+    Card realDebitCard = new Card("DEBIT","123456787","John","327", "1232", true, true);
+    Card fakeDebitCard = new Card("DEBIT","123456786","Jane","326", "1231", true, true);
+
+    
 
     public HardwarePopups(CentralStationLogic centralStationLogic) {
     	
     	this.centralStationLogic = centralStationLogic;
     	
-    }
+    	this.centralStationLogic.setupBankDetails(bank);
+    	Calendar expiry = Calendar.getInstance();
+        expiry.set(2025,Calendar.JANUARY,24);
+        // adding REAL cards' data so bank's database
+        bank.addCardData("123456789", "Jane",expiry,"329",32.00);
+        bank.addCardData("123456787", "John",expiry,"327",32.00);
 
-//	public static void showScanMainScannerPopup(JFrame parentFrame) {
-//		JDialog dialog = createDialog(parentFrame, "Scan Main Scanner");
-//		JTextField textField = addTextField(dialog, "Scan barcode using the main scanner:");
-//		String barcode;
-//		Consumer<String> onSubmit = inputText -> {
-//			
-//		};			
-//		addSubmitButton(dialog, textField, onSubmit);
-//		showDialog(dialog);
-//	}
+    }
 	
 	public void showScanMainScannerPopup(JFrame parentFrame) {
-		JDialog dialog = createDialog(parentFrame, "Scan Main Scanner");
+		JFrame selectionFrame = new JFrame();
+		selectionFrame.setTitle("Scan Main Scanner");
+		selectionFrame.setSize(new Dimension(200, 300));
+		selectionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		selectionFrame.setLayout(new FlowLayout());
+
 		JButton apple = new JButton("Apple");
 		JButton orange = new JButton("Orange");
-		JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        apple.addActionListener(e -> {
+			BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass(10));
+            centralStationLogic.hardware.getMainScanner().scan(Apple);
+		  	selectionFrame.dispose();
+		});
+        orange.addActionListener(e -> {
+			BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass(10));
+			centralStationLogic.hardware.getMainScanner().scan(Orange);
+			selectionFrame.dispose();
+			});
         
-        apple.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	centralStationLogic.hardware.getMainScanner().scan(Apple);
-            	//idk how to make the panel close
-            	parentFrame.remove(panel);
-            	}
-        });
-        orange.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	centralStationLogic.hardware.getMainScanner().scan(Orange);
-            }
-        });
-        
-        dialog.add(panel);
-        panel.add(apple);
-        panel.add(orange);
-		showDialog(dialog);
+        selectionFrame.add(apple);
+        selectionFrame.add(orange);
+		selectionFrame.setLocationRelativeTo(parentFrame);
+		selectionFrame.setVisible(true);
 	}
 
 	public void showScanHandheldScannerPopup(JFrame parentFrame) {
@@ -86,12 +93,14 @@ public class HardwarePopups {
         apple.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass(10));
             	centralStationLogic.hardware.getHandheldScanner().scan(Apple);
             }
         });
         orange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass(10));
             	centralStationLogic.hardware.getHandheldScanner().scan(Orange);
             }
         });
@@ -113,13 +122,16 @@ public class HardwarePopups {
         apple.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass(10));
             	centralStationLogic.hardware.getBaggingArea().addAnItem(Apple);
             }
         });
         orange.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	centralStationLogic.hardware.getBaggingArea().addAnItem(Orange);            }
+                BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass(10));
+            	centralStationLogic.hardware.getBaggingArea().addAnItem(Orange);            
+            }
         });
         
         JPanel panel = new JPanel();
@@ -130,41 +142,242 @@ public class HardwarePopups {
 		showDialog(dialog);
 	}
 
-	public static void showRemoveItemFromScalePopup(JFrame parentFrame) {
-		JDialog dialog = createDialog(parentFrame, "Remove Item from Scale");
-		JTextField textField = addTextField(dialog, "Remove item from scale:");
-		Consumer<String> onSubmit = inputText -> {
-            Mass weight = new Mass(Double.parseDouble(inputText));
-            //guiLogic.removeItemFromScale(weight);
-		};
-		addSubmitButton(dialog, textField, onSubmit);
+	public void showRemoveItemFromScalePopup(JFrame parentFrame) {
+		JDialog dialog = createDialog(parentFrame, "Remove an item from the scale");
+		JButton apple = new JButton("Apple");
+		JButton orange = new JButton("Orange");
+
+        apple.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BarcodedItem Apple = new BarcodedItem(new Barcode(new Numeral[]{Numeral.one,Numeral.two, Numeral.three}), new Mass(10));
+            	centralStationLogic.hardware.getBaggingArea().removeAnItem(Apple);;
+            }
+        });
+        orange.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BarcodedItem Orange = new BarcodedItem(new Barcode(new Numeral[]{Numeral.three,Numeral.two, Numeral.three}), new Mass(10));
+            	centralStationLogic.hardware.getBaggingArea().removeAnItem(Orange);            
+            }
+        });
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        dialog.add(panel);
+        panel.add(apple);
+        panel.add(orange);
 		showDialog(dialog);
 	}
 
-	public static void showPayWithCreditPopup(JFrame parentFrame, boolean real) {
-		JDialog dialog = createDialog(parentFrame, real ? "Pay With Real Credit" : "Pay With Fake Credit");
-		JTextField textField = addTextField(dialog, "Enter credit card details:");
-		Consumer<String> onSubmit = inputText -> {
-			int cardNumber = Integer.parseInt(inputText);
-			if (real) {
-				//guiLogic.payWithCredit(cardNumber);
-			} else {
-				//TODO: can we just have an error message here?
-			}
-		};
-		addSubmitButton(dialog, textField, onSubmit);
-		showDialog(dialog);
+	public void showPayWithCreditPopup(JFrame parentFrame) {
+		JDialog dialog = createDialog(parentFrame, "Pay With Credit");
+		JButton swipeReal = new JButton("Swipe valid credit card");
+		JButton swipeFake = new JButton("Swipe invalid credit card");
+		JButton insertReal = new JButton("Insert valid credit card");
+		JButton insertFake = new JButton("Insert invalid credit card");
+		JButton tapReal = new JButton("Tap valid credit card");
+		JButton tapFake = new JButton("Tap invalid credit card");
+		
+		swipeReal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	try {
+					centralStationLogic.hardware.getCardReader().swipe(realCreditCard);
+				} catch (IOException e1) {
+					// POPUP FOR ERROR
+				}
+            }
+        });
+		swipeFake.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	try {
+					centralStationLogic.hardware.getCardReader().swipe(fakeCreditCard);
+				} catch (IOException e1) {
+					// POPUP FOR ERROR
+				}
+            }
+        });
+		
+		insertReal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	JDialog pinDialog = createDialog(parentFrame, "pin");
+            	JTextField textField = addTextField(pinDialog, "Enter pin:");
+        		Consumer<String> onSubmit = inputText -> {
+					try {
+						centralStationLogic.hardware.getCardReader().insert(realCreditCard, inputText);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						
+					}
+
+        		};
+        		addSubmitButton(pinDialog, textField, onSubmit);
+                showDialog(pinDialog);
+
+            }
+        });
+		insertFake.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	JDialog pinDialog = createDialog(parentFrame, "pin");
+            	JTextField textField = addTextField(pinDialog, "Enter pin:");
+        		Consumer<String> onSubmit = inputText -> {
+					try {
+						centralStationLogic.hardware.getCardReader().insert(fakeCreditCard, inputText);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						
+					}
+
+                    //guiLogic.insertCoin(coinValue);
+        		};
+        		addSubmitButton(pinDialog, textField, onSubmit);
+                showDialog(pinDialog);
+
+            }
+        });		
+		tapReal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	try {
+					centralStationLogic.hardware.getCardReader().tap(realCreditCard);
+				} catch (IOException e1) {
+					// POPUP FOR ERROR
+				}
+            }
+        });
+		tapFake.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	try {
+					centralStationLogic.hardware.getCardReader().tap(fakeCreditCard);
+				} catch (IOException e1) {
+					// POPUP FOR ERROR
+				}
+            }
+        });
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        dialog.add(panel);
+        panel.add(swipeReal);
+        panel.add(swipeFake);	
+        panel.add(insertReal);
+        panel.add(insertFake);
+        panel.add(tapReal);
+        panel.add(tapFake);
+        showDialog(dialog);
 	}
 
-	public static void showPayWithDebitPopup(JFrame parentFrame) {
+	public void showPayWithDebitPopup(JFrame parentFrame) {
 		JDialog dialog = createDialog(parentFrame, "Pay With Debit");
-		JTextField textField = addTextField(dialog, "Enter debit card details:");
-		Consumer<String> onSubmit = inputText -> {
-            int cardNumber = Integer.parseInt(inputText);
-            //guiLogic.payWithDebit(cardNumber);
-		};
-		addSubmitButton(dialog, textField, onSubmit);
-		showDialog(dialog);
+		JButton swipeReal = new JButton("Swipe valid debit card");
+		JButton swipeFake = new JButton("Swipe invalid debit card");
+		JButton insertReal = new JButton("Insert valid debit card");
+		JButton insertFake = new JButton("Insert invalid debit card");
+		JButton tapReal = new JButton("Tap valid debit card");
+		JButton tapFake = new JButton("Tap invalid debit card");
+		
+		swipeReal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	try {
+					centralStationLogic.hardware.getCardReader().swipe(realDebitCard);
+				} catch (IOException e1) {
+					// POPUP FOR ERROR
+				}
+            }
+        });
+		swipeFake.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	try {
+					centralStationLogic.hardware.getCardReader().swipe(fakeDebitCard);
+				} catch (IOException e1) {
+					// POPUP FOR ERROR
+				}
+            }
+        });
+		
+		// NEED INSERT
+		insertReal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	JDialog pinDialog = createDialog(parentFrame, "pin");
+            	JTextField textField = addTextField(pinDialog, "Enter pin:");
+        		Consumer<String> onSubmit = inputText -> {
+					try {
+						centralStationLogic.hardware.getCardReader().insert(realDebitCard, inputText);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						
+					}
+
+        		};
+        		addSubmitButton(pinDialog, textField, onSubmit);
+                showDialog(pinDialog);
+
+            }
+        });
+		insertFake.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	JDialog pinDialog = createDialog(parentFrame, "pin");
+            	JTextField textField = addTextField(pinDialog, "Enter pin:");
+        		Consumer<String> onSubmit = inputText -> {
+					try {
+						centralStationLogic.hardware.getCardReader().insert(fakeDebitCard, inputText);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						
+					}
+
+                    //guiLogic.insertCoin(coinValue);
+        		};
+        		addSubmitButton(pinDialog, textField, onSubmit);
+                showDialog(pinDialog);
+
+            }
+        });
+		
+		tapReal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	try {
+					centralStationLogic.hardware.getCardReader().tap(realDebitCard);
+				} catch (IOException e1) {
+					// POPUP FOR ERROR
+				}
+            }
+        });
+		tapFake.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	try {
+					centralStationLogic.hardware.getCardReader().tap(fakeDebitCard);
+				} catch (IOException e1) {
+					// POPUP FOR ERROR
+				}
+            }
+        });
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        dialog.add(panel);
+        panel.add(swipeReal);
+        panel.add(swipeFake);	
+        panel.add(insertReal);
+        panel.add(insertFake);
+        panel.add(tapReal);
+        panel.add(tapFake);
+        showDialog(dialog);
 	}
 
 	public static void showInsertCoinPopup(JFrame parentFrame) {

@@ -35,13 +35,13 @@ public class HardwareActionSimulations extends JFrame {
         // Scale Section
         add(createHeader("Scale"));
         add(createButton("Add Item to Scale", e -> hardwarePopups.showAddItemToScalePopup(this)));
-        add(createButton("Remove Item from Scale", e -> HardwarePopups.showRemoveItemFromScalePopup(this)));
+        add(createButton("Remove Item from Scale", e -> hardwarePopups.showRemoveItemFromScalePopup(this)));
 
         // Pay Section
         add(createHeader("Pay"));
-        add(createButton("Pay with Credit (Real)", e -> HardwarePopups.showPayWithCreditPopup(this, true)));
-        add(createButton("Pay with Credit (Fake)", e -> HardwarePopups.showPayWithCreditPopup(this, false)));
-        add(createButton("Pay with Debit", e -> HardwarePopups.showPayWithDebitPopup(this)));
+        add(createButton("Pay with Credit", e -> hardwarePopups.showPayWithCreditPopup(this)));
+        add(createButton("Pay with Debit", e -> hardwarePopups.showPayWithDebitPopup(this)));
+        
         add(createButton("Insert Coin", e -> HardwarePopups.showInsertCoinPopup(this)));
         add(createButton("Insert Banknote", e -> HardwarePopups.showInsertBanknotePopup(this)));
 

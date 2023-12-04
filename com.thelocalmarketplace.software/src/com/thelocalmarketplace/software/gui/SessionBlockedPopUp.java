@@ -24,6 +24,24 @@ public class SessionBlockedPopUp {
 
         popupDialog.setVisible(true);
     }
+    
+    public static void outOfOrder() {
+        popupDialog = new JDialog();
+        popupDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        popupDialog.setSize(800, 700);
+        popupDialog.setLocationRelativeTo(null);
+
+        JLabel label = new JLabel("OUT OF ORDER");
+
+        // Set a larger font for the label
+        Font font = new Font("Arial", Font.PLAIN, 24);
+        label.setFont(font);
+
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        popupDialog.add(label);
+
+        popupDialog.setVisible(true);
+    }
 
     public static void attendantOverride() {
         // Close the popup dialog

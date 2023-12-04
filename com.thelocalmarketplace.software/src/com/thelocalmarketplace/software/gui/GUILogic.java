@@ -123,6 +123,11 @@ public class GUILogic {
 		centralLogic.startSession();
 	}
 	
+	public void SessionOver() {
+		System.out.println("Start Session");
+		centralLogic.stopSession();
+	}
+	
 	
 	
 	

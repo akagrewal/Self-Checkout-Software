@@ -44,6 +44,8 @@ public class AttendantLogic implements GUIListener{
 	
 	/** tracks weather or not a bagging discrepency has been found */
 	private boolean inBaggingDiscrepency;
+	
+	private boolean waitingToDisable = false;
 
 // listener stuff
 private final Set<AttendantFrameListener> listeners = new HashSet<>();
@@ -149,26 +151,28 @@ private final Set<AttendantFrameListener> listeners = new HashSet<>();
         notify.notifyPopUp();
     }
 	
+	/** Method to notify the attendant station that the current session has ended */
+	public void notifySessionEnded() {
+		if (waitingToDisable) {
+			disableCustomerStation();
+			waitingToDisable = false;
+		}
+	}
+	
 	/** Method to disable a customer station for maintenance and display out of order */
 	public void disableCustomerStation() {
 		//TODO: change the logic do be able to disable only a specific customer station
 		//TODO GUI: GUI should display out of order when disabled for maintenance
-
-		// test
-		discrepancyDetected();
 		
-		// wait for station to finish session
-		while (logic.isSessionStarted()) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (!logic.isSessionStarted() && logic.stateLogic.getState() != States.OUTOFORDER) {
+			// once the station is out of the session
+			logic.stateLogic.gotoState(States.OUTOFORDER);
+			
+			outOfOrder();
+		} else {
+			waitingToDisable = true;
 		}
 		
-		// once the station is out of the session
-		logic.stateLogic.gotoState(States.OUTOFORDER);
 	}
 	
 	/** Method to take a customer station out of maintenance mode */
