@@ -78,23 +78,36 @@ public class StationGUI extends JFrame implements logicObserver {
     // Customer Screen 1
     private JPanel StartSessionPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(Color.decode("#EFF0E5"));
         GridBagConstraints gbc = new GridBagConstraints();
 
         JButton nextButton = new JButton("Start adding items to cart");
         nextButton.setFont(new Font("Arial", Font.BOLD, 26));
         nextButton.addActionListener(e -> guiLogicInstance.StartSessionButtonPressed());
-
+        nextButton.setBackground(Color.decode("#9DAF99"));  //Maroon
+        nextButton.setForeground(Color.decode("#40543D"));
+        nextButton.setFont(new Font("Serif", Font.BOLD, 40));
+        
         JButton bags = new JButton("Have your own bags?");
-        nextButton.addActionListener(e -> {
+        bags.setBackground(Color.decode("#B9AFCA"));  //Navy
+        bags.setForeground(Color.decode("#4A3D54"));
+        bags.setFont(new Font("Serif", Font.BOLD, 25));
+        bags.addActionListener(e -> {
             // TODO: Implement
         });
 
         JButton help = new JButton("call for help");
+        help.setBackground(Color.decode("#B9AFCA"));  //Navy
+        help.setForeground(Color.decode("#4A3D54"));
+        help.setFont(new Font("Serif", Font.BOLD, 25));
         nextButton.addActionListener(e -> {
             //TODO: Implement
         });
 
         JButton membership = new JButton("Are you a member?");
+        membership.setBackground(Color.decode("#B9AFCA"));  //Navy
+        membership.setForeground(Color.decode("#4A3D54"));
+        membership.setFont(new Font("Serif", Font.BOLD, 25));
         membership.addActionListener(e -> {
             Numpad membershipNumpad = new Numpad(StationGUI.this, guiLogicInstance, 0); // this may need changes
             membershipNumpad.openNumPadPanel();
@@ -103,14 +116,17 @@ public class StationGUI extends JFrame implements logicObserver {
 
 
         JLabel welcomeLabel = new JLabel("Welcome to the UofC market!");
+        welcomeLabel.setHorizontalAlignment(JLabel.CENTER);
         welcomeLabel.setFont(new Font("Serif", Font.BOLD, 20));
 
 
-        addComponent(panel,welcomeLabel,0, 0, 3, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+
+        addComponent(panel,welcomeLabel,0, 0, 3, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE);
         addComponent(panel,new JLabel(""),0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(panel,nextButton,1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(panel,new JLabel(""),2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        JPanel bottomPanel = new JPanel(new GridLayout(2, 4, 10, 10));
+        JPanel bottomPanel = new JPanel(new GridLayout(2, 3, 20, 20));
+        bottomPanel.setBackground(Color.decode("#EFF0E5"));
         bottomPanel.setBorder(BorderFactory.createTitledBorder("MORE OPTIONS"));
 
 
@@ -119,7 +135,6 @@ public class StationGUI extends JFrame implements logicObserver {
         bottomPanel.add(help);
         bottomPanel.add(membership);
 
-        bottomPanel.add(new JLabel(""));
         bottomPanel.add(new JLabel(""));
         bottomPanel.add(new JLabel(""));
         bottomPanel.add(new JLabel(""));
