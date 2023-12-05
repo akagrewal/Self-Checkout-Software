@@ -229,52 +229,47 @@ public class StationGUI extends JFrame {
         });
 
         JButton ownBagsButton = new JButton("Have your own bags? ");
-        ownBagsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                centralStationLogic.addBagsLogic.startAddBags();
+        ownBagsButton.addActionListener(e -> {
+            centralStationLogic.addBagsLogic.startAddBags();
 
-                // Create a custom dialog
-                JDialog dialog = new JDialog();
-                dialog.setTitle("Add Own Bags");
-                dialog.setModal(false); // This makes the dialog non-modal
+            // Create a custom dialog
+            JDialog dialog = new JDialog();
+            dialog.setTitle("Add Own Bags");
+            dialog.setModal(false); // This makes the dialog non-modal
 
-                // Create a panel to hold the components
-                JPanel panel = new JPanel();
+            // Create a panel to hold the components
+            JPanel panel = new JPanel();
 
-                // Create the message
-                JLabel messageLabel = new JLabel("Please press 'DONE' when done adding bags.");
-                panel.add(messageLabel);
+            // Create the message
+            JLabel messageLabel = new JLabel("Please press 'DONE' when done adding bags.");
+            panel.add(messageLabel);
 
-                // Create the buttons
-                JButton doneButton = new JButton("DONE");
-                JButton cancelButton = new JButton("Cancel");
+            // Create the buttons
+            JButton doneButton = new JButton("DONE");
+            JButton cancelButton = new JButton("Cancel");
 
-                // Add action listeners to the buttons
-                doneButton.addActionListener(e2 -> {
-                    centralStationLogic.addBagsLogic.endAddBags();
-                    dialog.dispose();
-                });
+            // Add action listeners to the buttons
+            doneButton.addActionListener(e2 -> {
+                centralStationLogic.addBagsLogic.endAddBags();
+                dialog.dispose();
+            });
 
-                cancelButton.addActionListener(e2 -> dialog.dispose());
+            cancelButton.addActionListener(e2 -> dialog.dispose());
 
-                // Add the buttons to the panel
-                panel.add(doneButton);
-                panel.add(cancelButton);
+            // Add the buttons to the panel
+            panel.add(doneButton);
+            panel.add(cancelButton);
 
-                // Add the panel to the dialog
-                dialog.getContentPane().add(panel);
+            // Add the panel to the dialog
+            dialog.getContentPane().add(panel);
 
-                // Set the location of the dialog to the location of the button
-                Point location = ((Component) e.getSource()).getLocationOnScreen();
-                dialog.setLocation(location);
+            // Set the location of the dialog to the location of the button
+            Point location = ((Component) e.getSource()).getLocationOnScreen();
+            dialog.setLocation(location);
 
-                // Display the dialog
-                dialog.pack();
-                dialog.setVisible(true);
-            }
-
-            guiLogicInstance.switchPanels("paymentPanel");
+            // Display the dialog
+            dialog.pack();
+            dialog.setVisible(true);
         });
         // Attach buttons
         buttonsPanel.add(VCButton);
