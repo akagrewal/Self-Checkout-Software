@@ -14,17 +14,20 @@ public class CreateTestDatabases {
 	
 	public static BarcodedProduct soup;
 	public static BarcodedProduct pickles;
-	
+
+    public static PLUCodedProduct bagsPurchasable;
 	public static PLUCodedProduct bagsUnder;
 	public static PLUCodedProduct bagsOver;
 
     public static void createDatabase() {
+        PriceLookUpCode purchasableBag = new PriceLookUpCode("72700");
+        bagsPurchasable = new PLUCodedProduct(purchasableBag, "TheLocalMarketplace Purchasable Bag", 3);
     	
-    	PriceLookUpCode bagsUnderPLU = new PriceLookUpCode("9999");
-    	bagsUnder = new PLUCodedProduct(bagsUnderPLU, "Bags", 15);
+    	PriceLookUpCode bagsUnderPLU = new PriceLookUpCode("72701");
+    	bagsUnder = new PLUCodedProduct(bagsUnderPLU, "USER BAG: LIGHT", 15);
     	
-    	PriceLookUpCode bagsOverPLU = new PriceLookUpCode("9998");
-    	bagsOver = new PLUCodedProduct(bagsOverPLU, "Bags", 35);
+    	PriceLookUpCode bagsOverPLU = new PriceLookUpCode("72702");
+    	bagsOver = new PLUCodedProduct(bagsOverPLU, "USER BAG: TOO HEAVY", 35);
     	
     	
         // Populate PLU-coded products (fruits)
@@ -50,6 +53,7 @@ public class CreateTestDatabases {
         ProductDatabases.PLU_PRODUCT_DATABASE.put(applePLU, apple);
         ProductDatabases.PLU_PRODUCT_DATABASE.put(bagsUnderPLU, bagsUnder);
         ProductDatabases.PLU_PRODUCT_DATABASE.put(bagsOverPLU, bagsOver);
+        ProductDatabases.PLU_PRODUCT_DATABASE.put(purchasableBag, bagsPurchasable);
 
         ProductDatabases.BARCODED_PRODUCT_DATABASE.put(soupBarcode, soup);
         ProductDatabases.BARCODED_PRODUCT_DATABASE.put(picklesBarcode, pickles);
@@ -61,5 +65,6 @@ public class CreateTestDatabases {
         ProductDatabases.INVENTORY.put(pickles, 75);
         ProductDatabases.INVENTORY.put(bagsUnder, 1);
         ProductDatabases.INVENTORY.put(bagsOver, 1);
+        ProductDatabases.INVENTORY.put(bagsPurchasable, 750);
     }
 }

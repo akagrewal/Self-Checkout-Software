@@ -170,28 +170,28 @@ public class GUILogic {
 			panel.add(removeButton);
 		}
 	}
-	
-	
 
-	public boolean addProductPLU(String PLU){
+
+
+	public void addPurchasableBag(int numberOfBags) {
+		for (int i = 0; i < numberOfBags; i++) {
+			centralLogic.cartLogic.addPLUCodedProductToCart(new PriceLookUpCode("72700"));
+		}
+		updateCartChanged();
+	}
+
+	public void addProductPLU(String PLU){
 		boolean productFound = false;
-
-//		productFound = checkPLU(PLU);
 
 		PriceLookUpCode pluCode = new PriceLookUpCode(PLU);
 
-
-//		if (productFound){
 		PLUCodedProduct product = ProductDatabases.PLU_PRODUCT_DATABASE.get(pluCode);
 		System.out.println("This is the PLU code of the item being added: " + product.getPLUCode());
 		centralLogic.addPLUProductController.addPLU(product.getPLUCode());
 		updateCartChanged();
-//		PLUCodedItem item = new PLUCodedItem(new PriceLookUpCode("0000"), centralLogic.scanningAreaController.getScanningAreaMass());
-		// Removes all items from scale
 		for (Item i : centralLogic.scanningAreaController.itemsOnScale) {
 			centralLogic.hardware.getScanningArea().removeAnItem(i);
 		}
 		centralLogic.scanningAreaController.itemsOnScale.clear();
-		return productFound;
 	}
 }

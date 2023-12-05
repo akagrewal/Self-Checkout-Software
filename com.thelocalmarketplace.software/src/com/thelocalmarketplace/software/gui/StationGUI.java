@@ -226,8 +226,7 @@ public class StationGUI extends JFrame {
 
         JButton buyBagsButton = new JButton("Purchase Bags");
         buyBagsButton.addActionListener(e -> {
-            new BagKeypad(StationGUI.this, buyBagsButton, centralStationLogic);
-            guiLogicInstance.switchPanels("paymentPanel");
+            new BagKeypad(StationGUI.this, centralStationLogic);
         });
 
         JButton ownBagsButton = new JButton("Have your own bags? ");
