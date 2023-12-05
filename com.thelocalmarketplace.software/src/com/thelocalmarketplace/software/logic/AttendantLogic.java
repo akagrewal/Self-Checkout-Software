@@ -185,14 +185,8 @@ public class AttendantLogic {
 	
 	/** Method to take a customer station out of maintenance mode */
 	public void enableCustomerStation(CentralStationLogic logic) {
-		//TODO: change the logic do be able to enable only a specific customer station
-
-
-		if (logic.stateLogic.getState() == States.OUTOFORDER || logic.stateLogic.getState() == States.BLOCKED)
-			//TODO GUI: GUI should go back to normal if it was previously disabled
-			attendantOverride(logic.stationNumber);
-			
-			logic.stateLogic.gotoState(States.NORMAL);
+		logic.weightLogic.overrideDiscrepancy();
+		logic.stateLogic.gotoState(States.NORMAL);
 	}
 	
 	/** 

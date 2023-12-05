@@ -1,5 +1,7 @@
 package com.thelocalmarketplace.software.gui;
 
+import com.thelocalmarketplace.software.logic.CentralStationLogic;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -81,9 +83,4 @@ public class SessionBlockedPopUp {
         popupDialog.setVisible(true);
     }
 
-    public static void attendantOverride(int stationNumber) {
-        // Close the popup dialog
-        // popupDialog.dispose();
-        popUps.get(stationNumber).dispose();
-    }
 }
