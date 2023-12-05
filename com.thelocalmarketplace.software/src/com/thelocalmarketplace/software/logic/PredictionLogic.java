@@ -135,8 +135,7 @@ public class PredictionLogic extends AbstractLogicDependant {
 		// notify attendant
 		AttendantPopups attendantPopup = new AttendantPopups(logic.attendantLogic.attendantGUI.getAttendantFrame());
 		attendantPopup.issuePredictedPopUp(message);
-		// display popup on station, give 5 seconds before station is disabled.
-		SessionBlockedPopUp.issuePredicted(message);
+		// give 5s until station disabled
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
