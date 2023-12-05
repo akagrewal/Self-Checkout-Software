@@ -86,7 +86,7 @@ public class StationGUI extends JFrame {
         blockingPanel = new JPanel(new GridBagLayout());
         blockingPanel.setBackground(Color.GRAY); 
         JLabel blockingLabel = new JLabel("Blocking");
-        blockingLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        blockingLabel.setFont(new Font("Sans", Font.BOLD, 30));
         blockingPanel.add(blockingLabel);
         blockingPanel.setVisible(false); // Initially hidden
         this.add(blockingPanel, BorderLayout.CENTER);
@@ -98,26 +98,25 @@ public class StationGUI extends JFrame {
         panel.setBackground(Color.decode("#EFF0E5")); // beige
         GridBagConstraints gbc = new GridBagConstraints();
 
-        JButton nextButton = new JButton("Start adding items to cart");
-        nextButton.setFont(new Font("Arial", Font.BOLD, 26));
+        JButton nextButton = new JButton("START SESSION");
         nextButton.addActionListener(e -> guiLogicInstance.StartSessionButtonPressed());
         nextButton.setBackground(Color.decode("#9DAF99"));  //light green
         nextButton.setForeground(Color.decode("#40543D"));	// dark green
-        nextButton.setFont(new Font("Serif", Font.BOLD, 42));
+        nextButton.setFont(new Font("SERIF", Font.BOLD, 42));
         
-        JButton bags = new JButton("Have your own bags?");
-        bags.setBackground(Color.decode("#B9AFCA"));  //light purple
-        bags.setForeground(Color.decode("#4A3D54"));	// dark purple
-        bags.setFont(new Font("Serif", Font.BOLD, 24));
-        bags.addActionListener(e -> {
+        JButton uselessButton = new JButton("About");
+        uselessButton.setBackground(Color.decode("#00A489"));  // OpenSUSE cyan
+        uselessButton.setForeground(Color.decode("#dceec8"));	// OpenSUSE green 25%
+        uselessButton.setFont(new Font("Serif", Font.BOLD, 24));
+        uselessButton.addActionListener(e -> {
             // TODO: Implement
         });
 
-        JButton help = new JButton("Call for assisstance");
-        help.setBackground(Color.decode("#B9AFCA"));  //Navy
-        help.setForeground(Color.decode("#4A3D54"));
-        help.setFont(new Font("Serif", Font.BOLD, 24));
-        help.addActionListener(e -> {
+        JButton helpButton = new JButton("Call for assisstance");
+        helpButton.setBackground(Color.decode("#B9AFCA"));  //Navy
+        helpButton.setForeground(Color.decode("#4A3D54"));
+        helpButton.setFont(new Font("Serif", Font.BOLD, 24));
+        helpButton.addActionListener(e -> {
             centralStationLogic.attendantLogic.callAttendant(centralStationLogic.stationNumber);
         });
 
@@ -150,8 +149,8 @@ public class StationGUI extends JFrame {
 
 
 
-        bottomPanel.add(bags);
-        bottomPanel.add(help);
+        bottomPanel.add(uselessButton);
+        bottomPanel.add(helpButton);
         bottomPanel.add(membership);
 
         bottomPanel.add(new JLabel(""));
@@ -502,7 +501,7 @@ public class StationGUI extends JFrame {
             }
         });
         JLabel POSLabel = new JLabel("Please complete the payment at the POS");
-        POSLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        POSLabel.setFont(new Font("Sans", Font.BOLD, 26));
         gbc.gridy = 0;
         panel.add(POSLabel, gbc);
         gbc.gridy = 1;
@@ -524,7 +523,7 @@ public class StationGUI extends JFrame {
                 guiLogicInstance.SessionOver();
             }
         });
-        BalanceLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        BalanceLabel.setFont(new Font("Sans", Font.BOLD, 26));
         gbc.gridy = 0;
         panel.add(BalanceLabel, gbc);
         gbc.gridy = 1;
@@ -548,7 +547,7 @@ public class StationGUI extends JFrame {
             }
         });
         JLabel TY_receiptLabel = new JLabel("Thank you for Shopping, Please take your receipt.");
-        TY_receiptLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        TY_receiptLabel.setFont(new Font("Sans", Font.BOLD, 26));
         gbc.gridy = 0;
         panel.add(TY_receiptLabel, gbc);
         gbc.gridy = 1;

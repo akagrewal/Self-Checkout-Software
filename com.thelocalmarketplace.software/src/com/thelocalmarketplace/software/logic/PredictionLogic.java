@@ -57,9 +57,16 @@ public class PredictionLogic extends AbstractLogicDependant {
 	}
 	
 	public boolean checkPaperPrediction() {
-        int currentLinesRemaining = logic.hardware.getPrinter().paperRemaining();
+        int currentLinesRemaining = 0;
         double lowPaperLevel = MAXIMUM_PAPER * 0.15;
         boolean isLow = false;
+        
+        try {
+        	currentLinesRemaining = logic.hardware.getPrinter().paperRemaining();
+        } catch (UnsupportedOperationException ex) {
+        	// Bronze Printer, must be manually checked.
+        	currentLinesRemaining = MAXIMUM_PAPER;
+        }
         
         // Warning is triggered when 15% of the machines capacity is reached, should permit for 1-2 receipts before empty.
         if (currentLinesRemaining <= lowPaperLevel) {
@@ -72,10 +79,17 @@ public class PredictionLogic extends AbstractLogicDependant {
     }
     
     public boolean checkInkPrediction() {
-        int currentInkRemaining = logic.hardware.getPrinter().inkRemaining();
+        int currentInkRemaining = 0;
         double lowInkLevel = MAXIMUM_INK * 0.15;
         boolean isLow = false;
 
+        try {
+        	currentInkRemaining = logic.hardware.getPrinter().inkRemaining();
+        } catch (UnsupportedOperationException e) {
+        	// Bronze Printer, must be manually checked.
+        	currentInkRemaining = MAXIMUM_INK;
+        }
+        
         // Warning is made when 15% of the machines capacity is reached, should permit for 1-2 more receipts before empty.
         if (currentInkRemaining <= lowInkLevel) {       	
             // low ink!!
@@ -112,7 +126,7 @@ public class PredictionLogic extends AbstractLogicDependant {
      */
     public boolean PredictFullBanknotes() {
 	 
-    	var currentBankNotes = logic.hardware.getBanknoteStorage().getBanknoteCount();
+    	var currentBankNotes = logic.getAvailableBanknotesInDispensers().size();
     	var capacity = logic.hardware.getBanknoteStorage().getCapacity();
     	var maxCapacity = capacity * .75;
 	 

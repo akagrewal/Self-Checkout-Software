@@ -3,6 +3,7 @@ package com.thelocalmarketplace.software.test.logic;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,21 +27,52 @@ import com.tdc.coin.CoinStorageUnit;
 import com.tdc.coin.CoinValidator;
 import com.tdc.coin.ICoinDispenser;
 import com.thelocalmarketplace.hardware.*;
-import com.thelocalmarketplace.hardware.CoinTray;
 import com.thelocalmarketplace.software.gui.AttendantGUI;
 import com.thelocalmarketplace.software.logic.*;
+import com.thelocalmarketplace.software.logic.StateLogic.States;
 
+import powerutility.PowerGrid;
+
+/**
+ * 
+ * @author Jaimie Marchuk - 30112841
+ * @author Wyatt Deichert - 30174611
+ * @author Jane Magai - 30180119
+ * @author Enzo Mutiso - 30182555
+ * @author Mauricio Murillo - 30180713
+ * @author Ahmed Ibrahim Mohamed Seifeldin Hassan - 30174024
+ * @author Aryaman Sandhu - 30017164
+ * @author Nikki Kim - 30189188
+ * @author Jayden Ma - 30184996
+ * @author Braden Beler - 30084941
+ * @author Danish Sharma - 30172600
+ * @author Angelina Rochon - 30087177
+ * @author Amira Wishah - 30182579
+ * @author Walija Ihsan - 30172565
+ * @author Hannah Pohl - 30173027
+ * @author Akashdeep Grewal - 30179657
+ * @author Rhett Bramfield - 30170520
+ * @author Arthur Huan - 30197354
+ * @author Jaden Myers - 30152504
+ * @author Jincheng Li - 30172907
+ * @author Anandita Mahika - 30097559
+ */
 public class AttendantLogicTest {
 	private AttendantLogic attendantLogic;
 	private CentralStationLogicStub centralStationLogicStub;
 	private AttendantGUIStub attendantGUIStub;
+	private SelfCheckoutStationBronze station = new SelfCheckoutStationBronze();
 	
 	@Before
 	public void setUp() {
+		PowerGrid.engageUninterruptiblePowerSource();
+		PowerGrid.instance().forcePowerRestore();
 		attendantLogic = new AttendantLogic();
 		attendantGUIStub = new AttendantGUIStub();
 		attendantLogic.attendantGUI = attendantGUIStub;
-		centralStationLogicStub = new CentralStationLogicStub(new SelfCheckoutStationBronze());
+		centralStationLogicStub = new CentralStationLogicStub(station);
+		station.plugIn(PowerGrid.instance());
+		station.turnOn();
 	}
 	
 	@Test
@@ -73,11 +105,45 @@ public class AttendantLogicTest {
 	
 	@Test
 	public void testUpdateAttendantGUIWhenFrameNull() {
+		attendantLogic.updateAttendantGUI();
+		
+		// the frame should have been created
+		assertTrue(attendantGUIStub.createAttendantFrameCalled == 1);
+	}
+	
+	@Test
+	public void testApproveBaggingAreaWhenNotApproved() {
+		try {
+			centralStationLogicStub.sessionStarted = true;
+			centralStationLogicStub.stateLogic.gotoState(States.ADDBAGS);
+			attendantLogic.approveBaggingArea(centralStationLogicStub);
+		} catch (Exception e) {
+			System.out.println(e);
+			fail();
+		}
+	}
+	
+	@Test
+	public void testBaggingDiscrepencyDetectedWhenNotApproved() {
+		centralStationLogicStub.addBagsLogic.approvedBagging = false;
+		attendantLogic.baggingDiscrepencyDetected(centralStationLogicStub);
+	}
+	
+	@Test
+	public void testBaggingDiscrepencyDetectedWhenApproved() {
+		centralStationLogicStub.addBagsLogic.approvedBagging = true;
+		attendantLogic.baggingDiscrepencyDetected(centralStationLogicStub);
 	}
 	
 	class CentralStationLogicStub extends CentralStationLogic {
+		boolean sessionStarted = false;
+		
 		public CentralStationLogicStub(AbstractSelfCheckoutStation hardware) throws NullPointerException {
 			super(hardware);
+		}
+		
+		public boolean isSessionStarted() {
+			 return true;
 		}
 	}
 	
@@ -103,5 +169,4 @@ public class AttendantLogicTest {
 			disposed++;
 		}
 	}
-	
 }
