@@ -7,6 +7,7 @@ import java.math.RoundingMode;
 
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
@@ -331,8 +332,10 @@ public class StationGUI extends JFrame {
         JPanel topMiddlePanel = new JPanel(new BorderLayout());
         
         topMiddlePanel.setBackground(Color.decode("#EFF0E5")); // beige
-        topMiddlePanel.setBorder(BorderFactory.createTitledBorder("Current Items: "));
-        
+        TitledBorder addItemBorder = new TitledBorder("Current Items in Cart");
+        addItemBorder.setTitleFont(new Font("Serif", Font.BOLD, 24));
+        topMiddlePanel.setBorder(addItemBorder);
+
         itemList.setVisibleRowCount(10); // visible row count
         itemList.setFixedCellHeight(20); // cell height
 
