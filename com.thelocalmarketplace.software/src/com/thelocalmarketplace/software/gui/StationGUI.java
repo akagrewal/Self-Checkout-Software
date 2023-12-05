@@ -205,7 +205,8 @@ public class StationGUI extends JFrame {
         removeItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // goto panel to remove an item
+                cardPanel.add(createRemoveItemPanel(), "removeItem");
+                guiLogicInstance.switchPanels("removeItem");
             }
         });
 
@@ -331,6 +332,35 @@ public class StationGUI extends JFrame {
         return mainPanel;
     }
 
+	private JPanel createRemoveItemPanel() {
+        // create the panel
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+
+        JPanel removeItemPanel = new JPanel();
+        JLabel removeLabel = new JLabel("Please select an item to remove: ");
+        removeLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        JButton backButton = new JButton("Back");
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guiLogicInstance.switchPanels("AddItemsPanel");
+            }
+        });
+        guiLogicInstance.addRemoveButtons(removeItemPanel);
+
+        removeItemPanel.setBorder(BorderFactory.createTitledBorder("SELECT AN ITEM"));
+        JScrollPane RMpanel = new JScrollPane(removeItemPanel);
+        RMpanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        RMpanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        addComponent(mainPanel,removeLabel,0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(mainPanel,backButton,0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+        addComponent(mainPanel,RMpanel,1, 0, 1, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        return mainPanel;
+    }
+
+	
 
     //Screen 3 Payment Panel
     private JPanel createPaymentPanel() {
