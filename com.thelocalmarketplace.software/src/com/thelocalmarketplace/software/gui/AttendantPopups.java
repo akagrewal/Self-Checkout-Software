@@ -85,13 +85,31 @@ public class AttendantPopups {
 	}
 
 	private JPanel createLabelPanel(String labelText, int width, int height) {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setPreferredSize(new Dimension(width, height));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        JLabel label = new JLabel(labelText);
-        label.setFont(new Font("Arial", Font.BOLD, 18));
-        panel.add(label, gbc);
-        return panel;
-    }
+		JPanel panel = new JPanel(new GridBagLayout());
+		panel.setPreferredSize(new Dimension(width, height));
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(10, 10, 10, 10);
+		JLabel label = new JLabel(labelText);
+		label.setFont(new Font("Arial", Font.BOLD, 18));
+		panel.add(label, gbc);
+		return panel;
+	}
+
+	public void maintenceComplete(String message) {
+		JFrame notifyPopUp = new JFrame("Maintenance Complete: " + message);
+		notifyPopUp.setSize(400, 300);
+		notifyPopUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		JPanel popupPanel = createLabelPanel("Maintenance Complete: " + message, 40, 50);
+		JPanel buttonPanel = new JPanel();
+		JButton confirmButton1 = new JButton("OK");
+		confirmButton1.addActionListener(e -> notifyPopUp.dispose());
+		buttonPanel.add(confirmButton1);
+		notifyPopUp.add(popupPanel, BorderLayout.NORTH);
+		notifyPopUp.add(buttonPanel, BorderLayout.CENTER);
+		notifyPopUp.setLocationRelativeTo(attendantFrame);
+
+		notifyPopUp.setVisible(true);
+
+	}
 }

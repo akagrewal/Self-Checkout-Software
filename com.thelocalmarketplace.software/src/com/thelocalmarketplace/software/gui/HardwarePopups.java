@@ -948,49 +948,73 @@ public class HardwarePopups {
 		JButton removeBanknotes = new JButton("Remove Banknotes");
 		JButton loadCoins = new JButton("Load Coins");
 		JButton removeCoins = new JButton("Remove Coins");
-		
+
 		addInk.addActionListener(e -> {
-			try {
-				centralStationLogic.hardware.getPrinter().addInk(500000);
-			} catch (OverloadedDevice e1){
-				centralStationLogic.guiLogic.showExceptionMessage("You spilled a bunch of ink!");
+			if (centralStationLogic.stateLogic.getState() != States.OUTOFORDER) {
+				centralStationLogic.guiLogic.showExceptionMessage("Station is not Disabled");
+			} else {
+				try {
+					centralStationLogic.hardware.getPrinter().addInk(500000);
+				} catch (OverloadedDevice e1){
+					centralStationLogic.guiLogic.showExceptionMessage("You spilled a bunch of ink!");
+				}
 			}
 		});
 		addPaper.addActionListener(e -> {
-			try {
-				centralStationLogic.hardware.getPrinter().addPaper(200);
-			} catch (OverloadedDevice e1){
-				centralStationLogic.guiLogic.showExceptionMessage("You may have broken the printer, jamming so much in there!");
+			if (centralStationLogic.stateLogic.getState() != States.OUTOFORDER) {
+				centralStationLogic.guiLogic.showExceptionMessage("Station is not Disabled");
+			} else {
+				try {
+					centralStationLogic.hardware.getPrinter().addPaper(200);
+				} catch (OverloadedDevice e1){
+					centralStationLogic.guiLogic.showExceptionMessage("You may have broken the printer, jamming so much in there!");
+				}
 			}
 		});
 		loadBanknotes.addActionListener(e -> {
 			Banknote banknote1 = new Banknote( Currency.getInstance("CAD"),BigDecimal.valueOf(5));
 			Banknote banknote2 = new Banknote( Currency.getInstance("CAD"),BigDecimal.valueOf(10));
 			Banknote banknote3 = new Banknote( Currency.getInstance("CAD"),BigDecimal.valueOf(20));
-			try {
-				centralStationLogic.hardware.getBanknoteStorage().load(banknote1, banknote2, banknote3);
-			} catch (CashOverloadException e1) {
-				centralStationLogic.guiLogic.showExceptionMessage("You tried to stuff too many banknotes in the storage unit.");
+			if (centralStationLogic.stateLogic.getState() != States.OUTOFORDER) {
+				centralStationLogic.guiLogic.showExceptionMessage("Station is not Disabled");
+			} else {
+				try {
+					centralStationLogic.hardware.getBanknoteStorage().load(banknote1, banknote2, banknote3);
+				} catch (CashOverloadException e1) {
+					centralStationLogic.guiLogic.showExceptionMessage("You tried to stuff too many banknotes in the storage unit.");
+				}
 			}
 		});
 		removeBanknotes.addActionListener(e -> {
-			centralStationLogic.hardware.getBanknoteStorage().unload();
+			if (centralStationLogic.stateLogic.getState() != States.OUTOFORDER) {
+				centralStationLogic.guiLogic.showExceptionMessage("Station is not Disabled");
+			} else {
+				centralStationLogic.hardware.getBanknoteStorage().unload();
+			}
 		});
 		loadCoins.addActionListener(e -> {
 			Coin nickleCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("0.05"));
 			Coin dimeCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("0.10"));
 			Coin quarterCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("0.25"));
 			Coin loonieCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("1.00"));
-			try {
-				centralStationLogic.hardware.getCoinStorage().load(nickleCoin, dimeCoin, quarterCoin, loonieCoin);
-			} catch (CashOverloadException e1) {
-				centralStationLogic.guiLogic.showExceptionMessage("You tried to stuff too many coins in the storage unit.");
+			if (centralStationLogic.stateLogic.getState() != States.OUTOFORDER) {
+				centralStationLogic.guiLogic.showExceptionMessage("Station is not Disabled");
+			} else {
+				try {
+					centralStationLogic.hardware.getCoinStorage().load(nickleCoin, dimeCoin, quarterCoin, loonieCoin);
+				} catch (CashOverloadException e1) {
+					centralStationLogic.guiLogic.showExceptionMessage("You tried to stuff too many coins in the storage unit.");
+				}
 			}
 		});
 		removeCoins.addActionListener(e -> {
-			centralStationLogic.hardware.getCoinStorage().unload();
+			if (centralStationLogic.stateLogic.getState() != States.OUTOFORDER) {
+				centralStationLogic.guiLogic.showExceptionMessage("Station is not Disabled");
+			} else {
+				centralStationLogic.hardware.getCoinStorage().unload();
+			}
 		});
-		
+
 		// Add Buttons to Frame
 		selectionFrame.add(addInk);
 		selectionFrame.add(addPaper);
@@ -998,7 +1022,7 @@ public class HardwarePopups {
 		selectionFrame.add(removeBanknotes);
 		selectionFrame.add(loadCoins);
 		selectionFrame.add(removeCoins);
-				
+
 		// Set Location of Frame and make Frame Visible
 		selectionFrame.setLocationRelativeTo(parentFrame);
 		selectionFrame.setVisible(true);
