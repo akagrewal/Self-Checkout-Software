@@ -8,6 +8,11 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
@@ -136,6 +141,34 @@ public class GUILogic {
 		centralLogic.stopSession();
 		updateItemsList();
 		updateTotal();
+	}
+
+	/** creates buttons for everyitem in the remove item panel **/
+	public void addRemoveButtons(JPanel panel){
+		Map<Product, Float> cart = centralLogic.cartLogic.getCart();
+		System.out.println("Size of cart: " + cart.size());
+		for (Map.Entry<Product, Float> entry : cart.entrySet()) {
+			Product product = entry.getKey();
+			String productName = "";
+			if (product instanceof BarcodedProduct) {
+				productName = ((BarcodedProduct) product).getDescription();
+			}
+			else if (product instanceof PLUCodedProduct) {
+				productName = ((PLUCodedProduct) product).getDescription();
+			}
+			JButton removeButton = new JButton(productName);
+			removeButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					centralLogic.cartLogic.removeProductFromCart(product);
+					switchPanels("AddItemsPanel");
+
+				}
+			});
+
+
+			panel.add(removeButton);
+		}
 	}
 	
 	
