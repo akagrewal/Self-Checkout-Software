@@ -42,8 +42,8 @@ public class HardwarePopups {
 	private BarcodedItem pickles = new BarcodedItem(CreateTestDatabases.pickles.getBarcode(), new Mass(CreateTestDatabases.pickles.getExpectedWeight()));
 	private PLUCodedItem apples = new PLUCodedItem(CreateTestDatabases.apple.getPLUCode(), new Mass((double) 300.0));
 	private PLUCodedItem bananas = new PLUCodedItem(CreateTestDatabases.banana.getPLUCode(), new Mass((double) 500.0));
-
-
+	private PLUCodedItem bagsUnder = new PLUCodedItem(CreateTestDatabases.bagsUnder.getPLUCode(), new Mass((double) 15.0));
+	private PLUCodedItem bagsOver = new PLUCodedItem(CreateTestDatabases.bagsOver.getPLUCode(), new Mass((double) 35.0));
 
 	private CentralStationLogic centralStationLogic;
 
@@ -129,6 +129,8 @@ public class HardwarePopups {
 		JButton pickleButton = new JButton("Pickle Jar");
 		JButton appleButton = new JButton("Apple");
 		JButton bananaButton = new JButton("Banana");
+		JButton bagsUnderButton = new JButton("Bags (under weight limit)");
+		JButton bagsOverButton = new JButton("Bags (over weight limit)");
 
 		soupButton.addActionListener(new ActionListener() {
 			@Override
@@ -154,6 +156,18 @@ public class HardwarePopups {
 				centralStationLogic.hardware.getBaggingArea().addAnItem(bananas);
 			}
 		});
+		bagsUnderButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsUnder);
+			}
+		});
+		bagsOverButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsOver);
+			}
+		});
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -162,6 +176,8 @@ public class HardwarePopups {
 		panel.add(pickleButton);
 		panel.add(appleButton);
 		panel.add(bananaButton);
+		panel.add(bagsUnderButton);
+		panel.add(bagsOverButton);
 		showDialog(dialog);
 	}
 
