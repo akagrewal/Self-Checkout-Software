@@ -9,7 +9,7 @@ import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 public class HardwareActionSimulations extends JFrame {
 
-    private static final int WINDOW_WIDTH = 500;
+    private static final int WINDOW_WIDTH = 750;
     private static final int WINDOW_HEIGHT = 500;
     private static final int BUTTON_WIDTH = 225; // 75% of WINDOW_WIDTH
     private static final int BUTTON_HEIGHT = 50;
@@ -22,7 +22,7 @@ public class HardwareActionSimulations extends JFrame {
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT); // Set the size of the window
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
-        setLayout(new GridLayout(2, 2));
+        setLayout(new GridLayout(1, 3));
 
         // Add Item Section
         JPanel addItemPanel = new JPanel();
