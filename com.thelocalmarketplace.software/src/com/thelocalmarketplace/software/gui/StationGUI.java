@@ -216,7 +216,7 @@ public class StationGUI extends JFrame {
             System.out.println(centralStationLogic.stateLogic.getState());
             centralStationLogic.stateLogic.gotoState(StateLogic.States.CHECKOUT);
             if (centralStationLogic.cartLogic.getBalanceOwed().compareTo(BigDecimal.ZERO) <= 0) {
-                guiLogicInstance.switchPanels("thankYouPanel");
+                //exception, have not added anything
             } else {
                 guiLogicInstance.switchPanels("paymentPanel");
             }
@@ -366,15 +366,20 @@ public class StationGUI extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        JButton button_CardPayment = new JButton("Credit/Debit");
+        JButton button_CreditPayment = new JButton("Credit");
+        JButton button_DebitPayment = new JButton("Debit");
+        
         JButton buttonCoinPayment = new JButton("Coins");
         JButton buttonCashPayment = new JButton("Banknotes");
         JButton buttonMixedPayment = new JButton("Mixed");
         JButton buttonLeaveWithoutPaying = new JButton("Leave Without Paying");
         JButton buttonBackToCheckout = new JButton("Back to Checkout");
         gbc.gridx = 1; gbc.gridy = 1;
-        button_CardPayment.setPreferredSize(new Dimension(200,123));
-        PaymentPanel.add(button_CardPayment, gbc);
+        button_CreditPayment.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(button_CreditPayment, gbc);
+        gbc.gridx = 1; gbc.gridy = 3;
+        button_DebitPayment.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(button_DebitPayment, gbc);
         gbc.gridx = 2; gbc.gridy = 1;
         buttonCoinPayment.setPreferredSize(new Dimension(200,123));
         PaymentPanel.add(buttonCoinPayment, gbc);
@@ -384,15 +389,19 @@ public class StationGUI extends JFrame {
         gbc.gridx = 4; gbc.gridy = 1;
         buttonMixedPayment.setPreferredSize(new Dimension(200,123));
         PaymentPanel.add(buttonMixedPayment, gbc);
-        gbc.gridx = 1; gbc.gridy = 3;
+        gbc.gridx = 2; gbc.gridy = 3;
         buttonLeaveWithoutPaying.setPreferredSize(new Dimension(200,50));
         PaymentPanel.add(buttonLeaveWithoutPaying, gbc);
         gbc.gridx = 4; gbc.gridy = 3;
         buttonBackToCheckout.setPreferredSize(new Dimension(200,50));
         PaymentPanel.add(buttonBackToCheckout, gbc);
 
-        button_CardPayment.addActionListener(e -> {
+        button_CreditPayment.addActionListener(e -> {
             centralStationLogic.selectPaymentMethod(PaymentMethods.CREDIT);
+            guiLogicInstance.switchPanels("POS_Panel");
+        });
+        button_DebitPayment.addActionListener(e -> {
+            centralStationLogic.selectPaymentMethod(PaymentMethods.DEBIT);
             guiLogicInstance.switchPanels("POS_Panel");
         });
         buttonCoinPayment.addActionListener(e -> {
