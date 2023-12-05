@@ -71,6 +71,10 @@ public class AttendantLogicTest {
 		assertTrue(frameStub.disposed == 1);
 	}
 	
+	@Test
+	public void testUpdateAttendantGUIWhenFrameNull() {
+	}
+	
 	class CentralStationLogicStub extends CentralStationLogic {
 		public CentralStationLogicStub(AbstractSelfCheckoutStation hardware) throws NullPointerException {
 			super(hardware);
