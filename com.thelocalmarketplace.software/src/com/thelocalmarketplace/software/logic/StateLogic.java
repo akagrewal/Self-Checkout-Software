@@ -106,6 +106,7 @@ public class StateLogic extends AbstractLogicDependant {
 		
 		// Other transitions
 		this.registerTransition(States.CHECKOUT, States.SUSPENDED);
+		this.registerTransition(States.ADDBAGS, States.BLOCKED);
 		
 		// Attach listeners
 		this.registerListener(States.NORMAL, new NormalListener(this.logic));

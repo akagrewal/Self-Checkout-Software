@@ -218,7 +218,7 @@ public class StationGUI extends JFrame {
             System.out.println(centralStationLogic.stateLogic.getState());
             centralStationLogic.stateLogic.gotoState(StateLogic.States.CHECKOUT);
             if (centralStationLogic.cartLogic.getBalanceOwed().compareTo(BigDecimal.ZERO) <= 0) {
-                //exception, have not added anything
+                centralStationLogic.guiLogic.showExceptionMessage("No Items Added");
             } else {
                 guiLogicInstance.switchPanels("paymentPanel");
             }

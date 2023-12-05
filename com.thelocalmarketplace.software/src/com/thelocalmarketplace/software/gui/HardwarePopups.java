@@ -29,6 +29,7 @@ import com.jjjwelectronics.scanner.BarcodedItem;
 import com.tdc.CashOverloadException;
 import com.tdc.DisabledException;
 import com.tdc.coin.Coin;
+import com.tdc.banknote.*;
 import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
 import com.thelocalmarketplace.hardware.PLUCodedItem;
 import com.thelocalmarketplace.hardware.external.CardIssuer;
@@ -82,12 +83,18 @@ public class HardwarePopups {
 		JButton soupButton = new JButton("Soup");
 		JButton picklesButton = new JButton("Pickle Jar");
 		soupButton.addActionListener(e -> {
+			if(!centralStationLogic.isSessionStarted()){
+				centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+			} else {
 			centralStationLogic.hardware.getMainScanner().scan(soup);
-			selectionFrame.dispose();
+			selectionFrame.dispose();}
 		});
 		picklesButton.addActionListener(e -> {
+			if(!centralStationLogic.isSessionStarted()){
+				centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+			} else {
 			centralStationLogic.hardware.getMainScanner().scan(pickles);
-			selectionFrame.dispose();
+			selectionFrame.dispose();}
 		});
 
 		selectionFrame.add(soupButton);
@@ -104,14 +111,20 @@ public class HardwarePopups {
 		soupButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				centralStationLogic.hardware.getHandheldScanner().scan(soup);
-			}
+			}}
 		});
 		picklesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				centralStationLogic.hardware.getHandheldScanner().scan(pickles);
-			}
+			}}
 		});
 
 		JPanel panel = new JPanel();
@@ -135,38 +148,56 @@ public class HardwarePopups {
 		soupButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				centralStationLogic.hardware.getBaggingArea().addAnItem(soup);
-			}
+			}}
 		});
 		pickleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				centralStationLogic.hardware.getBaggingArea().addAnItem(pickles);
-			}
+			}}
 		});
 		appleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				centralStationLogic.hardware.getBaggingArea().addAnItem(apples);
-			}
+			}}
 		});
 		bananaButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				centralStationLogic.hardware.getBaggingArea().addAnItem(bananas);
-			}
+			}}
 		});
 		bagsUnderButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsUnder);
-			}
+			}}
 		});
 		bagsOverButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsOver);
-			}
+			}}
 		});
 
 		JPanel panel = new JPanel();
@@ -189,14 +220,20 @@ public class HardwarePopups {
 		soupButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				centralStationLogic.hardware.getBaggingArea().removeAnItem(soup);;
-			}
+			}}
 		});
 		pickleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				centralStationLogic.hardware.getBaggingArea().removeAnItem(pickles);
-			}
+			}}
 		});
 
 		JPanel panel = new JPanel();
@@ -505,6 +542,9 @@ public class HardwarePopups {
 		JButton toonie = new JButton("Toonie ($2.00)");
 
 		nikle.addActionListener(e -> {
+			if(!centralStationLogic.isSessionStarted()){
+				centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+			} else {
 			Coin nickleCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("0.05"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().sink.receive(nickleCoin);
@@ -515,9 +555,12 @@ public class HardwarePopups {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			selectionFrame.dispose();
+			selectionFrame.dispose();}
 		});
 		dime.addActionListener(e -> {
+			if(!centralStationLogic.isSessionStarted()){
+				centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+			} else {
 			Coin dimeCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("0.10"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().receive(dimeCoin);
@@ -528,9 +571,12 @@ public class HardwarePopups {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			selectionFrame.dispose();
+			selectionFrame.dispose();}
 		});
 		quarter.addActionListener(e -> {
+			if(!centralStationLogic.isSessionStarted()){
+				centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+			} else {
 			Coin quarterCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("0.25"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().receive(quarterCoin);
@@ -541,9 +587,12 @@ public class HardwarePopups {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			selectionFrame.dispose();
+			selectionFrame.dispose();}
 		});
 		loonie.addActionListener(e -> {
+			if(!centralStationLogic.isSessionStarted()){
+				centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+			} else {
 			Coin loonieCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("1.00"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().receive(loonieCoin);
@@ -554,9 +603,12 @@ public class HardwarePopups {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			selectionFrame.dispose();
+			selectionFrame.dispose();}
 		});
 		toonie.addActionListener(e -> {
+			if(!centralStationLogic.isSessionStarted()){
+				centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+			} else {
 			Coin toonieCoin = new Coin(Currency.getInstance("CAD"), new BigDecimal("2.00"));
 			try {
 				centralStationLogic.hardware.getCoinSlot().receive(toonieCoin);
@@ -567,7 +619,7 @@ public class HardwarePopups {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			selectionFrame.dispose();
+			selectionFrame.dispose();}
 		});
 
 		selectionFrame.add(nikle);
@@ -580,15 +632,113 @@ public class HardwarePopups {
 		selectionFrame.setVisible(true);
 	}
 
-	public static void showInsertBanknotePopup(JFrame parentFrame) {
-		JDialog dialog = createDialog(parentFrame, "Insert Banknote");
-		JTextField textField = addTextField(dialog, "Enter banknote value:");
-		Consumer<String> onSubmit = inputText -> {
-			int banknoteValue = Integer.parseInt(inputText);
-			//guiLogic.insertBanknote(banknoteValue);
-		};
-		addSubmitButton(dialog, textField, onSubmit);
-		showDialog(dialog);
+public void showInsertBanknotePopup(JFrame parentFrame) {
+		
+		// Create a Frame
+		JFrame selectionFrame = new JFrame();
+		selectionFrame.setTitle("Insert Banknote");
+		selectionFrame.setSize(new Dimension(200, 300));
+		selectionFrame.setLayout(new FlowLayout());
+		
+		// Initialize the Bank Notes
+		JButton five = new JButton("$5");
+		JButton ten = new JButton("$10");
+		JButton twenty = new JButton("$20");
+		JButton fifty = new JButton("$50");
+		JButton hundred = new JButton("$100");
+		
+		// Action Listeners for Inserting Banknote
+		five.addActionListener(e -> {
+					if(!centralStationLogic.isSessionStarted()){
+						centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+					} else {
+			Banknote banknote = new Banknote( Currency.getInstance("CAD"),BigDecimal.valueOf(5));
+			try {
+				centralStationLogic.hardware.getBanknoteInput().receive(banknote);
+			} catch (DisabledException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (CashOverloadException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			selectionFrame.dispose();}
+		});
+		ten.addActionListener(e -> {
+			if(!centralStationLogic.isSessionStarted()){
+						centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+			} else {
+			Banknote banknote = new Banknote( Currency.getInstance("CAD"),BigDecimal.valueOf(10));
+			try {
+				centralStationLogic.hardware.getBanknoteInput().receive(banknote);
+			} catch (DisabledException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (CashOverloadException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			selectionFrame.dispose();}
+		});
+		twenty.addActionListener(e -> {
+			if(!centralStationLogic.isSessionStarted()){
+						centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+			} else {
+				Banknote banknote = new Banknote( Currency.getInstance("CAD"),BigDecimal.valueOf(20));
+			try {
+				centralStationLogic.hardware.getBanknoteInput().receive(banknote);
+			} catch (DisabledException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (CashOverloadException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			selectionFrame.dispose();}
+		});
+		fifty.addActionListener(e -> {
+			if(!centralStationLogic.isSessionStarted()){
+						centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+					} else {
+			Banknote banknote = new Banknote( Currency.getInstance("CAD"),BigDecimal.valueOf(50));
+			try {
+				centralStationLogic.hardware.getBanknoteInput().receive(banknote);
+			} catch (DisabledException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (CashOverloadException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			selectionFrame.dispose();}
+		});
+		hundred.addActionListener(e -> {
+			if(!centralStationLogic.isSessionStarted()){
+						centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+					} else {
+			Banknote banknote = new Banknote( Currency.getInstance("CAD"),BigDecimal.valueOf(100));
+			try {
+				centralStationLogic.hardware.getBanknoteInput().receive(banknote);
+			} catch (DisabledException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (CashOverloadException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			selectionFrame.dispose();}
+		});
+		
+		// Add Buttons to Frame
+		selectionFrame.add(five);
+		selectionFrame.add(ten);
+		selectionFrame.add(twenty);
+		selectionFrame.add(fifty);
+		selectionFrame.add(hundred);
+		
+		// Set Location of Frame and make Frame Visible
+		selectionFrame.setLocationRelativeTo(parentFrame);
+		selectionFrame.setVisible(true);
 	}
 
 	// Pop-up creation logic
