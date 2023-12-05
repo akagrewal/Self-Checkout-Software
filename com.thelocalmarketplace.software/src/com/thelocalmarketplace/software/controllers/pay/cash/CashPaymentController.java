@@ -127,7 +127,6 @@ public class CashPaymentController extends AbstractLogicDependant implements Ban
                 
                 // Print receipt
 				this.logic.receiptPrintingController.handlePrintReceipt(pay.subtract(missed));
-				this.logic.guiLogic.switchPanels("thankYouPanel");
             }
         }
         else {
