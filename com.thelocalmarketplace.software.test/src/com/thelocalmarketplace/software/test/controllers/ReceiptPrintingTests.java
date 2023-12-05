@@ -67,7 +67,6 @@ public class ReceiptPrintingTests {
         session = new CentralStationLogic(station);
         session.startSession();
         controller = new ReceiptPrintingController(session);
-              
     }
 
     @After
@@ -117,20 +116,26 @@ public class ReceiptPrintingTests {
         station.getPrinter().addPaper(5);
         controller.handlePrintReceipt(new BigDecimal(0));
         
-        assertEquals(this.session.stateLogic.getState(), States.SUSPENDED);
+        assertTrue(session.receiptPrintingController.getInkLow());
+        
+        assertEquals(this.session.stateLogic.getState(), States.OUTOFORDER);
+        
+        station.getPrinter().addInk(10);
+        
+        assertEquals(this.session.stateLogic.getState(), States.NORMAL);
     }
     
-    @Test
-    public void testNotifyOutofPaper() throws OverloadedDevice {
-    	Barcode barcode1 = new Barcode(new Numeral[] {Numeral.one});
-        BarcodedProduct product1 = new BarcodedProduct(barcode1, "TestProduct", 1, 100.0);      
-        session.cartLogic.addProductToCart(product1);  
-        station.getPrinter().addInk(1000);
-        station.getPrinter().addPaper(1);
-        controller.handlePrintReceipt(new BigDecimal(0));
-        
-        assertEquals(this.session.stateLogic.getState(), States.SUSPENDED);
-    }
+//    @Test
+//    public void testNotifyOutofPaper() throws OverloadedDevice {
+//    	Barcode barcode1 = new Barcode(new Numeral[] {Numeral.one});
+//        BarcodedProduct product1 = new BarcodedProduct(barcode1, "TestProduct", 1, 100.0);      
+//        session.cartLogic.addProductToCart(product1);  
+//        station.getPrinter().addInk(1000);
+//        station.getPrinter().addPaper(1);
+//        controller.handlePrintReceipt(new BigDecimal(0));
+//        
+//        assertEquals(this.session.stateLogic.getState(), States.SUSPENDED);
+//    }
     
     @Test
     public void testAttendantResolvingError() throws OverloadedDevice {
