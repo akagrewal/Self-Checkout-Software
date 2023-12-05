@@ -14,6 +14,7 @@ import com.thelocalmarketplace.software.AbstractLogicDependant;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
+
 /**
  * Adapted from Project Iteration 2 - Group 5
  * @author Jaimie Marchuk - 30112841
@@ -42,6 +43,10 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 	
 	// A duplicate receipt that can be printed by the attendant.
 	String duplicateReceipt;
+	
+	// Flags to see if ink or paper is low or empty
+	boolean inkLow = false;
+	boolean paperLow = false;
 	
 	/**
 	 * Base constructor
@@ -173,12 +178,35 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 	
 	@Override
 	public void thePrinterIsOutOfPaper() {
-		this.onPrintingFail();
+		// TODO: Notify Attendant
+		
+		// TODO: Change GUI display message about no Paper
+		System.out.println("Paper Storage Empty. System shutting off.");
+		
+		// Flag to see if paper remains empty
+		paperLow = true;
+		
+		// Disable System so attendant can add paper
+		if	(!inkLow) {
+			this.logic.attendantLogic.disableCustomerStation();
+		}
+		
 	}
 
 	@Override
 	public void thePrinterIsOutOfInk() {
-		this.onPrintingFail();
+		// TODO: Notify Attendant
+		
+		// TODO: Change GUI display message about no Ink
+		System.out.println("Ink Storage Empty. System shutting off.");
+		
+		// Flag to see if Ink remains empty
+		inkLow = true;
+		
+		// Disable System so attendant can add Ink
+		if	(!paperLow) {
+			this.logic.attendantLogic.disableCustomerStation();
+		}
 	}
 
 	@Override
@@ -207,25 +235,91 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 
 	@Override
 	public void thePrinterHasLowInk() {
-		// TODO Auto-generated method stub
+		// TODO: Notify Attendant
 		
+		// TODO: Change GUI display message about no Ink
+		System.out.println("Ink Level is low. System shutting off.");
+		
+		// Flag to see if paper remains low
+		paperLow = true;
+		
+		
+		// Disable System so attendant can add paper
+		this.logic.hardware.turnOff();
+		
+		//System.out.println("Does it reach here?");
 	}
 
 	@Override
 	public void thePrinterHasLowPaper() {
-		// TODO Auto-generated method stub
+		// TODO: Notify Attendant
+		
+		// TODO: Change GUI display message about no Paper
+		System.out.println("Paper Level is low. System shutting off.");
+		
+		// Flag to see if paper remains low
+		paperLow = true;
+		
+		// Disable System so attendant can add paper
+		this.logic.attendantLogic.disableCustomerStation();
 		
 	}
 
 	@Override
 	public void paperHasBeenAddedToThePrinter() {
-		// TODO Auto-generated method stub
+		
+		// Set flag to false
+		paperLow = false;
+		
+		// TODO: Change GUI display message about paper being added
+		System.out.println("Paper has been added");
+		
+		// Check if ink is low or empty
+		if (!inkLow) {
+			// TODO: Change GUI display message about printer ready
+			System.out.println("Printer ready for usage");
+			
+			// If enough ink is there enable system
+			this.logic.attendantLogic.enableCustomerStation();
+		} else {
+			// TODO: Change GUI display message about printer not ready due to low ink levels
+			System.out.println("Printer not ready for usage; Low Ink; Add Ink");
+			
+			// TODO: Notify Attendant
+		}
 		
 	}
 
 	@Override
 	public void inkHasBeenAddedToThePrinter() {
-		// TODO Auto-generated method stub
 		
+		// Set flag to false
+		inkLow = false;
+		
+		// TODO: Change GUI display message about paper being added
+		System.out.println("Ink has been added");
+		
+		// Check if paper is low or empty
+		if (!paperLow) {
+			// TODO: Change GUI display message about printer ready
+			System.out.println("Printer ready for usage");
+			
+			// If enough ink is there enable system
+			this.logic.attendantLogic.enableCustomerStation();
+		} else {
+			// TODO: Change GUI display message about printer not ready due to low paper levels
+			System.out.println("Printer not ready for usage; Low Paper; Add Paper");
+			
+			// TODO: Notify Attendant
+		}
+
+	}
+	
+	public boolean getInkLow() {
+		return inkLow;
+	}
+	
+	public boolean getPaperLow() {
+		return paperLow;
 	}
 }

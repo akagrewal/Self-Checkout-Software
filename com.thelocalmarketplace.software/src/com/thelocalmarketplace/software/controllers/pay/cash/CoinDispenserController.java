@@ -6,11 +6,14 @@ import java.util.List;
 
 import com.tdc.IComponent;
 import com.tdc.IComponentObserver;
+import com.tdc.banknote.BanknoteStorageUnit;
 import com.tdc.coin.Coin;
 import com.tdc.coin.CoinDispenserObserver;
+import com.tdc.coin.CoinStorageUnit;
 import com.tdc.coin.ICoinDispenser;
 import com.thelocalmarketplace.software.AbstractLogicDependant;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
+import powerutility.NoPowerException;
 
 /**
  * Represents an object that will control a coin dispenser of a specific coin denomination
@@ -43,7 +46,7 @@ public class CoinDispenserController extends AbstractLogicDependant implements C
 	 * List of available coins of this denomination
 	 */
 	private List<Coin> available;
-
+	private ICoinDispenser dispenser;
 	
 	/**
 	 * Base constructor
@@ -61,7 +64,8 @@ public class CoinDispenserController extends AbstractLogicDependant implements C
 		this.available = new ArrayList<>();
 		
 		// Attach self to specific dispenser corresponding to its denomination
-		this.logic.hardware.getCoinDispensers().get(denomination).attach(this);
+		dispenser = this.logic.hardware.getCoinDispensers().get(denomination);
+		dispenser.attach(this);
 	}
 	
 	/**
@@ -71,7 +75,41 @@ public class CoinDispenserController extends AbstractLogicDependant implements C
 	public List<Coin> getAvailableChange() {
 		return this.available;
 	}
-	
+
+	public void testCoinLevel() {
+		CoinStorageUnit coinStorage = this.logic.hardware.getCoinStorage();
+		if (!coinStorage.isActivated()) {  // This should not happen
+			throw new NoPowerException();
+		}
+		if (!coinStorage.isDisabled()) {
+			if (coinStorage.getCoinCount() < 20) {
+				// TODO: Change GUI display message about low banknote level
+				System.out.println("Coin level too low. System shutting off.");
+
+				logic.hardware.turnOff();
+			}
+			if (dispenser.size() < 5) {
+				// TODO: Change GUI display message about low banknote level
+				System.out.println("Coin level too low. System shutting off.");
+
+				logic.hardware.turnOff();
+			}
+
+			if (coinStorage.getCoinCount() - coinStorage.getCapacity() < 10) {
+				// TODO: Change GUI display message about (almost) full banknotes
+				System.out.println("Coins full or almost full. System shutting off.");
+
+				logic.hardware.turnOff();
+			}
+			if (dispenser.size() - dispenser.getCapacity() < 3) {
+				//TODO: Change GUI display message about (almost) full banknotes
+				System.out.println("Coins full or almost full. System shutting off.");
+
+				logic.hardware.turnOff();
+			}
+		}
+	}
+
 	@Override
 	public void coinsEmpty(ICoinDispenser dispenser) {
 		this.available.clear();
@@ -100,36 +138,29 @@ public class CoinDispenserController extends AbstractLogicDependant implements C
 			this.available.remove(c);
 		}
 	}
-	
-	// ------ Unused -------
 
+	// Test coin level on startup in case of improper or missed maintenance
 	@Override
 	public void enabled(IComponent<? extends IComponentObserver> component) {
-		// TODO Auto-generated method stub
-		
+		testCoinLevel();
 	}
 
 	@Override
 	public void disabled(IComponent<? extends IComponentObserver> component) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
+	// Test coin level on startup in case of improper or missed maintenance
 	@Override
 	public void turnedOn(IComponent<? extends IComponentObserver> component) {
-		// TODO Auto-generated method stub
-		
+		testCoinLevel();
 	}
 
 	@Override
 	public void turnedOff(IComponent<? extends IComponentObserver> component) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void coinsFull(ICoinDispenser dispenser) {
-		// TODO Auto-generated method stub
-		
 	}
 }
