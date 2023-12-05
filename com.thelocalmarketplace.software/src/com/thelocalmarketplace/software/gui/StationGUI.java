@@ -21,6 +21,7 @@ public class StationGUI extends JFrame {
     // For logic testing - delete after all GUI is done
     private int total;
     private JLabel totalLabel;
+    public JLabel BalanceLabel;
 
     public GUILogic guiLogicInstance;
     private final CentralStationLogic centralStationLogic;
@@ -323,6 +324,7 @@ public class StationGUI extends JFrame {
         JPanel totalPanel = new JPanel();
         totalPanel.setBorder(BorderFactory.createTitledBorder(" "));
         totalLabel = new JLabel("Total: $0.00");
+        BalanceLabel = new JLabel("");
         addComponent(totalPanel, totalLabel,0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         gbc.gridx = 1;
@@ -414,14 +416,17 @@ public class StationGUI extends JFrame {
         });
         buttonCoinPayment.addActionListener(e -> {
             centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
+            BalanceLabel.setText("Balance: " +  centralStationLogic.cartLogic.getBalanceOwed());
             guiLogicInstance.switchPanels("CashPaymentPanel");
         });
         buttonCashPayment.addActionListener(e -> {
             centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
+            BalanceLabel.setText("Balance: " +  centralStationLogic.cartLogic.getBalanceOwed());
             guiLogicInstance.switchPanels("CashPaymentPanel");
         });
         buttonMixedPayment.addActionListener(e -> {
             centralStationLogic.selectPaymentMethod(PaymentMethods.MIXED);
+            BalanceLabel.setText("Balance: " +  centralStationLogic.cartLogic.getBalanceOwed());
             guiLogicInstance.switchPanels("CashPaymentPanel");
         });
 
@@ -471,10 +476,9 @@ public class StationGUI extends JFrame {
                 guiLogicInstance.SessionOver();
             }
         });
-        JLabel POSLabel = new JLabel("Balance: " + centralStationLogic.cartLogic.getBalanceOwed());
-        POSLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        BalanceLabel.setFont(new Font("Arial", Font.BOLD, 26));
         gbc.gridy = 0;
-        panel.add(POSLabel, gbc);
+        panel.add(BalanceLabel, gbc);
         gbc.gridy = 1;
         panel.add(returnButton,gbc);
 
