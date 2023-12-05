@@ -201,6 +201,7 @@ public class WeightLogic extends AbstractLogicDependant {
 			}
 		} else {
 			this.logic.stateLogic.gotoState(States.NORMAL);
+			this.logic.attendantLogic.enableCustomerStation(this.logic);
 		}
 	}
 	
