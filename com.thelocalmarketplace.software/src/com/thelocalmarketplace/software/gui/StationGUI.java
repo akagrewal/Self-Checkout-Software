@@ -189,6 +189,7 @@ public class StationGUI extends JFrame {
         VCButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                guiLogicInstance.showInfoMessage("Please place items on scale, then select desired item");
                 guiLogicInstance.switchPanels("visualCatalogue");
             }
         });
@@ -199,6 +200,7 @@ public class StationGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // goto panel with options to add an item
+                guiLogicInstance.showInfoMessage("Please place items on scale, then select desired item");
                 Numpad pluNumpad = new Numpad(StationGUI.this, guiLogicInstance, 1); // this may need changes
                 pluNumpad.openNumPadPanel();
             }
@@ -424,6 +426,7 @@ public class StationGUI extends JFrame {
             guiLogicInstance.switchPanels("CashPaymentPanel");
         });
         buttonMixedPayment.addActionListener(e -> {
+            guiLogicInstance.showInfoMessage("Please insert desired cash, then use alternative payment");
             centralStationLogic.selectPaymentMethod(PaymentMethods.MIXED);
             BalanceLabel.setText("Balance: " +  centralStationLogic.cartLogic.getBalanceOwed());
             guiLogicInstance.switchPanels("CashPaymentPanel");

@@ -49,7 +49,11 @@ public class AttendantGUI {
             tempPanel.add(buttonConfirmSearch);
 
             buttonEnable.addActionListener(e -> stationLogic.attendantLogic.enableCustomerStation(stationLogic));
-            buttonDisable.addActionListener(e -> stationLogic.attendantLogic.disableCustomerStation(stationLogic));
+            buttonDisable.addActionListener(e -> {
+                if(stationLogic.isSessionStarted()){
+                    JOptionPane.showMessageDialog(attendantFrame, "Cannot disable an active session", "Information", JOptionPane.INFORMATION_MESSAGE);;
+                } else{stationLogic.attendantLogic.disableCustomerStation(stationLogic);}
+            });
             buttonConfirmSearch.addActionListener(e -> {
                 	 String textSearch = (String)searchBox.getSelectedItem();
                      stationLogic.attendantLogic.AddItemByTextSearch(stationLogic, textSearch);
