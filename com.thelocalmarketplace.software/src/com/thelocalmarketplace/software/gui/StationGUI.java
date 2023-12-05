@@ -9,6 +9,7 @@ import java.math.RoundingMode;
 import javax.swing.*;
 
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
+import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 
 
@@ -230,9 +231,13 @@ public class StationGUI extends JFrame {
             	
             	if (choice == JOptionPane.YES_OPTION) {
                     centralStationLogic.addBagsLogic.endAddBags();
+                    
+                    if (centralStationLogic.stateLogic.inState(States.ADDBAGS)) {
+                    	BagsTooHeavyPopUp heavyBagPopUp = new BagsTooHeavyPopUp();
+                    	heavyBagPopUp.notifyBagHeavyPopUp();
+                    	SessionBlockedPopUp.discrepancyDetected(StationGUI.this);
+                    }
                 }
-
-                guiLogicInstance.switchPanels("paymentPanel");
             }
         });
         // Attach buttons
