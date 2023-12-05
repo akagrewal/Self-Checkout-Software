@@ -113,7 +113,7 @@ public class CoinPaymentController extends AbstractLogicDependant implements Coi
 		else if (!this.logic.stateLogic.inState(States.CHECKOUT)) {
 			throw new InvalidStateSimulationException("Not ready for checkout");
 		}
-		else if (!this.logic.getSelectedPaymentMethod().equals(PaymentMethods.CASH)) {
+		else if (!    (     this.logic.getSelectedPaymentMethod().equals(PaymentMethods.CASH) || this.logic.getSelectedPaymentMethod().equals(PaymentMethods.MIXED)   )   ) {
 			throw new InvalidStateSimulationException("Payment by coin not selected");
 		}
 		else if (this.logic.cartLogic.getBalanceOwed().compareTo(BigDecimal.ZERO) == 0) {
@@ -147,9 +147,13 @@ public class CoinPaymentController extends AbstractLogicDependant implements Coi
 				// Print receipt
 				this.logic.receiptPrintingController.handlePrintReceipt(pay.subtract(missed));
 			}
+			this.logic.guiLogic.switchPanels("thankYouPanel");
 		}
 		else {
+			
 			System.out.println("Balance owed: " + this.logic.cartLogic.getBalanceOwed());
+			//tell gui to updates
+			this.logic.stationGUI.BalanceLabel.setText("Balance: " + this.logic.cartLogic.getBalanceOwed());
 		}
 	}
 	
