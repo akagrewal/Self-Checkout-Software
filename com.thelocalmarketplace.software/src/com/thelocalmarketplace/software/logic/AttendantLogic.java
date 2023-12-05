@@ -188,10 +188,11 @@ public class AttendantLogic {
 		//TODO: change the logic do be able to enable only a specific customer station
 
 
-		//TODO GUI: GUI should go back to normal if it was previously disabled
-		attendantOverride(logic.stationNumber);
-		
-		logic.stateLogic.gotoState(States.NORMAL);
+		if (logic.stateLogic.getState() == States.OUTOFORDER || logic.stateLogic.getState() == States.BLOCKED)
+			//TODO GUI: GUI should go back to normal if it was previously disabled
+			attendantOverride(logic.stationNumber);
+			
+			logic.stateLogic.gotoState(States.NORMAL);
 	}
 	
 	/** 
