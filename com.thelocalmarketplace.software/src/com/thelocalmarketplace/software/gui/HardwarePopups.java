@@ -381,7 +381,12 @@ public class HardwarePopups {
 					centralStationLogic.hardware.getCardReader().swipe(realCreditCard);
 				} catch (IOException e1) {
 					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
-				} }
+				} catch (InvalidStateSimulationException invalidStateSimulationException){
+					centralStationLogic.guiLogic.showExceptionMessage("Pay by CREDIT not selected");
+				}
+
+
+				}
 			}
 		});
 		swipeFake.addActionListener(new ActionListener() {
@@ -397,7 +402,11 @@ public class HardwarePopups {
 					centralStationLogic.guiLogic.showExceptionMessage("Invalid Card, please try another form of payment");
 				} catch (IOException e1) {
 					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
-				}}
+				} catch (InvalidStateSimulationException invalidStateSimulationException){
+					centralStationLogic.guiLogic.showExceptionMessage("Pay by CREDIT not selected");
+				}
+
+				}
 			}
 		});
 
@@ -407,7 +416,7 @@ public class HardwarePopups {
 				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
-				} else {
+				} else { try{
 				JDialog pinDialog = createDialog(parentFrame, "pin");
 				JTextField textField = addTextField(pinDialog, "Enter pin:");
 				Consumer<String> onSubmit = inputText -> {
@@ -424,6 +433,11 @@ public class HardwarePopups {
 				};
 				addSubmitButton(pinDialog, textField, onSubmit);
 				showDialog(pinDialog);}
+				catch (InvalidStateSimulationException invalidStateSimulationException){
+					centralStationLogic.guiLogic.showExceptionMessage("Pay by CREDIT not selected");
+				}
+
+				}
 
 			}
 		});
@@ -433,7 +447,7 @@ public class HardwarePopups {
 				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
-				} else {
+				} else { try{
 				JDialog pinDialog = createDialog(parentFrame, "pin");
 				JTextField textField = addTextField(pinDialog, "Enter pin:");
 				Consumer<String> onSubmit = inputText -> {
@@ -452,6 +466,11 @@ public class HardwarePopups {
 				};
 				addSubmitButton(pinDialog, textField, onSubmit);
 				showDialog(pinDialog);}
+				catch (InvalidStateSimulationException invalidStateSimulationException){
+					centralStationLogic.guiLogic.showExceptionMessage("Pay by CREDIT not selected");
+				}
+
+				}
 
 			}
 		});
@@ -466,7 +485,11 @@ public class HardwarePopups {
 					centralStationLogic.hardware.getCardReader().tap(realCreditCard);
 				} catch (IOException e1) {
 					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
-				}}
+				} catch (InvalidStateSimulationException invalidStateSimulationException){
+					centralStationLogic.guiLogic.showExceptionMessage("Pay by CREDIT not selected");
+				}
+
+				}
 			}
 		});
 		tapFake.addActionListener(new ActionListener() {
@@ -481,7 +504,10 @@ public class HardwarePopups {
 					centralStationLogic.guiLogic.showExceptionMessage("Invalid Card, please try an alternative form of payment");
 				} catch (IOException e1) {
 					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
-				}}
+				} catch (InvalidStateSimulationException invalidStateSimulationException){
+					centralStationLogic.guiLogic.showExceptionMessage("Pay by CREDIT not selected");
+				}
+				}
 			}
 		});
 
