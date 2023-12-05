@@ -199,6 +199,31 @@ public class AttendantLogicTest {
 		}
 	}
 	
+	@Test
+	public void notifySessionEndedNotWaiting() {
+		try {
+			attendantLogic.notifySessionEnded(centralStationLogicStub);
+		} catch (Exception e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void notifySessionEndedWaiting() {
+		try {
+			centralStationLogicStub.sessionStarted = true;
+			attendantLogic.disableCustomerStation(centralStationLogicStub);
+			attendantLogic.notifySessionEnded(centralStationLogicStub);
+		} catch (Exception e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void testDisableCustomerStationSessionStarted() {
+		attendantLogic.disableCustomerStation(centralStationLogicStub);
+	}
+	
 	class CentralStationLogicStub extends CentralStationLogic {
 		boolean sessionStarted = false;
 		
@@ -207,7 +232,7 @@ public class AttendantLogicTest {
 		}
 		
 		public boolean isSessionStarted() {
-			 return true;
+			 return sessionStarted;
 		}
 	}
 	
