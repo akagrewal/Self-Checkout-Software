@@ -105,8 +105,8 @@ public class StationGUI extends JFrame {
         nextButton.setFont(new Font("SERIF", Font.BOLD, 42));
         
         JButton uselessButton = new JButton("About");
-        uselessButton.setBackground(Color.decode("#00A489"));  // OpenSUSE cyan
-        uselessButton.setForeground(Color.decode("#dceec8"));	// OpenSUSE green 25%
+        uselessButton.setBackground(Color.decode("#4A3D54"));
+        uselessButton.setForeground(Color.decode("#B9AFCA"));
         uselessButton.setFont(new Font("Serif", Font.BOLD, 24));
         uselessButton.addActionListener(e -> {
             // TODO: Implement
