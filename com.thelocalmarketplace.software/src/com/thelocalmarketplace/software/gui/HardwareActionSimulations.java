@@ -47,6 +47,11 @@ public class HardwareActionSimulations extends JFrame {
         payPanel.add(createButton("Insert coin", e -> hardwarePopups.showInsertCoinPopup(this)));
         payPanel.add(createButton("Insert banknote", e -> hardwarePopups.showInsertBanknotePopup(this)));
         add(payPanel);
+        
+        // Maintain Section
+        JPanel maintainPanel = new JPanel();
+        payPanel.add(createHeader("Maintain"));
+        payPanel.add(createButton("Maintain Actions", e -> hardwarePopups.showMaintainActions(this)));
 
         setLocationRelativeTo(null); // Center the window on the screen
     	hardwarePopups = new HardwarePopups(centralStationLogic);
