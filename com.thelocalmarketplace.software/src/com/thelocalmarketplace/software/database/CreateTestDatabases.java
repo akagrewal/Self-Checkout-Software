@@ -15,13 +15,13 @@ public class CreateTestDatabases {
 	public static BarcodedProduct soup;
 	public static BarcodedProduct pickles;
 
-    public static PLUCodedProduct bagsPurchasable;
+    public static BarcodedProduct bagsPurchasable;
 	public static PLUCodedProduct bagsUnder;
 	public static PLUCodedProduct bagsOver;
 
     public static void createDatabase() {
-        PriceLookUpCode purchasableBag = new PriceLookUpCode("72700");
-        bagsPurchasable = new PLUCodedProduct(purchasableBag, "TheLocalMarketplace Purchasable Bag", 3);
+        Barcode purchasableBag = new Barcode(new Numeral[]{Numeral.nine, Numeral.nine, Numeral.nine, Numeral.zero});
+        bagsPurchasable = new BarcodedProduct(purchasableBag, "TheLocalMarketplace Purchasable Bag", 3, 0.00000001);
     	
     	PriceLookUpCode bagsUnderPLU = new PriceLookUpCode("72701");
     	bagsUnder = new PLUCodedProduct(bagsUnderPLU, "USER BAG: LIGHT", 15);
@@ -53,8 +53,8 @@ public class CreateTestDatabases {
         ProductDatabases.PLU_PRODUCT_DATABASE.put(applePLU, apple);
         ProductDatabases.PLU_PRODUCT_DATABASE.put(bagsUnderPLU, bagsUnder);
         ProductDatabases.PLU_PRODUCT_DATABASE.put(bagsOverPLU, bagsOver);
-        ProductDatabases.PLU_PRODUCT_DATABASE.put(purchasableBag, bagsPurchasable);
 
+        ProductDatabases.BARCODED_PRODUCT_DATABASE.put(purchasableBag, bagsPurchasable);
         ProductDatabases.BARCODED_PRODUCT_DATABASE.put(soupBarcode, soup);
         ProductDatabases.BARCODED_PRODUCT_DATABASE.put(picklesBarcode, pickles);
 

@@ -12,12 +12,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.jjjwelectronics.Item;
+import com.jjjwelectronics.Numeral;
+import com.jjjwelectronics.scanner.Barcode;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedItem;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.Product;
 import com.thelocalmarketplace.hardware.external.ProductDatabases;
+import com.thelocalmarketplace.software.database.CreateTestDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
@@ -175,7 +178,7 @@ public class GUILogic {
 
 	public void addPurchasableBag(int numberOfBags) {
 		for (int i = 0; i < numberOfBags; i++) {
-			centralLogic.cartLogic.addPLUCodedProductToCart(new PriceLookUpCode("72700"));
+			centralLogic.cartLogic.addBarcodedProductToCart(new Barcode(new Numeral[]{Numeral.nine, Numeral.nine, Numeral.nine, Numeral.zero}));
 		}
 		updateCartChanged();
 	}
