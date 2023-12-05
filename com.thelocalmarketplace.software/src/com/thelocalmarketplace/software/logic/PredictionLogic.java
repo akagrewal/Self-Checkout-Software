@@ -1,6 +1,8 @@
 package com.thelocalmarketplace.software.logic;
 
 import com.thelocalmarketplace.software.AbstractLogicDependant;
+import com.thelocalmarketplace.software.gui.AttendantPopups;
+import com.thelocalmarketplace.software.gui.SessionBlockedPopUp;
 
 public class PredictionLogic extends AbstractLogicDependant {
 	final int MAXIMUM_PAPER = 1 << 10;
@@ -11,6 +13,15 @@ public class PredictionLogic extends AbstractLogicDependant {
 		super(logic);
 		this.logic = logic;
 	}	
+	
+	public void runPredictions() {		
+		checkCoinsFullPrediction();
+		checkLowCoinPrediction();
+		PredictFullBanknotes();
+		PredictLowBanknotes();
+		checkInkPrediction();
+		checkPaperPrediction();
+	}
 	
 	public Boolean checkLowCoinPrediction() {
 		var currentCoins = logic.hardware.getCoinStorage().getCoinCount();
@@ -120,14 +131,17 @@ public class PredictionLogic extends AbstractLogicDependant {
 	
 	
 	public void predictionAction(String message) {
-		notify();
+		// notify attendant
+		AttendantPopups attendantPopup = new AttendantPopups(logic.attendantLogic.attendantGUI.getAttendantFrame());
+		attendantPopup.issuePredictedPopUp(message);
+		// display popup on station, give 5 seconds before station is disabled.
 		SessionBlockedPopUp.issuePredicted(message);
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			// do nothing
 		}
-		
-		logic.attendantLogic.disableCustomerStation(); 
+		// disable station
+		logic.attendantLogic.disableCustomerStation(logic); 
 	}	
 }
