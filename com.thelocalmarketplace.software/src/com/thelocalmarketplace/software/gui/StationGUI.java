@@ -11,7 +11,8 @@ import javax.swing.*;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
-
+import com.thelocalmarketplace.software.logic.CentralStationLogic.PaymentMethods;
+import com.thelocalmarketplace.software.logic.StateLogic;
 
 public class StationGUI extends JFrame {
     // Paneling on GUI
@@ -229,6 +230,7 @@ public class StationGUI extends JFrame {
         });
 
         JButton ownBagsButton = new JButton("Have your own bags? ");
+        
         ownBagsButton.addActionListener(e -> {
             centralStationLogic.addBagsLogic.startAddBags();
 
@@ -251,6 +253,11 @@ public class StationGUI extends JFrame {
             // Add action listeners to the buttons
             doneButton.addActionListener(e2 -> {
                 centralStationLogic.addBagsLogic.endAddBags();
+                if (centralStationLogic.stateLogic.inState(States.ADDBAGS)) {
+                	BagsTooHeavyPopUp heavyBagPopUp = new BagsTooHeavyPopUp();
+                	heavyBagPopUp.notifyBagHeavyPopUp();
+                	SessionBlockedPopUp.discrepancyDetected(StationGUI.this);
+                }
                 dialog.dispose();
             });
 
@@ -270,6 +277,7 @@ public class StationGUI extends JFrame {
             // Display the dialog
             dialog.pack();
             dialog.setVisible(true);
+
         });
         // Attach buttons
         buttonsPanel.add(VCButton);
