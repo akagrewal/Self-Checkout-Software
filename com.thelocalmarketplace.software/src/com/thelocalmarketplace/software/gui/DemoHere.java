@@ -47,15 +47,31 @@ public class DemoHere {
 	private ArrayList<BarcodedProduct> barcodedProductsInOrder;
 	private ArrayList<BarcodedProduct> baggedProducts;
 
-    
+	private static Currency currency = 	Currency.getInstance("CAD");
+
+	private BigDecimal[] billDenominations;
+
+	private static BigDecimal[] coindenominations = new BigDecimal[] {
+			new BigDecimal("0.05"),
+			new BigDecimal("0.10"),
+			new BigDecimal("0.25"),
+			new BigDecimal("1.00"),
+			new BigDecimal("2.00")
+	};
 
     //For Testing Purposes - to run GUI (main)
     public static void main(String[] args) {
-
+    	
 		CreateTestDatabases.createDatabase();
 		PowerGrid.engageUninterruptiblePowerSource();
 		PowerGrid.instance().forcePowerRestore();
 		AbstractSelfCheckoutStation.resetConfigurationToDefaults();
+
+		AbstractSelfCheckoutStation.configureCoinDenominations(coindenominations);
+		AbstractSelfCheckoutStation.configureCoinDispenserCapacity(10);
+		AbstractSelfCheckoutStation.configureCoinStorageUnitCapacity(10);
+		AbstractSelfCheckoutStation.configureCoinTrayCapacity(10);
+		AbstractSelfCheckoutStation.configureCurrency(currency);
 		
     	SelfCheckoutStationGold station1 = new SelfCheckoutStationGold();
     	station1.plugIn(PowerGrid.instance());
