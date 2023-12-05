@@ -1,34 +1,18 @@
 package com.thelocalmarketplace.software.gui;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+
+import javax.swing.*;
 
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 
 
-public class RunGUI extends JFrame implements logicObserver {
+public class StationGUI extends JFrame {
     // Paneling on GUI
     public JPanel cardPanel;
     public CardLayout cardLayout;
@@ -36,18 +20,20 @@ public class RunGUI extends JFrame implements logicObserver {
     private int total;
     private JLabel totalLabel;
 
-    //This is what allows Logic to happen when I click a button
     public GUILogic guiLogicInstance;
+    private final CentralStationLogic centralStationLogic;
     
+    public JPanel blockingPanel;
+
     /** Stores the list of items being displayed on the screen (needs to be updated by GUI logic)**/
 	public DefaultListModel<String> itemListModel = new DefaultListModel<>();
 	public JList<String> itemList = new JList<>(itemListModel);
 
     private static final Insets insets = new Insets(0, 0, 0, 0);
-    private CentralStationLogic centralStationLogic;
+
 
     //For Testing Purposes - to run GUI
-    public RunGUI(CentralStationLogic centralStationLogic) {
+    public StationGUI(CentralStationLogic centralStationLogic) {
     	this.centralStationLogic = centralStationLogic;
 
         SelfCheckoutGUI();
@@ -69,7 +55,7 @@ public class RunGUI extends JFrame implements logicObserver {
         cardPanel = new JPanel(cardLayout);
         cardPanel.add(StartSessionPanel(), "welcomePanel");
         cardPanel.add(createAddItemsPanel(), "AddItemsPanel");
-        cardPanel.add(createVisualCatalogue(), "visualCatalogue");
+        cardPanel.add(createVisual(), "visualCatalogue");
         cardPanel.add(createThankYouPanel(), "thankYouPanel");
         cardPanel.add(createPaymentPanel(), "paymentPanel");
         // cardPanel.add(createCashBillPanel(), "cashBillPanel");
@@ -83,6 +69,7 @@ public class RunGUI extends JFrame implements logicObserver {
         //Or use method guiLogicInstance.switchPanels("welcomePanel")
 
         setVisible(true);
+        createBlockingPanel();
     }
 
     private static void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
@@ -90,76 +77,77 @@ public class RunGUI extends JFrame implements logicObserver {
         GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, gridheight, 1.0, 1.0, anchor, fill, insets, 0, 0);
         container.add(component, gbc);
     }
+    
+    private void createBlockingPanel() {
+        blockingPanel = new JPanel(new GridBagLayout());
+        blockingPanel.setBackground(Color.GRAY); 
+        JLabel blockingLabel = new JLabel("Blocking");
+        blockingLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        blockingPanel.add(blockingLabel);
+        blockingPanel.setVisible(false); // Initially hidden
+        this.add(blockingPanel, BorderLayout.CENTER);
+    }
 
     // Customer Screen 1
     private JPanel StartSessionPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(Color.decode("#EFF0E5"));
         GridBagConstraints gbc = new GridBagConstraints();
 
         JButton nextButton = new JButton("Start adding items to cart");
         nextButton.setFont(new Font("Arial", Font.BOLD, 26));
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.StartSessionButtonPressed();
-                guiLogicInstance.switchPanels("AddItemsPanel");
-            }
-        });
-
-        JButton frenchButton = new JButton("Français");
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // change all text to french when button pressed. not implemented yet
-            }
-        });
-
+        nextButton.addActionListener(e -> guiLogicInstance.StartSessionButtonPressed());
+        nextButton.setBackground(Color.decode("#9DAF99"));  //Maroon
+        nextButton.setForeground(Color.decode("#40543D"));
+        nextButton.setFont(new Font("Serif", Font.BOLD, 42));
+        
         JButton bags = new JButton("Have your own bags?");
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // change all text to french when button pressed. not implemented yet
-            }
+        bags.setBackground(Color.decode("#B9AFCA"));  //Navy
+        bags.setForeground(Color.decode("#4A3D54"));
+        bags.setFont(new Font("Sans", Font.BOLD, 24));
+        bags.addActionListener(e -> {
+            // TODO: Implement
         });
 
-        JButton help = new JButton("call for help");
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // change all text to french when button pressed. not implemented yet
-            }
+        JButton help = new JButton("Call for assisstance");
+        help.setBackground(Color.decode("#B9AFCA"));  //Navy
+        help.setForeground(Color.decode("#4A3D54"));
+        help.setFont(new Font("Sans", Font.BOLD, 24));
+        help.addActionListener(e -> {
+            centralStationLogic.attendantLogic.callAttendant(centralStationLogic.stationNumber);
         });
 
-        JButton membership = new JButton("Are you a member?");
-        membership.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Numpad membershipNumpad = new Numpad(RunGUI.this, guiLogicInstance, 0); // this may need changes
-                membershipNumpad.openNumPadPanel();
-            }
+        JButton membership = new JButton("Enter Membership No.");
+        membership.setBackground(Color.decode("#B9AFCA"));  //Navy
+        membership.setForeground(Color.decode("#4A3D54"));
+        membership.setFont(new Font("Sans", Font.BOLD, 24));
+        membership.addActionListener(e -> {
+            Numpad membershipNumpad = new Numpad(StationGUI.this, guiLogicInstance, 0); // this may need changes
+            membershipNumpad.openNumPadPanel();
         });
 
 
 
         JLabel welcomeLabel = new JLabel("Welcome to the UofC market!");
+        welcomeLabel.setHorizontalAlignment(JLabel.CENTER);
         welcomeLabel.setFont(new Font("Serif", Font.BOLD, 20));
 
 
-        addComponent(panel,welcomeLabel,0, 0, 3, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+
+        addComponent(panel,welcomeLabel,0, 0, 3, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE);
         addComponent(panel,new JLabel(""),0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(panel,nextButton,1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         addComponent(panel,new JLabel(""),2, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        JPanel bottomPanel = new JPanel(new GridLayout(2, 4, 10, 10));
+        JPanel bottomPanel = new JPanel(new GridLayout(2, 3, 20, 20));
+        bottomPanel.setBackground(Color.decode("#EFF0E5"));
         bottomPanel.setBorder(BorderFactory.createTitledBorder("MORE OPTIONS"));
 
 
 
-        bottomPanel.add(frenchButton);
         bottomPanel.add(bags);
         bottomPanel.add(help);
         bottomPanel.add(membership);
 
-        bottomPanel.add(new JLabel(""));
         bottomPanel.add(new JLabel(""));
         bottomPanel.add(new JLabel(""));
         bottomPanel.add(new JLabel(""));
@@ -172,20 +160,12 @@ public class RunGUI extends JFrame implements logicObserver {
         return panel;
     }
 
-    private JScrollPane createVisualCatalogue() {
-        JPanel VisualCataloguePanel = new JPanel(new FlowLayout());
-        VisualCataloguePanel.setBorder(BorderFactory.createTitledBorder("VISUAL CATALOGUE "));
-        JScrollPane VCpanel = new JScrollPane(VisualCataloguePanel);
-        VCpanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        VCpanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    private JScrollPane createVisual() {
+        JScrollPane vc = new VisualCatalouge(this).createVisualCatalouge();
 
 
-        // for (ITEM : inverntory){
-        // VC pan
-        //}
 
-
-        return VCpanel;
+        return vc;
     }
     
     public void setTotal(BigDecimal total) {
@@ -216,7 +196,7 @@ public class RunGUI extends JFrame implements logicObserver {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // goto panel with options to add an item
-                Numpad pluNumpad = new Numpad(RunGUI.this, guiLogicInstance, 1); // this may need changes
+                Numpad pluNumpad = new Numpad(StationGUI.this, guiLogicInstance, 1); // this may need changes
                 pluNumpad.openNumPadPanel();
             }
         });
@@ -238,17 +218,33 @@ public class RunGUI extends JFrame implements logicObserver {
         });
 
         JButton buyBagsButton = new JButton("Purchase Bags");
-        payButton.addActionListener(new ActionListener() {
+        buyBagsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	new BagKeypad(StationGUI.this, buyBagsButton, centralStationLogic);
                 guiLogicInstance.switchPanels("paymentPanel");
             }
         });
 
-        JButton ownBagButtons = new JButton("Have your own bags? ");
-        payButton.addActionListener(new ActionListener() {
+        JButton ownBagsButton = new JButton("Have your own bags? ");
+        ownBagsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	centralStationLogic.addBagsLogic.startAddBags();
+            	//opens dialog to end Add Bags
+            	int choice = JOptionPane.showOptionDialog(ownBagsButton,
+                        "Please press 'DONE' when done adding bags.",
+                        "Add Own Bags",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        new Object[]{"DONE", "Cancel"},
+                        "DONE");
+            	
+            	if (choice == JOptionPane.YES_OPTION) {
+                    centralStationLogic.addBagsLogic.endAddBags();
+                }
+
                 guiLogicInstance.switchPanels("paymentPanel");
             }
         });
@@ -257,7 +253,7 @@ public class RunGUI extends JFrame implements logicObserver {
         buttonsPanel.add(PLUButton);
         buttonsPanel.add(removeItemButton);
         buttonsPanel.add(buyBagsButton);
-        buttonsPanel.add(ownBagButtons);
+        buttonsPanel.add(ownBagsButton);
         buttonsPanel.add(payButton);
 
         gbc.gridx = 0;
@@ -353,190 +349,6 @@ public class RunGUI extends JFrame implements logicObserver {
         return PaymentPanel;
     }
 
-
-/*
-    //Screen 3.B Payment Panel (Coin Bill)
-    private JPanel createCashBillPanel() {
-        JPanel CoinBillPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-
-
-        JButton payment_button1 = new JButton("$5.00");
-        payment_button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("5.00");
-            }
-        });
-        JButton payment_button2 = new JButton("$10.00");
-        payment_button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("10.00");
-            }
-        });
-        JButton payment_button3 = new JButton("$20.00");
-        payment_button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("20.00");
-            }
-        });
-        JButton payment_button4 = new JButton("$50.00");
-        payment_button4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("50.00");
-            }
-        });
-        JButton payment_button5 = new JButton("100.00");
-        payment_button5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("10.00");
-            }
-        });
-        JButton payment_button6 = new JButton("Pay for Order");
-        payment_button6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("thankYouPanel");
-            }
-        });
-        JButton payment_button7 = new JButton("Back to Checkout/Add More Items");
-        payment_button7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("AddItemsPanel");
-            }
-        });
-        gbc.gridx = 0; gbc.gridy = 0;
-        payment_button1.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button1, gbc);
-
-
-        gbc.gridx = 0; gbc.gridy = 1;
-        payment_button2.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button2, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 2;
-        payment_button3.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button3, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 3;
-        payment_button4.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button4, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 4;
-        payment_button5.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button5, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 5;
-        payment_button6.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button6, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 6;
-        payment_button7.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button7, gbc);
-
-        return CoinBillPanel;
-    }
-
- */
-
-    /*
-    //Screen 3 Payment Panel (Coin Coin)
-    private JPanel createCashCoinPanel() {
-        JPanel CoinBillPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-
-
-        JButton payment_button1 = new JButton("$0.01");
-        payment_button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("0.01");
-            }
-        });
-        JButton payment_button2 = new JButton("$0.05");
-        payment_button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("0.05");
-            }
-        });
-        JButton payment_button3 = new JButton("$0.10");
-        payment_button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("0.10");
-            }
-        });
-        JButton payment_button4 = new JButton("$0.25");
-        payment_button4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("0.25");
-            }
-        });
-        JButton payment_button5 = new JButton("$1.00");
-        payment_button5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("1.00");
-            }
-        });
-        JButton payment_button6 = new JButton("Pay for Order");
-        payment_button6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("thankYouPanel");
-            }
-        });
-        JButton payment_button7 = new JButton("Back to Checkout/Add More Items");
-        payment_button7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("AddItemsPanel");
-            }
-        });
-        gbc.gridx = 0; gbc.gridy = 0;
-        payment_button1.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button1, gbc);
-
-
-        gbc.gridx = 0; gbc.gridy = 1;
-        payment_button2.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button2, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 2;
-        payment_button3.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button3, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 3;
-        payment_button4.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button4, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 4;
-        payment_button5.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button5, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 5;
-        payment_button6.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button6, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 6;
-        payment_button7.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button7, gbc);
-
-        return CoinBillPanel;
-    }
-
-     */
-
-
     private JPanel createThankYouPanel()  {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -561,8 +373,7 @@ public class RunGUI extends JFrame implements logicObserver {
         return panel;
     }
 
-    @Override
-    public void updateTotal(int total) {
-        totalLabel.setText("Total: "+ total);
+    public GUILogic getLogicInstance(){
+        return this.guiLogicInstance;
     }
 }

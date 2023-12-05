@@ -1,20 +1,16 @@
 package com.thelocalmarketplace.software.gui;
 
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.*;
 
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 public class HardwareActionSimulations extends JFrame {
 
-    private static final int WINDOW_WIDTH = 300;
-    private static final int WINDOW_HEIGHT = 800;
+    private static final int WINDOW_WIDTH = 750;
+    private static final int WINDOW_HEIGHT = 500;
     private static final int BUTTON_WIDTH = 225; // 75% of WINDOW_WIDTH
     private static final int BUTTON_HEIGHT = 50;
     
@@ -25,25 +21,32 @@ public class HardwareActionSimulations extends JFrame {
         setTitle("Hardware Action Simulations");
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT); // Set the size of the window
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        // setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
+        setLayout(new GridLayout(1, 3));
 
         // Add Item Section
-        add(createHeader("Add Item"));
-        add(createButton("Scan Main Scanner", e -> hardwarePopups.showScanMainScannerPopup(this)));
-        add(createButton("Scan Handheld Scanner", e -> hardwarePopups.showScanHandheldScannerPopup(this)));
+        JPanel addItemPanel = new JPanel();
+        addItemPanel.add(createHeader("Add item"));
+        addItemPanel.add(createButton("Scan with main scanner", e -> hardwarePopups.showScanMainScannerPopup(this)));
+        addItemPanel.add(createButton("Scan with handheld scanner", e -> hardwarePopups.showScanHandheldScannerPopup(this)));
+        add(addItemPanel);
 
         // Scale Section
-        add(createHeader("Scale"));
-        add(createButton("Add Item to Scale", e -> hardwarePopups.showAddItemToScalePopup(this)));
-        add(createButton("Remove Item from Scale", e -> hardwarePopups.showRemoveItemFromScalePopup(this)));
+        JPanel scalePanel = new JPanel();
+        scalePanel.add(createHeader("Scale"));
+        scalePanel.add(createButton("Add item to bagging area", e -> hardwarePopups.showAddItemToScalePopup(this)));
+        scalePanel.add(createButton("Remove item from bagging area", e -> hardwarePopups.showRemoveItemFromScalePopup(this)));
+        scalePanel.add(createButton("Place items on scanner scale", e -> hardwarePopups.showMeasureItemsOnPLUScalePopup(this)));
+        add(scalePanel);
 
         // Pay Section
-        add(createHeader("Pay"));
-        add(createButton("Pay with Credit", e -> hardwarePopups.showPayWithCreditPopup(this)));
-        add(createButton("Pay with Debit", e -> hardwarePopups.showPayWithDebitPopup(this)));
-        
-        add(createButton("Insert Coin", e -> HardwarePopups.showInsertCoinPopup(this)));
-        add(createButton("Insert Banknote", e -> HardwarePopups.showInsertBanknotePopup(this)));
+        JPanel payPanel = new JPanel();
+        payPanel.add(createHeader("Pay"));
+        payPanel.add(createButton("Pay with credit", e -> hardwarePopups.showPayWithCreditPopup(this)));
+        payPanel.add(createButton("Pay with debit", e -> hardwarePopups.showPayWithDebitPopup(this)));
+        payPanel.add(createButton("Insert coin", e -> hardwarePopups.showInsertCoinPopup(this)));
+        payPanel.add(createButton("Insert banknote", e -> hardwarePopups.showInsertBanknotePopup(this)));
+        add(payPanel);
 
         setLocationRelativeTo(null); // Center the window on the screen
     	hardwarePopups = new HardwarePopups(centralStationLogic);

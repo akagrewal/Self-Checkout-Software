@@ -11,6 +11,7 @@ import javax.swing.SwingUtilities;
 import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
 import com.thelocalmarketplace.hardware.external.CardIssuer;
 import com.thelocalmarketplace.software.controllers.ReceiptPrintingController;
+import com.thelocalmarketplace.software.controllers.ScanningAreaController;
 import com.thelocalmarketplace.software.controllers.WeightDiscrepancyController;
 import com.thelocalmarketplace.software.controllers.item.AddBarcodedItemController;
 import com.thelocalmarketplace.software.controllers.item.AddPLUItemController;
@@ -20,7 +21,7 @@ import com.thelocalmarketplace.software.controllers.pay.cash.CashPaymentControll
 import com.thelocalmarketplace.software.controllers.pay.cash.CoinDispenserController;
 import com.thelocalmarketplace.software.controllers.pay.cash.CoinPaymentController;
 import com.thelocalmarketplace.software.gui.GUILogic;
-import com.thelocalmarketplace.software.gui.RunGUI;
+import com.thelocalmarketplace.software.gui.StationGUI;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
@@ -63,7 +64,11 @@ public class CentralStationLogic {
 		DEBIT,
 		CASH
 	}
-	
+
+	/**
+	 * The number of the station in the real-world setting
+	 */
+	public int stationNumber;
 	
 	/**
 	 * Reference to physical hardware
@@ -114,7 +119,12 @@ public class CentralStationLogic {
 	 * Instance of the controller that handles adding PLU product
 	 */
 	public AddPLUItemController addPLUProductController;
-	
+
+	/**
+	 * Instance of the controller that handles the scanning area scale
+	 */
+	public ScanningAreaController scanningAreaController;
+
 	/** 
 	 * Instance of weight logic 
 	 */
@@ -125,7 +135,12 @@ public class CentralStationLogic {
 	 */
 	public AddBagsLogic addBagsLogic;
 	
-	/*
+	/**
+	 * Instance of purchase bags logic
+	 */
+	public PurchaseBagsLogic purchaseBagsLogic;
+
+	/**
 	 * Instance of logic that handles item removal
 	 */
 	public RemoveItemLogic removeItemLogic;
@@ -172,6 +187,11 @@ public class CentralStationLogic {
 	
 	
 	/**
+	 * Instance of logic for prediction
+	 */
+	public PredictionLogic predictionLogic;
+
+	/**
 	 * Current selected payment method
 	 */
 	private PaymentMethods paymentMethod;	
@@ -182,7 +202,7 @@ public class CentralStationLogic {
 	private boolean sessionStarted;
 	
 	
-	public RunGUI runGUI; 
+	public StationGUI stationGUI;
 	
 	
 	/**
@@ -195,6 +215,7 @@ public class CentralStationLogic {
 		}
 		
 		this.hardware = hardware;
+		this.stationNumber = 0;
 		
 		this.sessionStarted = false;
 		this.paymentMethod = PaymentMethods.NONE;
@@ -203,8 +224,8 @@ public class CentralStationLogic {
 		this.cartLogic = new CartLogic(this);
 		this.weightLogic = new WeightLogic(this);
 		this.stateLogic = new StateLogic(this);
-		this.runGUI = new RunGUI(this);
-		this.guiLogic = runGUI.guiLogicInstance;
+		this.stationGUI = new StationGUI(this);
+		this.guiLogic = stationGUI.guiLogicInstance;
 
 		// Instantiate each controller
 		this.coinPaymentController = new CoinPaymentController(this);
@@ -214,10 +235,14 @@ public class CentralStationLogic {
 		this.weightDiscrepancyController = new WeightDiscrepancyController(this);
 		this.cardReaderController = new CardReaderController(this);
 		this.receiptPrintingController = new ReceiptPrintingController(this);
-		this.attendantLogic = new AttendantLogic(this);
+		this.scanningAreaController = new ScanningAreaController(this);
+		this.attendantLogic = new AttendantLogic();
 		this.addBagsLogic = new AddBagsLogic(this);
+		this.purchaseBagsLogic = new PurchaseBagsLogic(this);
 		this.removeItemLogic = new RemoveItemLogic(this);
-		
+		this.predictionLogic = new PredictionLogic(this);
+		this.membershipLogic = new MembershipLogic(this);
+
 		this.coinCurrencyLogic = new CurrencyLogic(this.hardware.getCoinDenominations());
 		this.banknoteCurrencyLogic = new CurrencyLogic(this.hardware.getBanknoteDenominations());
 		
@@ -225,11 +250,15 @@ public class CentralStationLogic {
 		this.setupBanknoteDispenserControllers(this.banknoteCurrencyLogic.getDenominationsAsList());
 		
 		SwingUtilities.invokeLater(() -> {
-            RunGUI GUIframe = runGUI;
-            GUIframe.setTitle("Welcome Screen");
+            StationGUI GUIframe = stationGUI;
+            GUIframe.setTitle("Customer Touchscreen "+this.stationNumber);
         });
 	}
-	
+
+	public void setStationNumber(int stationNumber) {
+		this.stationNumber = stationNumber;
+	}
+
 	/**
 	 * Gets the current selected payment method
 	 * @return the payment method
@@ -338,6 +367,16 @@ public class CentralStationLogic {
 		System.out.println("Session ended");
 		
 		this.sessionStarted = false;
-		this.attendantLogic.notifySessionEnded();
+		reset();
+		this.attendantLogic.notifySessionEnded(this);
+	}
+
+	/**
+	 * Resets the station after session ends
+	 */
+	public void reset() {
+		this.cartLogic = new CartLogic(this);
+		this.weightLogic = new WeightLogic(this);
+		this.stateLogic = new StateLogic(this);
 	}
 }

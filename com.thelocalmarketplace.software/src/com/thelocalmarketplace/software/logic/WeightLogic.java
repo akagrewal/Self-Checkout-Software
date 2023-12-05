@@ -2,8 +2,10 @@ package com.thelocalmarketplace.software.logic;
 
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.Mass.MassDifference;
+import com.jjjwelectronics.bag.ReusableBag;
 import com.jjjwelectronics.OverloadedDevice;
 import com.jjjwelectronics.scale.AbstractElectronicScale;
+
 import com.jjjwelectronics.scanner.Barcode;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
@@ -115,7 +117,16 @@ public class WeightLogic extends AbstractLogicDependant {
 		if (!ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(plu)) {
 			throw new InvalidStateSimulationException("PLU not registered to product database");
 		}
-		this.expectedWeight = this.expectedWeight.sum(this.actualWeight);
+		System.out.println("Scanning area mass to be added: " + logic.scanningAreaController.getScanningAreaMass().toString());
+		this.expectedWeight = this.expectedWeight.sum(logic.scanningAreaController.getScanningAreaMass());
+	}
+	
+	/** Adds to the expected weight the weight of Purchased bags
+	 * @param ReusableBag bag
+	 */
+	public void addExpectedPurchasedBagWeight(ReusableBag bag) {
+		Mass mass = bag.getMass();
+		this.expectedWeight = this.expectedWeight.sum(mass);
 	}
 	
 	/** Removes the weight of the product given from expectedWeight
@@ -147,6 +158,8 @@ public class WeightLogic extends AbstractLogicDependant {
 	/** Updates actual weight to the mass passed
 	 * @param mass - Mass to change the actual weight to */
 	public void updateActualWeight(Mass mass) {
+		System.out.println("Expected mass is: " + this.expectedWeight.toString());
+		System.out.println("Updating Actual Mass to: " + mass.toString());
 		this.actualWeight = mass;
 	}
 	
@@ -155,7 +168,7 @@ public class WeightLogic extends AbstractLogicDependant {
 	 * @throws InvalidArgumentSimulationException - when skipBagging is called on a product not in the cart */
 	public void skipBaggingRequest(Barcode barcode) {
 		if (!this.logic.cartLogic.getCart().containsKey(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode))) throw new InvalidArgumentSimulationException("Cannot skip bagging an item that has not been added to cart");
-		logic.attendantLogic.requestApprovalSkipBagging(barcode);
+		logic.attendantLogic.requestApprovalSkipBagging(logic, barcode);
 		
 	}
 	
@@ -171,6 +184,8 @@ public class WeightLogic extends AbstractLogicDependant {
 		// Checks for discrepancy and calls notifier if needed 
 		if (actualWeight.difference(expectedWeight).abs().compareTo(this.sensitivity) <= 0 ) {
 			return false;
+		} else {
+			logic.attendantLogic.weightDiscrepancy(logic);
 		}
 	
 		if (actualWeight.compareTo(expectedWeight) > 0) this.logic.weightDiscrepancyController.notifyOverload();
@@ -186,6 +201,7 @@ public class WeightLogic extends AbstractLogicDependant {
 			}
 		} else {
 			this.logic.stateLogic.gotoState(States.NORMAL);
+			this.logic.attendantLogic.enableCustomerStation(this.logic);
 		}
 	}
 	

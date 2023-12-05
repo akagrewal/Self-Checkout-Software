@@ -1,10 +1,10 @@
 package com.thelocalmarketplace.software.gui;
 
-import com.thelocalmarketplace.hardware.external.ProductDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Vector;
@@ -12,27 +12,21 @@ import java.util.Vector;
 import javax.swing.*;
 
 
-public class AttendantFrame {
-    HashMap<CentralStationLogic, JPanel> stationLogicsMap;
+public class AttendantGUI {
     Vector<String> itemsArray;
+    public HashMap<CentralStationLogic, JPanel> stationToButtonMap;
+    public ArrayList<CentralStationLogic> stationLogicsList;
+    JFrame attendantFrame;
 
-    public AttendantFrame() {
-        stationLogicsMap = new HashMap<>();
+    public AttendantGUI() {
+        this.stationToButtonMap = new HashMap<>();
+        this.stationLogicsList = new ArrayList<>();
         // TODO: Find a way to incorporate `itemsArray` with `ProductDatabases`.
         itemsArray = new Vector<> (Arrays.asList("Banana", "Apple", "Soup Can", "Pickles Jar"));
     }
 
-    public void registerStationLogic(CentralStationLogic logic) {
-        stationLogicsMap.put(logic, null);
-    }
-
-    public void deregisterStationLogic(CentralStationLogic logic) {
-        stationLogicsMap.remove(logic);
-    }
-
     public void createAttendantFrame() {
-
-        JFrame attendantFrame = new JFrame("Attendant Screen");
+        attendantFrame = new JFrame("Attendant Screen");
         attendantFrame.setSize(800, 500);
         attendantFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         attendantFrame.setLocation(1000, 0); // Adjust the coordinates as needed
@@ -40,28 +34,32 @@ public class AttendantFrame {
         JPanel mainPanel = new JPanel(new GridLayout(12, 4));
 
         int i = 0;
-        for (CentralStationLogic stationLogic : stationLogicsMap.keySet()) {
+
+        for (CentralStationLogic stationLogic : stationLogicsList) {
             i++;
             JPanel tempPanel = new JPanel(new GridLayout());
-
             JButton buttonEnable = new JButton("Enable Station " + i);
             JButton buttonDisable = new JButton("DisableStation " + i);
             JComboBox<String> searchBox = new JComboBox<>(itemsArray);
             JButton buttonConfirmSearch = new JButton("Confirm search");
+            stationLogic.attendantLogic.attendantGUI = this;
             tempPanel.add(buttonEnable);
             tempPanel.add(buttonDisable);
             tempPanel.add(searchBox);
             tempPanel.add(buttonConfirmSearch);
 
-            buttonEnable.addActionListener(e -> stationLogic.attendantLogic.enableCustomerStation());
-            buttonDisable.addActionListener(e -> stationLogic.attendantLogic.disableCustomerStation());
-            // buttonConfirmSearch.addActionListener(e -> textsearch());
-
+            buttonEnable.addActionListener(e -> stationLogic.attendantLogic.enableCustomerStation(stationLogic));
+            buttonDisable.addActionListener(e -> stationLogic.attendantLogic.disableCustomerStation(stationLogic));
+            buttonConfirmSearch.addActionListener(e -> {
+                	 String textSearch = (String)searchBox.getSelectedItem();
+                     stationLogic.attendantLogic.AddItemByTextSearch(stationLogic, textSearch);
+                });
+            
             tempPanel.add(buttonEnable);
             tempPanel.add(buttonDisable);
             tempPanel.add(searchBox);
             tempPanel.add(buttonConfirmSearch);
-            stationLogicsMap.put(stationLogic, tempPanel);
+            stationToButtonMap.put(stationLogic, tempPanel);
 
             mainPanel.add(tempPanel);
         }
@@ -69,5 +67,9 @@ public class AttendantFrame {
         attendantFrame.add(mainPanel);
 
         attendantFrame.setVisible(true);
+    }
+
+    public JFrame getAttendantFrame() {
+        return attendantFrame;
     }
 }

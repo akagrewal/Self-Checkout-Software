@@ -1,15 +1,15 @@
 package com.thelocalmarketplace.software.logic;
 
 import com.thelocalmarketplace.software.AbstractLogicDependant;
-import com.thelocalmarketplace.software.gui.NotifyPopUp;
-import com.thelocalmarketplace.software.gui.SessionBlockedPopUp;
 
 public class PredictionLogic extends AbstractLogicDependant {
 	final int MAXIMUM_PAPER = 1 << 10;
 	final int MAXIMUM_INK = 1 << 20;
-		
+	private final CentralStationLogic logic;
+	
 	public PredictionLogic(CentralStationLogic logic) throws NullPointerException {
 		super(logic);
+		this.logic = logic;
 	}	
 	
 	public Boolean checkLowCoinPrediction() {

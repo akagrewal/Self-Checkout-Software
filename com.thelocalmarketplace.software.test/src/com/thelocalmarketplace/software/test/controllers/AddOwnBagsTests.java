@@ -211,7 +211,7 @@ public class AddOwnBagsTests {
 		session.addBagsLogic.startAddBags();
 		station.getBaggingArea().addAnItem(bag3);
 		session.addBagsLogic.endAddBags();
-		session.attendantLogic.approveBaggingArea();
+		session.attendantLogic.approveBaggingArea(this.session);
 		assertTrue("bag mass did not update correctly", this.session.stateLogic.inState(States.NORMAL));
 		
 	}@Test public void addInvalidBagsFixByApprovingCheckExpectedMass() throws Exception {
@@ -219,7 +219,7 @@ public class AddOwnBagsTests {
 		session.addBagsLogic.startAddBags();
 		station.getBaggingArea().addAnItem(bag3);
 		session.addBagsLogic.endAddBags();
-		session.attendantLogic.approveBaggingArea();
+		session.attendantLogic.approveBaggingArea(this.session);
 		assertTrue("bag mass did not update correctly",session.weightLogic.getExpectedWeight().equals(invalidBagMass));
 		
 	}
@@ -238,7 +238,7 @@ public class AddOwnBagsTests {
 		session.addBagsLogic.startAddBags();
 		station.getBaggingArea().addAnItem(bag3);
 		session.addBagsLogic.endAddBags();
-		session.attendantLogic.approveBaggingArea();
+		session.attendantLogic.approveBaggingArea(this.session);
 		session.addBagsLogic.startAddBags();
 		station.getBaggingArea().addAnItem(bag2);
 		session.addBagsLogic.endAddBags();

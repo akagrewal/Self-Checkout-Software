@@ -78,7 +78,7 @@ public class AddBagsLogic extends AbstractLogicDependant {
 		} else {
 			//bags are too heavy 
 			//TODO GUI: display waiting for attendant approval
-			this.logic.attendantLogic.baggingDiscrepencyDetected();	
+			this.logic.attendantLogic.baggingDiscrepencyDetected(this.logic);
 		}
 	}
 
