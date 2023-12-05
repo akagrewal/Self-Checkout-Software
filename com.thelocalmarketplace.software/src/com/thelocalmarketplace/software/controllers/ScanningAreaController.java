@@ -1,7 +1,10 @@
 package com.thelocalmarketplace.software.controllers;
 
+import java.util.ArrayList;
+
 import com.jjjwelectronics.IDevice;
 import com.jjjwelectronics.IDeviceListener;
+import com.jjjwelectronics.Item;
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.scale.ElectronicScaleListener;
 import com.jjjwelectronics.scale.IElectronicScale;
@@ -10,6 +13,7 @@ import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 public class ScanningAreaController extends AbstractLogicDependant implements ElectronicScaleListener {
     private Mass scanningAreaMass;
+    public ArrayList<Item> itemsOnScale = new ArrayList<Item>();
 
     /**
      * Base constructor
@@ -29,6 +33,7 @@ public class ScanningAreaController extends AbstractLogicDependant implements El
 
     @Override
     public void theMassOnTheScaleHasChanged(IElectronicScale scale, Mass mass) {
+    	System.out.println("The mass has changed for the Scanning Area; current mass: " + mass.toString());
         scanningAreaMass = mass;
                 
     }

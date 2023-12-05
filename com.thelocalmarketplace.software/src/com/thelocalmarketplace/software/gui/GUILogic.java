@@ -2,18 +2,18 @@
 package com.thelocalmarketplace.software.gui;
 
 import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-
+import com.jjjwelectronics.Item;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.PLUCodedItem;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.Product;
@@ -186,7 +186,12 @@ public class GUILogic {
 		System.out.println("This is the PLU code of the item being added: " + product.getPLUCode());
 		centralLogic.addPLUProductController.addPLU(product.getPLUCode());
 		updateCartChanged();
-
+//		PLUCodedItem item = new PLUCodedItem(new PriceLookUpCode("0000"), centralLogic.scanningAreaController.getScanningAreaMass());
+		// Removes all items from scale
+		for (Item i : centralLogic.scanningAreaController.itemsOnScale) {
+			centralLogic.hardware.getScanningArea().removeAnItem(i);
+		}
+		centralLogic.scanningAreaController.itemsOnScale.clear();
 		return productFound;
 	}
 }
