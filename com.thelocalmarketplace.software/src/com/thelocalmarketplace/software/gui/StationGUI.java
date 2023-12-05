@@ -9,7 +9,8 @@ import java.math.RoundingMode;
 import javax.swing.*;
 
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
-
+import com.thelocalmarketplace.software.logic.CentralStationLogic.PaymentMethods;
+import com.thelocalmarketplace.software.logic.StateLogic;
 
 
 public class StationGUI extends JFrame {
@@ -58,8 +59,8 @@ public class StationGUI extends JFrame {
         cardPanel.add(createVisual(), "visualCatalogue");
         cardPanel.add(createThankYouPanel(), "thankYouPanel");
         cardPanel.add(createPaymentPanel(), "paymentPanel");
-        // cardPanel.add(createCashBillPanel(), "cashBillPanel");
-        // cardPanel.add(createCashCoinPanel(), "cashCoinPanel");
+        cardPanel.add(createPOSPanel(), "POS_Panel");
+        cardPanel.add(createCashPaymentPanel(), "CashPaymentPanel");
 
 //        cardPanel.add(createNumberPad(), "numpadPanel");
         add(cardPanel);
@@ -205,48 +206,70 @@ public class StationGUI extends JFrame {
         removeItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // goto panel to remove an item
+                cardPanel.add(createRemoveItemPanel(), "removeItem");
+                guiLogicInstance.switchPanels("removeItem");
             }
         });
 
         JButton payButton = new JButton("Finish and Pay");
-        payButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        payButton.addActionListener(e -> {
+            System.out.println(centralStationLogic.stateLogic.getState());
+            centralStationLogic.stateLogic.gotoState(StateLogic.States.CHECKOUT);
+            if (centralStationLogic.cartLogic.getBalanceOwed().compareTo(BigDecimal.ZERO) <= 0) {
+                //exception, have not added anything
+            } else {
                 guiLogicInstance.switchPanels("paymentPanel");
             }
         });
 
         JButton buyBagsButton = new JButton("Purchase Bags");
-        buyBagsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	new BagKeypad(StationGUI.this, buyBagsButton, centralStationLogic);
-                guiLogicInstance.switchPanels("paymentPanel");
-            }
+        buyBagsButton.addActionListener(e -> {
+            new BagKeypad(StationGUI.this, buyBagsButton, centralStationLogic);
+            guiLogicInstance.switchPanels("paymentPanel");
         });
 
         JButton ownBagsButton = new JButton("Have your own bags? ");
-        ownBagsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	centralStationLogic.addBagsLogic.startAddBags();
-            	//opens dialog to end Add Bags
-            	int choice = JOptionPane.showOptionDialog(ownBagsButton,
-                        "Please press 'DONE' when done adding bags.",
-                        "Add Own Bags",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.INFORMATION_MESSAGE,
-                        null,
-                        new Object[]{"DONE", "Cancel"},
-                        "DONE");
-            	
-            	if (choice == JOptionPane.YES_OPTION) {
-                    centralStationLogic.addBagsLogic.endAddBags();
-                }
+        ownBagsButton.addActionListener(e -> {
+            centralStationLogic.addBagsLogic.startAddBags();
 
-                guiLogicInstance.switchPanels("paymentPanel");
-            }
+            // Create a custom dialog
+            JDialog dialog = new JDialog();
+            dialog.setTitle("Add Own Bags");
+            dialog.setModal(false); // This makes the dialog non-modal
+
+            // Create a panel to hold the components
+            JPanel panel = new JPanel();
+
+            // Create the message
+            JLabel messageLabel = new JLabel("Please press 'DONE' when done adding bags.");
+            panel.add(messageLabel);
+
+            // Create the buttons
+            JButton doneButton = new JButton("DONE");
+            JButton cancelButton = new JButton("Cancel");
+
+            // Add action listeners to the buttons
+            doneButton.addActionListener(e2 -> {
+                centralStationLogic.addBagsLogic.endAddBags();
+                dialog.dispose();
+            });
+
+            cancelButton.addActionListener(e2 -> dialog.dispose());
+
+            // Add the buttons to the panel
+            panel.add(doneButton);
+            panel.add(cancelButton);
+
+            // Add the panel to the dialog
+            dialog.getContentPane().add(panel);
+
+            // Set the location of the dialog to the location of the button
+            Point location = ((Component) e.getSource()).getLocationOnScreen();
+            dialog.setLocation(location);
+
+            // Display the dialog
+            dialog.pack();
+            dialog.setVisible(true);
         });
         // Attach buttons
         buttonsPanel.add(VCButton);
@@ -307,6 +330,35 @@ public class StationGUI extends JFrame {
         return mainPanel;
     }
 
+	private JPanel createRemoveItemPanel() {
+        // create the panel
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+
+        JPanel removeItemPanel = new JPanel();
+        JLabel removeLabel = new JLabel("Please select an item to remove: ");
+        removeLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        JButton backButton = new JButton("Back");
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guiLogicInstance.switchPanels("AddItemsPanel");
+            }
+        });
+        guiLogicInstance.addRemoveButtons(removeItemPanel);
+
+        removeItemPanel.setBorder(BorderFactory.createTitledBorder("SELECT AN ITEM"));
+        JScrollPane RMpanel = new JScrollPane(removeItemPanel);
+        RMpanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        RMpanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        addComponent(mainPanel,removeLabel,0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(mainPanel,backButton,0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+        addComponent(mainPanel,RMpanel,1, 0, 1, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        return mainPanel;
+    }
+
+	
 
     //Screen 3 Payment Panel
     private JPanel createPaymentPanel() {
@@ -314,15 +366,20 @@ public class StationGUI extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        JButton button_CardPayment = new JButton("Credit/Debit");
+        JButton button_CreditPayment = new JButton("Credit");
+        JButton button_DebitPayment = new JButton("Debit");
+        
         JButton buttonCoinPayment = new JButton("Coins");
         JButton buttonCashPayment = new JButton("Banknotes");
         JButton buttonMixedPayment = new JButton("Mixed");
         JButton buttonLeaveWithoutPaying = new JButton("Leave Without Paying");
         JButton buttonBackToCheckout = new JButton("Back to Checkout");
         gbc.gridx = 1; gbc.gridy = 1;
-        button_CardPayment.setPreferredSize(new Dimension(200,123));
-        PaymentPanel.add(button_CardPayment, gbc);
+        button_CreditPayment.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(button_CreditPayment, gbc);
+        gbc.gridx = 1; gbc.gridy = 3;
+        button_DebitPayment.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(button_DebitPayment, gbc);
         gbc.gridx = 2; gbc.gridy = 1;
         buttonCoinPayment.setPreferredSize(new Dimension(200,123));
         PaymentPanel.add(buttonCoinPayment, gbc);
@@ -332,22 +389,90 @@ public class StationGUI extends JFrame {
         gbc.gridx = 4; gbc.gridy = 1;
         buttonMixedPayment.setPreferredSize(new Dimension(200,123));
         PaymentPanel.add(buttonMixedPayment, gbc);
-        gbc.gridx = 1; gbc.gridy = 3;
+        gbc.gridx = 2; gbc.gridy = 3;
         buttonLeaveWithoutPaying.setPreferredSize(new Dimension(200,50));
         PaymentPanel.add(buttonLeaveWithoutPaying, gbc);
         gbc.gridx = 4; gbc.gridy = 3;
         buttonBackToCheckout.setPreferredSize(new Dimension(200,50));
         PaymentPanel.add(buttonBackToCheckout, gbc);
 
-        button_CardPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonCoinPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonCashPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonMixedPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonLeaveWithoutPaying.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonBackToCheckout.addActionListener(e -> guiLogicInstance.switchPanels("AddItemsPanel"));
+        button_CreditPayment.addActionListener(e -> {
+            centralStationLogic.selectPaymentMethod(PaymentMethods.CREDIT);
+            guiLogicInstance.switchPanels("POS_Panel");
+        });
+        button_DebitPayment.addActionListener(e -> {
+            centralStationLogic.selectPaymentMethod(PaymentMethods.DEBIT);
+            guiLogicInstance.switchPanels("POS_Panel");
+        });
+        buttonCoinPayment.addActionListener(e -> {
+            centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
+            guiLogicInstance.switchPanels("CashPaymentPanel");
+        });
+        buttonCashPayment.addActionListener(e -> {
+            centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
+            guiLogicInstance.switchPanels("CashPaymentPanel");
+        });
+        buttonMixedPayment.addActionListener(e -> {
+            centralStationLogic.selectPaymentMethod(PaymentMethods.MIXED);
+            guiLogicInstance.switchPanels("CashPaymentPanel");
+        });
+
+        buttonLeaveWithoutPaying.addActionListener(e -> {
+        });
+        buttonBackToCheckout.addActionListener(e -> {
+            guiLogicInstance.switchPanels("AddItemsPanel");
+        });
+
 
         return PaymentPanel;
     }
+
+    private JPanel createPOSPanel()  {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        JButton returnButton = new JButton("Cancel");
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guiLogicInstance.switchPanels("paymentPanel");
+                guiLogicInstance.SessionOver();
+            }
+        });
+        JLabel POSLabel = new JLabel("Please complete the payment at the POS");
+        POSLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        gbc.gridy = 0;
+        panel.add(POSLabel, gbc);
+        gbc.gridy = 1;
+        panel.add(returnButton,gbc);
+
+        return panel;
+    }
+
+    private JPanel createCashPaymentPanel()  {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        JButton returnButton = new JButton("Cancel");
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guiLogicInstance.switchPanels("paymentPanel");
+                guiLogicInstance.SessionOver();
+            }
+        });
+        JLabel POSLabel = new JLabel("Balance: " + centralStationLogic.cartLogic.getBalanceOwed());
+        POSLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        gbc.gridy = 0;
+        panel.add(POSLabel, gbc);
+        gbc.gridy = 1;
+        panel.add(returnButton,gbc);
+
+        return panel;
+    }
+
 
     private JPanel createThankYouPanel()  {
         JPanel panel = new JPanel(new GridBagLayout());

@@ -21,20 +21,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.jjjwelectronics.Item;
 import com.jjjwelectronics.Mass;
-import com.jjjwelectronics.Numeral;
 import com.jjjwelectronics.card.Card;
-import com.jjjwelectronics.scanner.Barcode;
 import com.jjjwelectronics.scanner.BarcodedItem;
 import com.tdc.CashOverloadException;
 import com.tdc.DisabledException;
 import com.tdc.coin.Coin;
+import com.tdc.banknote.*;
 import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
 import com.thelocalmarketplace.hardware.PLUCodedItem;
 import com.thelocalmarketplace.hardware.external.CardIssuer;
 import com.thelocalmarketplace.software.database.CreateTestDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
-import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 public class HardwarePopups {
 
@@ -42,7 +41,10 @@ public class HardwarePopups {
 	private BarcodedItem pickles = new BarcodedItem(CreateTestDatabases.pickles.getBarcode(), new Mass(CreateTestDatabases.pickles.getExpectedWeight()));
 	private PLUCodedItem apples = new PLUCodedItem(CreateTestDatabases.apple.getPLUCode(), new Mass((double) 300.0));
 	private PLUCodedItem bananas = new PLUCodedItem(CreateTestDatabases.banana.getPLUCode(), new Mass((double) 500.0));
-
+	private PLUCodedItem bagsUnder = new PLUCodedItem(CreateTestDatabases.bagsUnder.getPLUCode(), new Mass((double) 15.0));
+	private PLUCodedItem bagsOver = new PLUCodedItem(CreateTestDatabases.bagsOver.getPLUCode(), new Mass((double) 35.0));
+	
+	
 	private static Currency currency = 	Currency.getInstance("CAD");
 
 	private BigDecimal[] billDenominations;
@@ -145,6 +147,9 @@ public class HardwarePopups {
 		JButton pickleButton = new JButton("Pickle Jar");
 		JButton appleButton = new JButton("Apple");
 		JButton bananaButton = new JButton("Banana");
+		JButton bagsUnderButton = new JButton("Bags (under weight limit)");
+		JButton bagsOverButton = new JButton("Bags (over weight limit)");
+		
 
 		soupButton.addActionListener(new ActionListener() {
 			@Override
@@ -170,6 +175,18 @@ public class HardwarePopups {
 				centralStationLogic.hardware.getBaggingArea().addAnItem(bananas);
 			}
 		});
+		bagsUnderButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsUnder);
+			}
+		});
+		bagsOverButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsOver);
+			}
+		});
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -178,6 +195,8 @@ public class HardwarePopups {
 		panel.add(pickleButton);
 		panel.add(appleButton);
 		panel.add(bananaButton);
+		panel.add(bagsUnderButton);
+		panel.add(bagsOverButton);
 		showDialog(dialog);
 	}
 
@@ -541,15 +560,98 @@ public class HardwarePopups {
 		selectionFrame.setVisible(true);
 	}
 
-	public static void showInsertBanknotePopup(JFrame parentFrame) {
-		JDialog dialog = createDialog(parentFrame, "Insert Banknote");
-		JTextField textField = addTextField(dialog, "Enter banknote value:");
-		Consumer<String> onSubmit = inputText -> {
-			int banknoteValue = Integer.parseInt(inputText);
-			//guiLogic.insertBanknote(banknoteValue);
-		};
-		addSubmitButton(dialog, textField, onSubmit);
-		showDialog(dialog);
+public void showInsertBanknotePopup(JFrame parentFrame) {
+		
+		// Create a Frame
+		JFrame selectionFrame = new JFrame();
+		selectionFrame.setTitle("Insert Banknote");
+		selectionFrame.setSize(new Dimension(200, 300));
+		selectionFrame.setLayout(new FlowLayout());
+		
+		// Initialize the Bank Notes
+		JButton five = new JButton("$5");
+		JButton ten = new JButton("$10");
+		JButton twenty = new JButton("$20");
+		JButton fifty = new JButton("$50");
+		JButton hundred = new JButton("$100");
+		
+		// Action Listeners for Inserting Banknote
+		five.addActionListener(e -> {
+			Banknote banknote = new Banknote( Currency.getInstance("CAD"),BigDecimal.valueOf(5));
+			try {
+				centralStationLogic.hardware.getBanknoteInput().receive(banknote);
+			} catch (DisabledException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (CashOverloadException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			selectionFrame.dispose();
+		});
+		ten.addActionListener(e -> {
+			Banknote banknote = new Banknote( Currency.getInstance("CAD"),BigDecimal.valueOf(10));
+			try {
+				centralStationLogic.hardware.getBanknoteInput().receive(banknote);
+			} catch (DisabledException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (CashOverloadException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			selectionFrame.dispose();
+		});
+		twenty.addActionListener(e -> {
+			Banknote banknote = new Banknote( Currency.getInstance("CAD"),BigDecimal.valueOf(20));
+			try {
+				centralStationLogic.hardware.getBanknoteInput().receive(banknote);
+			} catch (DisabledException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (CashOverloadException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			selectionFrame.dispose();
+		});
+		fifty.addActionListener(e -> {
+			Banknote banknote = new Banknote( Currency.getInstance("CAD"),BigDecimal.valueOf(50));
+			try {
+				centralStationLogic.hardware.getBanknoteInput().receive(banknote);
+			} catch (DisabledException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (CashOverloadException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			selectionFrame.dispose();
+		});
+		hundred.addActionListener(e -> {
+			Banknote banknote = new Banknote( Currency.getInstance("CAD"),BigDecimal.valueOf(100));
+			try {
+				centralStationLogic.hardware.getBanknoteInput().receive(banknote);
+			} catch (DisabledException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (CashOverloadException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			selectionFrame.dispose();
+		});
+		
+		// Add Buttons to Frame
+		selectionFrame.add(five);
+		selectionFrame.add(ten);
+		selectionFrame.add(twenty);
+		selectionFrame.add(fifty);
+		selectionFrame.add(hundred);
+		
+		// Set Location of Frame and make Frame Visible
+		selectionFrame.setLocationRelativeTo(parentFrame);
+		selectionFrame.setVisible(true);
 	}
 
 	// Pop-up creation logic
