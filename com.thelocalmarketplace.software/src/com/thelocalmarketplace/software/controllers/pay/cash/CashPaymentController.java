@@ -103,7 +103,7 @@ public class CashPaymentController extends AbstractLogicDependant implements Ban
 		else if (!this.logic.stateLogic.inState(States.CHECKOUT)) {
 			throw new InvalidStateSimulationException("Not ready for checkout");
 		}
-		else if (!this.logic.getSelectedPaymentMethod().equals(PaymentMethods.CASH)) {
+		else if (!  (  this.logic.getSelectedPaymentMethod().equals(PaymentMethods.CASH) || this.logic.getSelectedPaymentMethod().equals(PaymentMethods.MIXED)  )) {
 			throw new InvalidStateSimulationException("Payment by banknote not selected");
 		}
 		else if (this.logic.cartLogic.getBalanceOwed().compareTo(BigDecimal.ZERO) == 0) {
@@ -128,9 +128,11 @@ public class CashPaymentController extends AbstractLogicDependant implements Ban
                 // Print receipt
 				this.logic.receiptPrintingController.handlePrintReceipt(pay.subtract(missed));
             }
+            this.logic.guiLogic.switchPanels("thankYouPanel");
         }
         else {
             System.out.println("Payment accepted. Remaining balance: " + pay);
+            this.logic.stationGUI.BalanceLabel.setText("Balance: " + this.logic.cartLogic.getBalanceOwed());
         }
 	}
 

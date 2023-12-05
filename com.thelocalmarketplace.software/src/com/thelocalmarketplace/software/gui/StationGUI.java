@@ -9,9 +9,10 @@ import java.math.RoundingMode;
 import javax.swing.*;
 
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
+import com.thelocalmarketplace.software.logic.StateLogic.States;
+
 import com.thelocalmarketplace.software.logic.CentralStationLogic.PaymentMethods;
 import com.thelocalmarketplace.software.logic.StateLogic;
-
 
 public class StationGUI extends JFrame {
     // Paneling on GUI
@@ -20,6 +21,7 @@ public class StationGUI extends JFrame {
     // For logic testing - delete after all GUI is done
     private int total;
     private JLabel totalLabel;
+    public JLabel BalanceLabel;
 
     public GUILogic guiLogicInstance;
     private final CentralStationLogic centralStationLogic;
@@ -187,6 +189,7 @@ public class StationGUI extends JFrame {
         VCButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                guiLogicInstance.showInfoMessage("Please place items on scale, then select desired item");
                 guiLogicInstance.switchPanels("visualCatalogue");
             }
         });
@@ -197,6 +200,7 @@ public class StationGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // goto panel with options to add an item
+                guiLogicInstance.showInfoMessage("Please place items on scale, then select desired item");
                 Numpad pluNumpad = new Numpad(StationGUI.this, guiLogicInstance, 1); // this may need changes
                 pluNumpad.openNumPadPanel();
             }
@@ -216,7 +220,7 @@ public class StationGUI extends JFrame {
             System.out.println(centralStationLogic.stateLogic.getState());
             centralStationLogic.stateLogic.gotoState(StateLogic.States.CHECKOUT);
             if (centralStationLogic.cartLogic.getBalanceOwed().compareTo(BigDecimal.ZERO) <= 0) {
-                //exception, have not added anything
+                centralStationLogic.guiLogic.showExceptionMessage("No Items Added");
             } else {
                 guiLogicInstance.switchPanels("paymentPanel");
             }
@@ -224,11 +228,11 @@ public class StationGUI extends JFrame {
 
         JButton buyBagsButton = new JButton("Purchase Bags");
         buyBagsButton.addActionListener(e -> {
-            new BagKeypad(StationGUI.this, buyBagsButton, centralStationLogic);
-            guiLogicInstance.switchPanels("paymentPanel");
+            new BagKeypad(StationGUI.this, centralStationLogic);
         });
 
         JButton ownBagsButton = new JButton("Have your own bags? ");
+        
         ownBagsButton.addActionListener(e -> {
             centralStationLogic.addBagsLogic.startAddBags();
 
@@ -251,6 +255,11 @@ public class StationGUI extends JFrame {
             // Add action listeners to the buttons
             doneButton.addActionListener(e2 -> {
                 centralStationLogic.addBagsLogic.endAddBags();
+                if (centralStationLogic.stateLogic.inState(States.ADDBAGS)) {
+                	BagsTooHeavyPopUp heavyBagPopUp = new BagsTooHeavyPopUp();
+                	heavyBagPopUp.notifyBagHeavyPopUp();
+                	SessionBlockedPopUp.discrepancyDetected(StationGUI.this, centralStationLogic.stationNumber);
+                }
                 dialog.dispose();
             });
 
@@ -270,6 +279,7 @@ public class StationGUI extends JFrame {
             // Display the dialog
             dialog.pack();
             dialog.setVisible(true);
+
         });
         // Attach buttons
         buttonsPanel.add(VCButton);
@@ -315,6 +325,7 @@ public class StationGUI extends JFrame {
         JPanel totalPanel = new JPanel();
         totalPanel.setBorder(BorderFactory.createTitledBorder(" "));
         totalLabel = new JLabel("Total: $0.00");
+        BalanceLabel = new JLabel("");
         addComponent(totalPanel, totalLabel,0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         gbc.gridx = 1;
@@ -406,14 +417,18 @@ public class StationGUI extends JFrame {
         });
         buttonCoinPayment.addActionListener(e -> {
             centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
+            BalanceLabel.setText("Balance: " +  centralStationLogic.cartLogic.getBalanceOwed());
             guiLogicInstance.switchPanels("CashPaymentPanel");
         });
         buttonCashPayment.addActionListener(e -> {
             centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
+            BalanceLabel.setText("Balance: " +  centralStationLogic.cartLogic.getBalanceOwed());
             guiLogicInstance.switchPanels("CashPaymentPanel");
         });
         buttonMixedPayment.addActionListener(e -> {
+            guiLogicInstance.showInfoMessage("Please insert desired cash, then use alternative payment");
             centralStationLogic.selectPaymentMethod(PaymentMethods.MIXED);
+            BalanceLabel.setText("Balance: " +  centralStationLogic.cartLogic.getBalanceOwed());
             guiLogicInstance.switchPanels("CashPaymentPanel");
         });
 
@@ -463,10 +478,9 @@ public class StationGUI extends JFrame {
                 guiLogicInstance.SessionOver();
             }
         });
-        JLabel POSLabel = new JLabel("Balance: " + centralStationLogic.cartLogic.getBalanceOwed());
-        POSLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        BalanceLabel.setFont(new Font("Arial", Font.BOLD, 26));
         gbc.gridy = 0;
-        panel.add(POSLabel, gbc);
+        panel.add(BalanceLabel, gbc);
         gbc.gridy = 1;
         panel.add(returnButton,gbc);
 

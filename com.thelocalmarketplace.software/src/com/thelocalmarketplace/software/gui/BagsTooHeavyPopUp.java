@@ -13,8 +13,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class BagsTooHeavyPopUp {
+
+	public BagsTooHeavyPopUp() {
+		
+	}
 	
-	public void notifyPopUp() {
+	public void notifyBagHeavyPopUp() {
 		JFrame bagsPopUp = new JFrame("Bags Too Heavy");
 		bagsPopUp.setSize(400, 125);
 		bagsPopUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,4 +53,5 @@ public class BagsTooHeavyPopUp {
         panel.add(label, gbc);
         return panel;
     }
+
 }

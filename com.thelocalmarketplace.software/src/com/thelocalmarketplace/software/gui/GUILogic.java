@@ -2,18 +2,18 @@
 package com.thelocalmarketplace.software.gui;
 
 import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-
+import com.jjjwelectronics.Item;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
+import com.thelocalmarketplace.hardware.PLUCodedItem;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
 import com.thelocalmarketplace.hardware.Product;
@@ -170,23 +170,28 @@ public class GUILogic {
 			panel.add(removeButton);
 		}
 	}
-	
-	
 
-	public boolean addProductPLU(String PLU){
+
+
+	public void addPurchasableBag(int numberOfBags) {
+		for (int i = 0; i < numberOfBags; i++) {
+			centralLogic.cartLogic.addPLUCodedProductToCart(new PriceLookUpCode("72700"));
+		}
+		updateCartChanged();
+	}
+
+	public void addProductPLU(String PLU){
 		boolean productFound = false;
-
-//		productFound = checkPLU(PLU);
 
 		PriceLookUpCode pluCode = new PriceLookUpCode(PLU);
 
-
-//		if (productFound){
 		PLUCodedProduct product = ProductDatabases.PLU_PRODUCT_DATABASE.get(pluCode);
 		System.out.println("This is the PLU code of the item being added: " + product.getPLUCode());
 		centralLogic.addPLUProductController.addPLU(product.getPLUCode());
 		updateCartChanged();
-
-		return productFound;
+		for (Item i : centralLogic.scanningAreaController.itemsOnScale) {
+			centralLogic.hardware.getScanningArea().removeAnItem(i);
+		}
+		centralLogic.scanningAreaController.itemsOnScale.clear();
 	}
 }

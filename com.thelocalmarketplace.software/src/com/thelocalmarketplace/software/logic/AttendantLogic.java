@@ -103,8 +103,8 @@ public class AttendantLogic {
 	 * The only way for customer to transition out of ADDBAGS state is for attendant to call
 	 * approveBaggingArea() */
 	public void baggingDiscrepencyDetected(CentralStationLogic logic) {
-		//TODO GUI: display that customer is awaiting approval to attendant
-		customerDiscrepancyDetected(attendantGUI.getAttendantFrame(), logic.stationNumber);
+		customerDiscrepancyDetected(logic.guiLogic);
+		discrepancyDetected(attendantGUI.getAttendantFrame(), logic.stationNumber);
 
 		this.inBaggingDiscrepency = true;
 		logic.stateLogic.gotoState(States.BLOCKED);
@@ -176,7 +176,7 @@ public class AttendantLogic {
 			// once the station is out of the session
 			logic.stateLogic.gotoState(States.OUTOFORDER);
 			
-			outOfOrder(logic.stationGUI.cardPanel);
+			outOfOrder(logic.stationGUI.cardPanel, logic.stationNumber);
 		} else {
 			waitingToDisable = true;
 		}
@@ -185,12 +185,7 @@ public class AttendantLogic {
 	
 	/** Method to take a customer station out of maintenance mode */
 	public void enableCustomerStation(CentralStationLogic logic) {
-		//TODO: change the logic do be able to enable only a specific customer station
-
-
-		//TODO GUI: GUI should go back to normal if it was previously disabled
-		attendantOverride(logic.stationNumber);
-		
+		logic.weightLogic.overrideDiscrepancy();
 		logic.stateLogic.gotoState(States.NORMAL);
 	}
 	
@@ -198,7 +193,7 @@ public class AttendantLogic {
 	 *  Attendant being notified of weight discrepancy
 	 */
 	public void weightDiscrepancy(CentralStationLogic logic) {
-		customerDiscrepancyDetected(logic.stationGUI, logic.stationNumber);
+		customerDiscrepancyDetected(logic.guiLogic);
 		discrepancyDetected(attendantGUI.getAttendantFrame(), logic.stationNumber);
 	}
 	

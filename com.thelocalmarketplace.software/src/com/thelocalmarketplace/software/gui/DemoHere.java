@@ -49,7 +49,13 @@ public class DemoHere {
 
 	private static Currency currency = 	Currency.getInstance("CAD");
 
-	private BigDecimal[] billDenominations;
+	private static BigDecimal[] billDenominations = new BigDecimal[] {
+			new BigDecimal("5"),
+			new BigDecimal("10"),
+			new BigDecimal("20"),
+			new BigDecimal("50"),
+			new BigDecimal("100")
+	};
 
 	private static BigDecimal[] coindenominations = new BigDecimal[] {
 			new BigDecimal("0.05"),
@@ -72,6 +78,9 @@ public class DemoHere {
 		AbstractSelfCheckoutStation.configureCoinStorageUnitCapacity(10);
 		AbstractSelfCheckoutStation.configureCoinTrayCapacity(10);
 		AbstractSelfCheckoutStation.configureCurrency(currency);
+		
+		AbstractSelfCheckoutStation.configureBanknoteDenominations(billDenominations);
+		AbstractSelfCheckoutStation.configureBanknoteStorageUnitCapacity(10);
 		
     	SelfCheckoutStationGold station1 = new SelfCheckoutStationGold();
     	station1.plugIn(PowerGrid.instance());

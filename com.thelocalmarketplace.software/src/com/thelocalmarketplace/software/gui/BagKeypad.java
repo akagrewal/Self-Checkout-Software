@@ -19,14 +19,10 @@ public class BagKeypad {
     private CentralStationLogic station;
     private JFrame parent;
 
-    public BagKeypad(JFrame parent, JButton purchaseBagsButton, CentralStationLogic station) {
+    public BagKeypad(JFrame parent, CentralStationLogic station) {
         this.station = station;
-        this.parent = parent; 
-    	purchaseBagsButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                showNumberInputDialog(parent, "Enter the number of bags:");
-            }
-        });
+        this.parent = parent;
+        showNumberInputDialog(parent, "Enter the number of bags:");
     }
 
     private void showNumberInputDialog(JFrame parent, String message) {
@@ -45,10 +41,11 @@ public class BagKeypad {
         int result = JOptionPane.showConfirmDialog(parent, panel, message, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
-            int bags = Integer.parseInt(bagsTextField.getText());
             try {
+                int bags = Integer.parseInt(bagsTextField.getText());
                 station.purchaseBagsLogic.dispensePurchasedBags(bags);
-            } catch (EmptyDevice ignored) {};
+                station.guiLogic.addPurchasableBag(bags);
+            } catch (Exception ignored) {}
         }
     }
 
