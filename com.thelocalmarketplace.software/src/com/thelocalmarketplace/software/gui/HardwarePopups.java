@@ -739,6 +739,8 @@ public class HardwarePopups {
 			} catch (CashOverloadException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+			} catch (InvalidStateSimulationException invalidStateSimulationException){
+				centralStationLogic.guiLogic.showExceptionMessage("Payment by coin not selected");
 			}
 			selectionFrame.dispose();}
 		});
@@ -755,7 +757,8 @@ public class HardwarePopups {
 			} catch (CashOverloadException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			} catch (InvalidStateSimulationException invalidStateSimulationException){
+				centralStationLogic.guiLogic.showExceptionMessage("Payment by coin not selected");}
 			selectionFrame.dispose();}
 		});
 		quarter.addActionListener(e -> {
@@ -771,7 +774,8 @@ public class HardwarePopups {
 			} catch (CashOverloadException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			} catch (InvalidStateSimulationException invalidStateSimulationException){
+				centralStationLogic.guiLogic.showExceptionMessage("Payment by coin not selected");}
 			selectionFrame.dispose();}
 		});
 		loonie.addActionListener(e -> {
@@ -787,7 +791,8 @@ public class HardwarePopups {
 			} catch (CashOverloadException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			} catch (InvalidStateSimulationException invalidStateSimulationException){
+				centralStationLogic.guiLogic.showExceptionMessage("Payment by coin not selected");}
 			selectionFrame.dispose();}
 		});
 		toonie.addActionListener(e -> {
@@ -803,7 +808,8 @@ public class HardwarePopups {
 			} catch (CashOverloadException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			} catch (InvalidStateSimulationException invalidStateSimulationException){
+				centralStationLogic.guiLogic.showExceptionMessage("Payment by coin not selected");}
 			selectionFrame.dispose();}
 		});
 
