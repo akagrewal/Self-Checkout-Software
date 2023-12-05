@@ -99,13 +99,21 @@ public class HardwarePopups {
 
 		JButton soupButton = new JButton("Soup");
 		JButton picklesButton = new JButton("Pickle Jar");
+
 		soupButton.addActionListener(e -> {
+			if(!centralStationLogic.isSessionStarted()){
+				centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+			} else {
 			centralStationLogic.hardware.getMainScanner().scan(soup);
-			selectionFrame.dispose();
+			System.out.println("scanned scanned");
+			selectionFrame.dispose();}
 		});
 		picklesButton.addActionListener(e -> {
+			if(!centralStationLogic.isSessionStarted()){
+				centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+			} else {
 			centralStationLogic.hardware.getMainScanner().scan(pickles);
-			selectionFrame.dispose();
+			selectionFrame.dispose();}
 		});
 
 		selectionFrame.add(soupButton);
@@ -119,16 +127,24 @@ public class HardwarePopups {
 		JButton soupButton = new JButton("Soup");
 		JButton picklesButton = new JButton("Pickle Jar");
 
+
+
 		soupButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				centralStationLogic.hardware.getHandheldScanner().scan(soup);
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
+				centralStationLogic.hardware.getHandheldScanner().scan(soup);}
 			}
 		});
 		picklesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				centralStationLogic.hardware.getHandheldScanner().scan(pickles);
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
+				centralStationLogic.hardware.getHandheldScanner().scan(pickles);}
 			}
 		});
 
@@ -154,37 +170,55 @@ public class HardwarePopups {
 		soupButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				centralStationLogic.hardware.getBaggingArea().addAnItem(soup);
-			}
+			}}
 		});
 		pickleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				centralStationLogic.hardware.getBaggingArea().addAnItem(pickles);
-			}
+			}}
 		});
 		appleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				centralStationLogic.hardware.getBaggingArea().addAnItem(apples);
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
+				centralStationLogic.hardware.getBaggingArea().addAnItem(apples);}
 			}
 		});
 		bananaButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				centralStationLogic.hardware.getBaggingArea().addAnItem(bananas);
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
+				centralStationLogic.hardware.getBaggingArea().addAnItem(bananas);}
 			}
 		});
 		bagsUnderButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsUnder);
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
+				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsUnder);}
 			}
 		});
 		bagsOverButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsOver);
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
+				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsOver);}
 			}
 		});
 
@@ -208,13 +242,19 @@ public class HardwarePopups {
 		soupButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				centralStationLogic.hardware.getBaggingArea().removeAnItem(soup);;
-			}
+			}}
 		});
 		pickleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				centralStationLogic.hardware.getBaggingArea().removeAnItem(pickles);
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
+				centralStationLogic.hardware.getBaggingArea().removeAnItem(pickles);}
 			}
 		});
 
