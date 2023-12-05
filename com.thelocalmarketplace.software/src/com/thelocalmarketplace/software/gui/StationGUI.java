@@ -345,13 +345,13 @@ public class StationGUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(itemList);
         itemList.setBackground(Color.decode("#DFDFD1")); //slightly darker beige
         itemList.setForeground(Color.decode("#4A3D54"));
-        itemList.setFont(new Font("Serif", Font.BOLD, 24));
+        itemList.setFont(new Font("Sans", Font.BOLD, 18));
 
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         topMiddlePanel.add(scrollPane, BorderLayout.CENTER);
-//        addComponent(mainPanel,CurrentItemsPanel,1, 0, 2, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        // addComponent(mainPanel,CurrentItemsPanel,1, 0, 2, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
@@ -362,15 +362,12 @@ public class StationGUI extends JFrame {
         mainPanel.add(topMiddlePanel, gbc);
 
         JPanel totalPanel = new JPanel();
-
-        
         totalLabel = new JLabel("Total: $0.00");
-        totalLabel.setFont(new Font("Serif", Font.BOLD, 25));
+        totalLabel.setFont(new Font("Serif", Font.BOLD, 30));
         totalLabel.setForeground(Color.decode("#40543D")); // dark green
         totalPanel.setBackground(Color.decode("#9DAF99")); //slightly darker beige
 
-
-
+        
         BalanceLabel = new JLabel("");
         addComponent(totalPanel, totalLabel,0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
@@ -382,7 +379,7 @@ public class StationGUI extends JFrame {
         gbc.weightx = 0.7; // 70% horizontal
         gbc.weighty = 0.3; // 30% vertical
         mainPanel.add(totalPanel, gbc);
-//        addComponent(mainPanel,totalPanel,1, 2, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        // addComponent(mainPanel,totalPanel,1, 2, 2, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
         return mainPanel;
     }
@@ -393,7 +390,7 @@ public class StationGUI extends JFrame {
 
         JPanel removeItemPanel = new JPanel();
         JLabel removeLabel = new JLabel("Please select an item to remove: ");
-        removeLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        removeLabel.setFont(new Font("Sans", Font.BOLD, 30));
         JButton backButton = new JButton("Back");
 
         backButton.addActionListener(new ActionListener() {
