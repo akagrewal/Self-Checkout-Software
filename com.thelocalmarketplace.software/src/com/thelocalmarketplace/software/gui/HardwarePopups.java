@@ -187,12 +187,41 @@ public class HardwarePopups {
 	}
 
 
+
 	public void showAddItemToScalePopup(JFrame parentFrame) {
-		JDialog dialog = createDialog(parentFrame, "Add an item to the scale");
+		JDialog dialog = createDialog(parentFrame, "Item to add to bagging area: ");
+
+
+		JButton appleButton = new JButton("Apples");
+		JButton bananaButton = new JButton("Bananas");
+
+		appleButton.addActionListener(e -> {
+			JDialog scaleDialog = createDialog(parentFrame, "Number of items");
+			JTextField textField = addTextField(scaleDialog, "Total weight of items:");
+			Consumer<String> onSubmit = inputText -> {
+				double massOfItems = Integer.parseInt(inputText);
+				PLUCodedItem currentItem = new PLUCodedItem(CreateTestDatabases.apple.getPLUCode(), new Mass(massOfItems));
+				centralStationLogic.hardware.getBaggingArea().addAnItem(currentItem);
+				centralStationLogic.scanningAreaController.itemsOnScale.add(currentItem);
+			};
+			addSubmitButton(scaleDialog, textField, onSubmit);
+			showDialog(scaleDialog);
+		});
+		bananaButton.addActionListener(e -> {
+			JDialog scaleDialog = createDialog(parentFrame, "Number of items");
+			JTextField textField = addTextField(scaleDialog, "Total weight of items:");
+			Consumer<String> onSubmit = inputText -> {
+				double massOfItems = Integer.parseInt(inputText);
+				PLUCodedItem currentItem = new PLUCodedItem(CreateTestDatabases.banana.getPLUCode(), new Mass(massOfItems));
+				centralStationLogic.hardware.getBaggingArea().addAnItem(currentItem);
+				centralStationLogic.scanningAreaController.itemsOnScale.add(currentItem);
+			};
+			addSubmitButton(scaleDialog, textField, onSubmit);
+			showDialog(scaleDialog);
+		});
+
 		JButton soupButton = new JButton("Soup");
 		JButton pickleButton = new JButton("Pickle Jar");
-		JButton appleButton = new JButton("Apple");
-		JButton bananaButton = new JButton("Banana");
 		JButton bagsUnderButton = new JButton("Bags (under weight limit)");
 		JButton bagsOverButton = new JButton("Bags (over weight limit)");
 
@@ -202,8 +231,8 @@ public class HardwarePopups {
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
-				centralStationLogic.hardware.getBaggingArea().addAnItem(soup);
-			}}
+					centralStationLogic.hardware.getBaggingArea().addAnItem(soup);
+				}}
 		});
 		pickleButton.addActionListener(new ActionListener() {
 			@Override
@@ -211,35 +240,18 @@ public class HardwarePopups {
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
-				centralStationLogic.hardware.getBaggingArea().addAnItem(pickles);
-			}}
+					centralStationLogic.hardware.getBaggingArea().addAnItem(pickles);
+				}}
 		});
-		appleButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(!centralStationLogic.isSessionStarted()){
-					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
-				} else {
-				centralStationLogic.hardware.getBaggingArea().addAnItem(apples);
-			}}
-		});
-		bananaButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(!centralStationLogic.isSessionStarted()){
-					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
-				} else {
-				centralStationLogic.hardware.getBaggingArea().addAnItem(bananas);
-			}}
-		});
+
 		bagsUnderButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
-				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsUnder);
-			}}
+					centralStationLogic.hardware.getBaggingArea().addAnItem(bagsUnder);
+				}}
 		});
 		bagsOverButton.addActionListener(new ActionListener() {
 			@Override
@@ -247,8 +259,8 @@ public class HardwarePopups {
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
-				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsOver);
-			}}
+					centralStationLogic.hardware.getBaggingArea().addAnItem(bagsOver);
+				}}
 		});
 
 		JPanel panel = new JPanel();
@@ -262,6 +274,7 @@ public class HardwarePopups {
 		panel.add(bagsOverButton);
 		showDialog(dialog);
 	}
+
 
 	public void showRemoveItemFromScalePopup(JFrame parentFrame) {
 		JDialog dialog = createDialog(parentFrame, "Remove an item from the scale");
