@@ -21,10 +21,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.jjjwelectronics.Item;
 import com.jjjwelectronics.Mass;
-import com.jjjwelectronics.Numeral;
 import com.jjjwelectronics.card.Card;
-import com.jjjwelectronics.scanner.Barcode;
 import com.jjjwelectronics.scanner.BarcodedItem;
 import com.tdc.CashOverloadException;
 import com.tdc.DisabledException;
@@ -34,7 +33,6 @@ import com.thelocalmarketplace.hardware.PLUCodedItem;
 import com.thelocalmarketplace.hardware.external.CardIssuer;
 import com.thelocalmarketplace.software.database.CreateTestDatabases;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
-import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 public class HardwarePopups {
 
@@ -42,7 +40,10 @@ public class HardwarePopups {
 	private BarcodedItem pickles = new BarcodedItem(CreateTestDatabases.pickles.getBarcode(), new Mass(CreateTestDatabases.pickles.getExpectedWeight()));
 	private PLUCodedItem apples = new PLUCodedItem(CreateTestDatabases.apple.getPLUCode(), new Mass((double) 300.0));
 	private PLUCodedItem bananas = new PLUCodedItem(CreateTestDatabases.banana.getPLUCode(), new Mass((double) 500.0));
-
+	private PLUCodedItem bagsUnder = new PLUCodedItem(CreateTestDatabases.bagsUnder.getPLUCode(), new Mass((double) 15.0));
+	private PLUCodedItem bagsOver = new PLUCodedItem(CreateTestDatabases.bagsOver.getPLUCode(), new Mass((double) 35.0));
+	
+	
 	private static Currency currency = 	Currency.getInstance("CAD");
 
 	private BigDecimal[] billDenominations;
@@ -145,6 +146,9 @@ public class HardwarePopups {
 		JButton pickleButton = new JButton("Pickle Jar");
 		JButton appleButton = new JButton("Apple");
 		JButton bananaButton = new JButton("Banana");
+		JButton bagsUnderButton = new JButton("Bags (under weight limit)");
+		JButton bagsOverButton = new JButton("Bags (over weight limit)");
+		
 
 		soupButton.addActionListener(new ActionListener() {
 			@Override
@@ -170,6 +174,18 @@ public class HardwarePopups {
 				centralStationLogic.hardware.getBaggingArea().addAnItem(bananas);
 			}
 		});
+		bagsUnderButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsUnder);
+			}
+		});
+		bagsOverButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				centralStationLogic.hardware.getBaggingArea().addAnItem(bagsOver);
+			}
+		});
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -178,6 +194,8 @@ public class HardwarePopups {
 		panel.add(pickleButton);
 		panel.add(appleButton);
 		panel.add(bananaButton);
+		panel.add(bagsUnderButton);
+		panel.add(bagsOverButton);
 		showDialog(dialog);
 	}
 
