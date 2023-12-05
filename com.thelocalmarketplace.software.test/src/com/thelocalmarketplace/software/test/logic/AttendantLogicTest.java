@@ -11,10 +11,12 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 
+import com.jjjwelectronics.Numeral;
 import com.jjjwelectronics.bag.IReusableBagDispenser;
 import com.jjjwelectronics.card.ICardReader;
 import com.jjjwelectronics.printer.IReceiptPrinter;
 import com.jjjwelectronics.scale.IElectronicScale;
+import com.jjjwelectronics.scanner.Barcode;
 import com.jjjwelectronics.scanner.IBarcodeScanner;
 import com.jjjwelectronics.screen.ITouchScreen;
 import com.tdc.banknote.BanknoteDispensationSlot;
@@ -31,6 +33,8 @@ import com.thelocalmarketplace.software.gui.AttendantGUI;
 import com.thelocalmarketplace.software.logic.*;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
+import ca.ucalgary.seng300.simulation.InvalidArgumentSimulationException;
+import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
 import powerutility.PowerGrid;
 
 /**
@@ -125,14 +129,54 @@ public class AttendantLogicTest {
 	
 	@Test
 	public void testBaggingDiscrepencyDetectedWhenNotApproved() {
-		centralStationLogicStub.addBagsLogic.approvedBagging = false;
-		attendantLogic.baggingDiscrepencyDetected(centralStationLogicStub);
+		try {
+			centralStationLogicStub.addBagsLogic.approvedBagging = false;
+			attendantLogic.baggingDiscrepencyDetected(centralStationLogicStub);
+		} catch (Exception e) {
+			System.out.println(e);
+			fail();
+		}
 	}
 	
 	@Test
 	public void testBaggingDiscrepencyDetectedWhenApproved() {
-		centralStationLogicStub.addBagsLogic.approvedBagging = true;
-		attendantLogic.baggingDiscrepencyDetected(centralStationLogicStub);
+		try {
+			centralStationLogicStub.addBagsLogic.approvedBagging = true;
+			attendantLogic.baggingDiscrepencyDetected(centralStationLogicStub);
+		} catch (Exception e) {
+			System.out.println(e);
+			fail();
+		}
+	}
+	
+	@Test
+	public void testRequestApprovalSkipBaggingWhenBarcodeNotNullNotBlocked() {
+		try {
+			attendantLogic.requestApprovalSkipBagging(centralStationLogicStub, new Barcode(new Numeral[]{Numeral.one}));
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof InvalidStateSimulationException);
+		}
+	}
+	
+	@Test
+	public void testRequestApprovalSkipBaggingWhenBarcodeNotNullBlocked() {
+		try {
+			centralStationLogicStub.stateLogic.gotoState(States.BLOCKED);
+			attendantLogic.requestApprovalSkipBagging(centralStationLogicStub, new Barcode(new Numeral[]{Numeral.one}));
+		} catch (InvalidStateSimulationException e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void testRequestApprovalSkipBaggingWhenBarcodeNull() {
+		try {
+			attendantLogic.requestApprovalSkipBagging(centralStationLogicStub, null);
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof InvalidArgumentSimulationException);
+		}
 	}
 	
 	class CentralStationLogicStub extends CentralStationLogic {
