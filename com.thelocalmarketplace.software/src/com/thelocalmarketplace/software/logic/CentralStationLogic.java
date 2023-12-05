@@ -356,7 +356,7 @@ public class CentralStationLogic {
 		}
 		
 		System.out.println("Session started");
-		
+		predictionLogic.runPredictions();
 		this.stateLogic.gotoState(States.NORMAL);
 		this.sessionStarted = true;
 	}
