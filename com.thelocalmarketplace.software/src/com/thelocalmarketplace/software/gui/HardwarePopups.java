@@ -163,6 +163,7 @@ public class HardwarePopups {
 		soupButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -172,6 +173,7 @@ public class HardwarePopups {
 		picklesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -197,25 +199,27 @@ public class HardwarePopups {
 		JButton bananaButton = new JButton("Bananas");
 
 		appleButton.addActionListener(e -> {
-			JDialog scaleDialog = createDialog(parentFrame, "Number of items");
+			JDialog scaleDialog = createDialog(parentFrame, "Item Weight Input");
 			JTextField textField = addTextField(scaleDialog, "Total weight of items:");
 			Consumer<String> onSubmit = inputText -> {
 				double massOfItems = Integer.parseInt(inputText);
 				PLUCodedItem currentItem = new PLUCodedItem(CreateTestDatabases.apple.getPLUCode(), new Mass(massOfItems));
 				centralStationLogic.hardware.getBaggingArea().addAnItem(currentItem);
 				centralStationLogic.scanningAreaController.itemsOnScale.add(currentItem);
+				dialog.dispose();
 			};
 			addSubmitButton(scaleDialog, textField, onSubmit);
 			showDialog(scaleDialog);
 		});
 		bananaButton.addActionListener(e -> {
-			JDialog scaleDialog = createDialog(parentFrame, "Number of items");
+			JDialog scaleDialog = createDialog(parentFrame, "Item Weight Input");
 			JTextField textField = addTextField(scaleDialog, "Total weight of items:");
 			Consumer<String> onSubmit = inputText -> {
 				double massOfItems = Integer.parseInt(inputText);
 				PLUCodedItem currentItem = new PLUCodedItem(CreateTestDatabases.banana.getPLUCode(), new Mass(massOfItems));
 				centralStationLogic.hardware.getBaggingArea().addAnItem(currentItem);
 				centralStationLogic.scanningAreaController.itemsOnScale.add(currentItem);
+				dialog.dispose();
 			};
 			addSubmitButton(scaleDialog, textField, onSubmit);
 			showDialog(scaleDialog);
@@ -229,6 +233,7 @@ public class HardwarePopups {
 		soupButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -238,6 +243,7 @@ public class HardwarePopups {
 		pickleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -248,6 +254,7 @@ public class HardwarePopups {
 		bagsUnderButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -257,6 +264,7 @@ public class HardwarePopups {
 		bagsOverButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -285,6 +293,7 @@ public class HardwarePopups {
 		soupButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -294,6 +303,7 @@ public class HardwarePopups {
 		pickleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -314,25 +324,27 @@ public class HardwarePopups {
 		JButton banana = new JButton("Bananas");
 
 		apple.addActionListener(e -> {
-            JDialog scaleDialog = createDialog(parentFrame, "Number of items");
+            JDialog scaleDialog = createDialog(parentFrame, "Item Weight Input");
             JTextField textField = addTextField(scaleDialog, "Total weight of items:");
             Consumer<String> onSubmit = inputText -> {
                 double massOfItems = Integer.parseInt(inputText);
                 PLUCodedItem currentItem = new PLUCodedItem(CreateTestDatabases.apple.getPLUCode(), new Mass(massOfItems));
                 centralStationLogic.hardware.getScanningArea().addAnItem(currentItem);
                 centralStationLogic.scanningAreaController.itemsOnScale.add(currentItem);
+				dialog.dispose();
             };
             addSubmitButton(scaleDialog, textField, onSubmit);
             showDialog(scaleDialog);
         });
 		banana.addActionListener(e -> {
-            JDialog scaleDialog = createDialog(parentFrame, "Number of items");
+            JDialog scaleDialog = createDialog(parentFrame, "Item Weight Input");
             JTextField textField = addTextField(scaleDialog, "Total weight of items:");
             Consumer<String> onSubmit = inputText -> {
                 double massOfItems = Integer.parseInt(inputText);
                 PLUCodedItem currentItem = new PLUCodedItem(CreateTestDatabases.banana.getPLUCode(), new Mass(massOfItems));
                 centralStationLogic.hardware.getScanningArea().addAnItem(currentItem);
                 centralStationLogic.scanningAreaController.itemsOnScale.add(currentItem);
+				dialog.dispose();
             };
             addSubmitButton(scaleDialog, textField, onSubmit);
             showDialog(scaleDialog);
@@ -358,6 +370,7 @@ public class HardwarePopups {
 		swipeReal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -371,6 +384,7 @@ public class HardwarePopups {
 		swipeFake.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -386,6 +400,7 @@ public class HardwarePopups {
 		insertReal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -409,6 +424,7 @@ public class HardwarePopups {
 		insertFake.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -433,6 +449,7 @@ public class HardwarePopups {
 		tapReal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -446,6 +463,7 @@ public class HardwarePopups {
 		tapFake.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -481,6 +499,7 @@ public class HardwarePopups {
 		swipeReal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -494,6 +513,7 @@ public class HardwarePopups {
 		swipeFake.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -509,6 +529,7 @@ public class HardwarePopups {
 		insertReal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -532,6 +553,7 @@ public class HardwarePopups {
 		insertFake.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -557,6 +579,7 @@ public class HardwarePopups {
 		tapReal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
@@ -570,6 +593,7 @@ public class HardwarePopups {
 		tapFake.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
 				} else {
