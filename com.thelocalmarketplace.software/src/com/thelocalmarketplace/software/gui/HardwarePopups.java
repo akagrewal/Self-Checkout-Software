@@ -31,6 +31,8 @@ import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.Numeral;
 import com.jjjwelectronics.OverloadedDevice;
 import com.jjjwelectronics.card.Card;
+import com.jjjwelectronics.card.ChipFailureException;
+import com.jjjwelectronics.card.InvalidPINException;
 import com.jjjwelectronics.scanner.Barcode;
 import com.jjjwelectronics.scanner.BarcodedItem;
 import com.tdc.CashOverloadException;
@@ -391,6 +393,7 @@ public class HardwarePopups {
 
 				try {
 					centralStationLogic.hardware.getCardReader().swipe(fakeCreditCard);
+					centralStationLogic.guiLogic.showExceptionMessage("Invalid Card, please try another form of payment");
 				} catch (IOException e1) {
 					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 				}}
@@ -409,7 +412,9 @@ public class HardwarePopups {
 				Consumer<String> onSubmit = inputText -> {
 					try {
 						centralStationLogic.hardware.getCardReader().insert(realCreditCard, inputText);
-					} catch (IOException e1) {
+					}  catch(InvalidPINException pinException){
+						centralStationLogic.guiLogic.showExceptionMessage("Invalid PIN, please try entering again");}
+					catch (IOException e1) {
 						centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 						e1.printStackTrace();
 
@@ -433,7 +438,10 @@ public class HardwarePopups {
 				Consumer<String> onSubmit = inputText -> {
 					try {
 						centralStationLogic.hardware.getCardReader().insert(fakeCreditCard, inputText);
-					} catch (IOException e1) {
+						centralStationLogic.guiLogic.showExceptionMessage("Invalid PIN, please try entering again");
+					}  catch(InvalidPINException pinException){
+						centralStationLogic.guiLogic.showExceptionMessage("Invalid PIN, please try entering again");}
+						catch (IOException e1) {
 						centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 						e1.printStackTrace();
 
@@ -538,7 +546,9 @@ public class HardwarePopups {
 				Consumer<String> onSubmit = inputText -> {
 					try {
 						centralStationLogic.hardware.getCardReader().insert(realDebitCard, inputText);
-					} catch (IOException e1) {
+					}  catch(InvalidPINException pinException){
+						centralStationLogic.guiLogic.showExceptionMessage("Invalid PIN, please try entering again");}
+					catch (IOException e1) {
 						centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 						e1.printStackTrace();
 
@@ -562,6 +572,8 @@ public class HardwarePopups {
 				Consumer<String> onSubmit = inputText -> {
 					try {
 						centralStationLogic.hardware.getCardReader().insert(fakeDebitCard, inputText);
+					} catch(InvalidPINException pinException){
+						centralStationLogic.guiLogic.showExceptionMessage("Invalid PIN, please try entering again");
 					} catch (IOException e1) {
 						centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 						e1.printStackTrace();
