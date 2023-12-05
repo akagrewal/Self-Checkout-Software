@@ -69,6 +69,12 @@ public class SessionBlockedPopUp {
         popupDialog.setVisible(true);
     }
 
+    public static void removeOutOfOrder(int stationNumber) {
+        popUps.get(stationNumber).dispose();
+        popUps.remove(stationNumber);
+    }
+
+
     public static void maintenanceRequired(JFrame parentFrame, String issue) {
         popupDialog = new JDialog(parentFrame);
         popupDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);

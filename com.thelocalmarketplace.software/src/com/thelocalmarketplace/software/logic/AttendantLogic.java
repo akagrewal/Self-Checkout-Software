@@ -78,19 +78,6 @@ public class AttendantLogic {
 	
 	private boolean waitingToDisable = false;
 
-	// LOGIC PANEL
-	// add logic for when attendant confirms call from customer
-	private void confirmCall(GUILogic guiLogic) {
-		// TODO: write code to basically close the popup on both ends
-	}
-
-	// add logic for when attendant overrides block on specific station
-	private void override(GUILogic guiLogic, String blockType) {
-		// TODO: write code to override the station specified
-	}
-
-
-	
 	/** simulates attendant signifying they approve the bagging area 
 	 * @throws Exception if the add bags state cannot be exited*/
 	public void approveBaggingArea(CentralStationLogic logic) throws Exception {
@@ -169,9 +156,6 @@ public class AttendantLogic {
 	
 	/** Method to disable a customer station for maintenance and display out of order */
 	public void disableCustomerStation(CentralStationLogic logic) {
-		//TODO: change the logic do be able to disable only a specific customer station
-		//TODO GUI: GUI should display out of order when disabled for maintenance
-		
 		if (!logic.isSessionStarted() && logic.stateLogic.getState() != States.OUTOFORDER) {
 			// once the station is out of the session
 			logic.stateLogic.gotoState(States.OUTOFORDER);
@@ -185,8 +169,13 @@ public class AttendantLogic {
 	
 	/** Method to take a customer station out of maintenance mode */
 	public void enableCustomerStation(CentralStationLogic logic) {
-		logic.weightLogic.overrideDiscrepancy();
-		logic.stateLogic.gotoState(States.NORMAL);
+		if (logic.stateLogic.getState() == States.OUTOFORDER) {
+			removeOutOfOrder(logic.stationNumber);
+			logic.stateLogic.gotoState(States.NORMAL);
+		} else {
+			logic.weightLogic.overrideDiscrepancy();
+			logic.stateLogic.gotoState(States.NORMAL);
+		}
 	}
 	
 	/** 
