@@ -438,7 +438,7 @@ public class HardwarePopups {
 				Consumer<String> onSubmit = inputText -> {
 					try {
 						centralStationLogic.hardware.getCardReader().insert(fakeCreditCard, inputText);
-						centralStationLogic.guiLogic.showExceptionMessage("Invalid PIN, please try entering again");
+						centralStationLogic.guiLogic.showExceptionMessage("Can't read card, please try another form of payment");
 					}  catch(InvalidPINException pinException){
 						centralStationLogic.guiLogic.showExceptionMessage("Invalid PIN, please try entering again");}
 						catch (IOException e1) {
@@ -477,6 +477,7 @@ public class HardwarePopups {
 				} else {
 				try {
 					centralStationLogic.hardware.getCardReader().tap(fakeCreditCard);
+					centralStationLogic.guiLogic.showExceptionMessage("Invalid Card, please try an alternative form of payment");
 				} catch (IOException e1) {
 					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 				}}
@@ -524,6 +525,7 @@ public class HardwarePopups {
 				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+					centralStationLogic.guiLogic.showExceptionMessage("Invalid swipe, please try an alternative form of payment");
 				} else {
 				try {
 					centralStationLogic.hardware.getCardReader().swipe(fakeDebitCard);
@@ -611,6 +613,7 @@ public class HardwarePopups {
 				} else {
 				try {
 					centralStationLogic.hardware.getCardReader().tap(fakeDebitCard);
+					centralStationLogic.guiLogic.showExceptionMessage("Invalid tap, please try another form of payment");
 				} catch (IOException e1) {
 					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 				}}

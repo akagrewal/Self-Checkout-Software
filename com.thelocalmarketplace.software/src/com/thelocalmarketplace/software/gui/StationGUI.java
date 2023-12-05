@@ -201,6 +201,7 @@ public class StationGUI extends JFrame {
         VCButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                centralStationLogic.guiLogic.showInfoMessage("Please add item to scale, then select desired item");
                 guiLogicInstance.switchPanels("visualCatalogue");
             }
         });
@@ -214,6 +215,7 @@ public class StationGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // goto panel with options to add an item
+                centralStationLogic.guiLogic.showInfoMessage("Please add item to scale, then type desired PLU");
                 Numpad pluNumpad = new Numpad(StationGUI.this, guiLogicInstance, 1); // this may need changes
                 pluNumpad.openNumPadPanel();
             }
@@ -238,11 +240,12 @@ public class StationGUI extends JFrame {
        
         payButton.addActionListener(e -> {
             System.out.println(centralStationLogic.stateLogic.getState());
-            centralStationLogic.stateLogic.gotoState(StateLogic.States.CHECKOUT);
+
             if (centralStationLogic.cartLogic.getBalanceOwed().compareTo(BigDecimal.ZERO) <= 0) {
                 centralStationLogic.guiLogic.showExceptionMessage("No Items Added");
             } else {
                 guiLogicInstance.switchPanels("paymentPanel");
+                centralStationLogic.stateLogic.gotoState(StateLogic.States.CHECKOUT);
             }
         });
 
