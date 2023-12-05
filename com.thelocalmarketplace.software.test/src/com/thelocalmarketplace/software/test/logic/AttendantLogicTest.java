@@ -179,6 +179,26 @@ public class AttendantLogicTest {
 		}
 	}
 	
+	@Test
+	public void testGrantApprovalSkipBaggingWhenBarcodeNull() {
+		try {
+			attendantLogic.grantApprovalSkipBagging(centralStationLogicStub, null);
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof InvalidArgumentSimulationException);
+		}
+	}
+	
+	@Test
+	public void testGrantApprovalSkipBaggingWhenBarcodeNotNull() {
+		try {
+			attendantLogic.grantApprovalSkipBagging(centralStationLogicStub, new Barcode(new Numeral[]{Numeral.one}));
+		} catch (Exception e) {
+			if (!(e instanceof InvalidStateSimulationException))
+				fail();
+		}
+	}
+	
 	class CentralStationLogicStub extends CentralStationLogic {
 		boolean sessionStarted = false;
 		
