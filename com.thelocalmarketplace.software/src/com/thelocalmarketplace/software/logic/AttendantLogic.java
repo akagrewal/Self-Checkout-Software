@@ -104,7 +104,7 @@ public class AttendantLogic {
 	 * approveBaggingArea() */
 	public void baggingDiscrepencyDetected(CentralStationLogic logic) {
 		//TODO GUI: display that customer is awaiting approval to attendant
-		discrepancyDetected(attendantGUI.getAttendantFrame());
+		customerDiscrepancyDetected(attendantGUI.getAttendantFrame(), logic.stationNumber);
 
 		this.inBaggingDiscrepency = true;
 		logic.stateLogic.gotoState(States.BLOCKED);
@@ -189,7 +189,7 @@ public class AttendantLogic {
 
 
 		//TODO GUI: GUI should go back to normal if it was previously disabled
-		attendantOverride();
+		attendantOverride(logic.stationNumber);
 		
 		logic.stateLogic.gotoState(States.NORMAL);
 	}
@@ -198,7 +198,7 @@ public class AttendantLogic {
 	 *  Attendant being notified of weight discrepancy
 	 */
 	public void weightDiscrepancy(CentralStationLogic logic) {
-		discrepancyDetected(logic.stationGUI);
+		customerDiscrepancyDetected(logic.stationGUI, logic.stationNumber);
 		discrepancyDetected(attendantGUI.getAttendantFrame(), logic.stationNumber);
 	}
 	

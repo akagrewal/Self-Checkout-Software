@@ -2,14 +2,17 @@ package com.thelocalmarketplace.software.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 public class SessionBlockedPopUp {
 
     private static JDialog popupDialog;
+    private static HashMap<Integer, JDialog> popUps = new HashMap<Integer, JDialog>();
     
     /** popup for customer */
-    public static void discrepancyDetected(JFrame parentFrame) {
+    public static void customerDiscrepancyDetected(JFrame parentFrame, int stationNumber) {
         popupDialog = new JDialog(parentFrame);
+        popUps.put(stationNumber, popupDialog);
         popupDialog.setUndecorated(true);
         popupDialog.setSize(800, 700);
         popupDialog.setLocationRelativeTo(parentFrame);
@@ -76,8 +79,9 @@ public class SessionBlockedPopUp {
         popupDialog.setVisible(true);
     }
 
-    public static void attendantOverride() {
+    public static void attendantOverride(int stationNumber) {
         // Close the popup dialog
-        popupDialog.dispose();
+        // popupDialog.dispose();
+        popUps.get(stationNumber).dispose();
     }
 }
