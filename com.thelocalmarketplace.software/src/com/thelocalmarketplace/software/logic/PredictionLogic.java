@@ -1,6 +1,8 @@
 package com.thelocalmarketplace.software.logic;
 
 import com.thelocalmarketplace.software.AbstractLogicDependant;
+import com.thelocalmarketplace.software.gui.AttendantPopups;
+import com.thelocalmarketplace.software.gui.SessionBlockedPopUp;
 
 public class PredictionLogic extends AbstractLogicDependant {
 	final int MAXIMUM_PAPER = 1 << 10;
@@ -11,6 +13,15 @@ public class PredictionLogic extends AbstractLogicDependant {
 		super(logic);
 		this.logic = logic;
 	}	
+	
+	public void runPredictions() {	// should be ran at the start/end of a session.	
+		checkCoinsFullPrediction();
+		checkLowCoinPrediction();
+		PredictFullBanknotes();
+		PredictLowBanknotes();
+		checkInkPrediction();
+		checkPaperPrediction();
+	}
 	
 	public Boolean checkLowCoinPrediction() {
 		var currentCoins = logic.hardware.getCoinStorage().getCoinCount();
@@ -33,7 +44,8 @@ public class PredictionLogic extends AbstractLogicDependant {
 		var capacity = logic.hardware.getCoinStorage().getCapacity();
     	var maxCapacity = capacity * .75;
     	
-      	if (currentCoins <= maxCapacity) {
+
+      	if (currentCoins >= maxCapacity) {
    		
     		//notify attendant and disable customer station
     		predictionAction("Warning: Coin storage is almost full.");
@@ -120,7 +132,16 @@ public class PredictionLogic extends AbstractLogicDependant {
 	
 	
 	public void predictionAction(String message) {
-		// need to notify attendant.
-		logic.attendantLogic.disableCustomerStation(this.logic);
+		// notify attendant
+		AttendantPopups attendantPopup = new AttendantPopups(logic.attendantLogic.attendantGUI.getAttendantFrame());
+		attendantPopup.issuePredictedPopUp(message);
+		// give 5s until station disabled
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// do nothing
+		}
+		// disable station
+		logic.attendantLogic.disableCustomerStation(logic); 
 	}	
 }
