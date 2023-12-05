@@ -253,7 +253,7 @@ public class HardwarePopups {
             JTextField textField = addTextField(scaleDialog, "Total weight of items:");
             Consumer<String> onSubmit = inputText -> {
                 double massOfItems = Integer.parseInt(inputText);
-                PLUCodedItem currentItem = new PLUCodedItem(CreateTestDatabases.apple.getPLUCode(), new Mass((double)300));
+                PLUCodedItem currentItem = new PLUCodedItem(CreateTestDatabases.apple.getPLUCode(), new Mass(massOfItems));
                 centralStationLogic.hardware.getScanningArea().addAnItem(currentItem);
                 centralStationLogic.scanningAreaController.itemsOnScale.add(currentItem);
             };
@@ -265,7 +265,7 @@ public class HardwarePopups {
             JTextField textField = addTextField(scaleDialog, "Total weight of items:");
             Consumer<String> onSubmit = inputText -> {
                 double massOfItems = Integer.parseInt(inputText);
-                PLUCodedItem currentItem = new PLUCodedItem(CreateTestDatabases.banana.getPLUCode(), new Mass((double) 500));
+                PLUCodedItem currentItem = new PLUCodedItem(CreateTestDatabases.banana.getPLUCode(), new Mass(massOfItems));
                 centralStationLogic.hardware.getScanningArea().addAnItem(currentItem);
                 centralStationLogic.scanningAreaController.itemsOnScale.add(currentItem);
             };
