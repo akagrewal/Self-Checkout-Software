@@ -47,8 +47,9 @@ public class SessionBlockedPopUp {
         popupDialog.setVisible(true);
     }
     
-    public static void outOfOrder(JPanel parentPanel) {
+    public static void outOfOrder(JPanel parentPanel, int stationNumber) {
         popupDialog = new JDialog();
+        popUps.put(stationNumber, popupDialog);
         popupDialog.setUndecorated(true);
         popupDialog.setSize(800, 700);
         popupDialog.setLocationRelativeTo(parentPanel);

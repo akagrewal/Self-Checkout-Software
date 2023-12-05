@@ -176,7 +176,7 @@ public class AttendantLogic {
 			// once the station is out of the session
 			logic.stateLogic.gotoState(States.OUTOFORDER);
 			
-			outOfOrder(logic.stationGUI.cardPanel);
+			outOfOrder(logic.stationGUI.cardPanel, logic.stationNumber);
 		} else {
 			waitingToDisable = true;
 		}
