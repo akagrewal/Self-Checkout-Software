@@ -224,6 +224,50 @@ public class AttendantLogicTest {
 		attendantLogic.disableCustomerStation(centralStationLogicStub);
 	}
 	
+	@Test
+	public void testCallAttendant() {
+		try {
+			attendantLogic.callAttendant(0);
+		} catch (Exception e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void testEnableCustomerStationWhenNotOutOfOrder() {
+		attendantLogic.enableCustomerStation(centralStationLogicStub);
+		assertTrue(centralStationLogicStub.stateLogic.getState() == States.NORMAL);
+	}
+	
+	@Test
+	public void testEnableCustomerStationWhenOutOfOrder() {
+		try {
+			centralStationLogicStub.stateLogic.gotoState(States.OUTOFORDER);
+			attendantLogic.enableCustomerStation(centralStationLogicStub);
+		} catch (Exception e) {
+			if (!(e instanceof NullPointerException))
+				fail();
+		}
+	}
+	
+	@Test
+	public void testWeightDiscrepancy() {
+		try {
+			attendantLogic.weightDiscrepancy(centralStationLogicStub);
+		} catch (Exception e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void testAddItemByTextSearch() {
+		try {
+			attendantLogic.AddItemByTextSearch(centralStationLogicStub, "Apple");
+		} catch (Exception e) {
+			fail();
+		}
+	}
+	
 	class CentralStationLogicStub extends CentralStationLogic {
 		boolean sessionStarted = false;
 		
