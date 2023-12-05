@@ -49,7 +49,8 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 	
 	// A duplicate receipt that can be printed by the attendant.
 	String duplicateReceipt;
-	
+	private boolean inkLow = false;
+	private boolean paperLow = false;
 	/**
 	 * Base constructor
 	 */
@@ -185,12 +186,31 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 	
 	@Override
 	public void thePrinterIsOutOfPaper() {
-		this.onPrintingFail();
+		// Notify Attendant
+		notifyAttendant("Paper Storage is empty. System shutting off.");
+		
+		// Flag to see if Paper remains low
+		paperLow = true;
+		
+		// Disable System so attendant can add Paper
+		if	(!inkLow) {
+			logic.attendantLogic.disableCustomerStation(logic);
+		}
 	}
 
 	@Override
 	public void thePrinterIsOutOfInk() {
-		this.onPrintingFail();
+		
+		// Notify Attendant
+		notifyAttendant("Ink Storage is empty. System shutting off.");
+		
+		// Flag to see if Ink remains low
+		inkLow = true;
+				
+		// Disable System so attendant can add Ink
+		if	(!paperLow) {
+			logic.attendantLogic.disableCustomerStation(logic);
+		}
 	}
 
 	@Override
@@ -219,25 +239,84 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
 
 	@Override
 	public void thePrinterHasLowInk() {
-		// TODO Auto-generated method stub
 		
+		// Notify Attendant
+		notifyAttendant("Ink Level is Low. System shutting off.");
+		
+		// Flag to see if Ink remains low
+		inkLow = true;
+				
+		// Disable System so attendant can add Ink
+		if	(!paperLow) {
+			logic.attendantLogic.disableCustomerStation(logic);
+		}
 	}
 
 	@Override
 	public void thePrinterHasLowPaper() {
-		// TODO Auto-generated method stub
 		
+		// Notify Attendant
+		notifyAttendant("Paper Level is Low. System shutting off.");
+		
+		// Flag to see if Paper remains low
+		paperLow = true;
+				
+		// Disable System so attendant can add Paper
+		if	(!inkLow) {
+			logic.attendantLogic.disableCustomerStation(logic);
+		}
 	}
 
 	@Override
 	public void paperHasBeenAddedToThePrinter() {
-		// TODO Auto-generated method stub
+		AttendantPopups attendantPopup = new AttendantPopups(logic.attendantLogic.attendantGUI.getAttendantFrame());
+		// Set flag to false
+		paperLow = false;
 		
+		// Check if ink is low or empty
+		if (!inkLow) {
+			// Announces Printer is ready 
+			attendantPopup.maintenceComplete("Printer ready for usage");
+		} else {
+			notifyAttendant("Printer not ready for usage; Low Ink; Add Ink");
+		}
 	}
 
 	@Override
 	public void inkHasBeenAddedToThePrinter() {
-		// TODO Auto-generated method stub
+		AttendantPopups attendantPopup = new AttendantPopups(logic.attendantLogic.attendantGUI.getAttendantFrame());
+		// Set flag to false
+		inkLow = false;
 		
+		// Check if paper is low or empty
+		if (!paperLow) {
+			// Announces Printer is ready 
+			attendantPopup.maintenceComplete("Printer ready for usage");
+		} else {
+			notifyAttendant("Printer not ready for usage; Low Ink; Add Ink");
+		
+		}
+		
+	}
+	
+	public void notifyAttendant(String message) {
+		
+		AttendantPopups attendantPopup = new AttendantPopups(logic.attendantLogic.attendantGUI.getAttendantFrame());
+		attendantPopup.issuePredictedPopUp(message);
+		// give 5s until station disabled
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// do nothing
+		}
+	
+	}
+	
+	public boolean getInkLow() {
+		return inkLow;
+	}
+	
+	public boolean getPaperLow() {
+		return paperLow;
 	}
 }

@@ -94,4 +94,22 @@ public class AttendantPopups {
         panel.add(label, gbc);
         return panel;
     }
+	
+	public void maintenceComplete(String message) {
+		JFrame notifyPopUp = new JFrame("Maintenance Complete: " + message);
+		notifyPopUp.setSize(400, 300);
+		notifyPopUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		JPanel popupPanel = createLabelPanel("Maintenance Complete: " + message, 40, 50);
+		JPanel buttonPanel = new JPanel();
+		JButton confirmButton1 = new JButton("OK");
+		confirmButton1.addActionListener(e -> notifyPopUp.dispose());
+		buttonPanel.add(confirmButton1);
+		notifyPopUp.add(popupPanel, BorderLayout.NORTH);
+		notifyPopUp.add(buttonPanel, BorderLayout.CENTER);
+		notifyPopUp.setLocationRelativeTo(attendantFrame);
+
+		notifyPopUp.setVisible(true);
+
+	}
 }
