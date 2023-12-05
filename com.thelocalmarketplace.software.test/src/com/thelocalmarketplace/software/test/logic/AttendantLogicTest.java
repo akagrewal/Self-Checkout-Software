@@ -71,8 +71,6 @@ public class AttendantLogicTest {
 		attendantGUIStub = new AttendantGUIStub();
 		attendantLogic.attendantGUI = attendantGUIStub;
 		centralStationLogicStub = new CentralStationLogicStub(station);
-		
-		station = new SelfCheckoutStationBronze();
 		station.plugIn(PowerGrid.instance());
 		station.turnOn();
 	}
@@ -114,15 +112,27 @@ public class AttendantLogicTest {
 	}
 	
 	@Test
-	public void testApproveBaggingArea() {
+	public void testApproveBaggingAreaWhenNotApproved() {
 		try {
 			centralStationLogicStub.sessionStarted = true;
-			// centralStationLogicStub.stateLogic.gotoState(States.ADDBAGS);
+			centralStationLogicStub.stateLogic.gotoState(States.ADDBAGS);
 			attendantLogic.approveBaggingArea(centralStationLogicStub);
 		} catch (Exception e) {
 			System.out.println(e);
 			fail();
 		}
+	}
+	
+	@Test
+	public void testBaggingDiscrepencyDetectedWhenNotApproved() {
+		centralStationLogicStub.addBagsLogic.approvedBagging = false;
+		attendantLogic.baggingDiscrepencyDetected(centralStationLogicStub);
+	}
+	
+	@Test
+	public void testBaggingDiscrepencyDetectedWhenApproved() {
+		centralStationLogicStub.addBagsLogic.approvedBagging = true;
+		attendantLogic.baggingDiscrepencyDetected(centralStationLogicStub);
 	}
 	
 	class CentralStationLogicStub extends CentralStationLogic {
