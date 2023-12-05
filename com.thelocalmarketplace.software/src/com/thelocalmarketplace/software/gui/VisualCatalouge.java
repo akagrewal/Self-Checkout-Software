@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 
 public class VisualCatalouge {
 
-    GUILogic guiLogicInstance;
 
     StationGUI stationGUI;
 
@@ -28,19 +27,28 @@ public class VisualCatalouge {
         VCpanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         VCpanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-
-
         JButton apple = createButtonWithImageAndPLU("com.thelocalmarketplace.software/src/com/thelocalmarketplace/software/pictures/apple.jpg", "1002", 300, 300);
         JButton banana = createButtonWithImageAndPLU("com.thelocalmarketplace.software/src/com/thelocalmarketplace/software/pictures/banana.jpg", "1001", 300, 300);
         apple.setText("Apple");
         banana.setText("Banana");
 
-
-
         VisualCataloguePanel.add(apple);
         VisualCataloguePanel.add(banana);
 
-        return VCpanel;
+        // Create a separate panel for the back button
+        JPanel backButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> {
+            stationGUI.getLogicInstance().switchPanels("AddItemsPanel");
+        });
+        backButtonPanel.add(backButton);
+
+        // Add the back button panel to the main panel
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(VCpanel, BorderLayout.CENTER);
+        mainPanel.add(backButtonPanel, BorderLayout.SOUTH);
+
+        return new JScrollPane(mainPanel);
     }
 
     private JButton createButtonWithImageAndPLU(String imagePath, String PLU, int width, int height) {
