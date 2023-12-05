@@ -35,7 +35,7 @@ public class AttendantLogicTest {
 	@Before
 	public void setUp() {
 		attendantLogic = new AttendantLogic();
-		centralStationLogic = new CentralStationLogicStub(null);
+		centralStationLogic = new CentralStationLogicStub();
 	}
 	
 	@Test
