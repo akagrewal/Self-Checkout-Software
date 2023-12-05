@@ -120,7 +120,6 @@ public class PredictionLogic extends AbstractLogicDependant {
 	
 	
 	public void predictionAction(String message) {
-		NotifyPopUp attendantPopUp = new NotifyPopUp();
 		notify();
 		SessionBlockedPopUp.issuePredicted(message);
 		try {
