@@ -35,15 +35,11 @@ public class SessionBlockedPopUp {
     /** popup for attendant */
     public static void discrepancyDetected(JFrame parentFrame, int stationNumber) {
         popupDialog = new JDialog(parentFrame);
-        popupDialog.setSize(200, 300);
+        popupDialog.setSize(300, 200);
         popupDialog.setLocationRelativeTo(parentFrame);
 
-        JLabel label = new JLabel("Weight issue at: Station " + stationNumber);
-
-        // Set a larger font for the label
-        Font font = new Font("Arial", Font.PLAIN, 24);
-        label.setFont(font);
-
+        JLabel label = new JLabel("Weight issue at Station " + stationNumber);
+        label.setFont(new Font("Sans", Font.BOLD, 18));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         popupDialog.add(label);
 
