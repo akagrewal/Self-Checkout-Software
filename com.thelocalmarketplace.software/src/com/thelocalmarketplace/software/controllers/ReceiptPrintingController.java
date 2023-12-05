@@ -11,6 +11,7 @@ import com.jjjwelectronics.OverloadedDevice;
 import com.jjjwelectronics.printer.ReceiptPrinterListener;
 import com.thelocalmarketplace.hardware.Product;
 import com.thelocalmarketplace.software.AbstractLogicDependant;
+import com.thelocalmarketplace.software.gui.HardwarePopups;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 import com.thelocalmarketplace.software.logic.StateLogic.States;
 
@@ -93,6 +94,11 @@ public class ReceiptPrintingController extends AbstractLogicDependant implements
         paymentRecord.append("Membership Number: ").append(membershipNumber).append("\n");
         paymentRecord.append("Total Cost: $").append(totalCost).append("\n");
         paymentRecord.append("Change Given: $").append(change.toString()).append("\n");
+        
+        HardwarePopups changePopup = new HardwarePopups(logic);
+        String changeStr = change.toString();
+        changePopup.showChangeDispensed(changeStr);
+        
         
         System.out.print(paymentRecord);
         

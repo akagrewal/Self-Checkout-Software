@@ -1,9 +1,13 @@
 package com.thelocalmarketplace.software.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -12,6 +16,7 @@ import java.util.Calendar;
 import java.util.Currency;
 import java.util.function.Consumer;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -20,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.Numeral;
@@ -74,6 +80,51 @@ public class HardwarePopups {
 
 	}
 
+	
+	//pop up for show change
+	public void showChangeDispensed(String message) {
+		JFrame changeFrame = new JFrame();
+	    JLabel label = new JLabel("Change dispensed: $" + message);
+	    Font font = new Font("Arial", Font.PLAIN, 22);
+	    label.setFont(font);
+	    
+	
+        Border paddingBorder = BorderFactory.createEmptyBorder(10, 15, 10, 15); 
+        Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 2); 
+        Border compoundBorder = BorderFactory.createCompoundBorder(lineBorder, paddingBorder);
+        
+    
+        label.setBorder(compoundBorder);
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        centerPanel.add(label);
+
+        JPanel outerPanel = new JPanel(new BorderLayout());
+        outerPanel.add(centerPanel, BorderLayout.CENTER);
+
+        changeFrame.setTitle("Change");
+        changeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        changeFrame.getContentPane().add(outerPanel); 
+        changeFrame.pack();
+  
+		changeFrame.setSize(new Dimension(300, 300));
+		
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+   
+        int screenWidth = screenSize.width;
+        int frameWidth = changeFrame.getWidth();
+        int xCoordinate = screenWidth - frameWidth;
+        int yCoordinate = 0; 
+
+    
+        changeFrame.setLocation(xCoordinate, yCoordinate);
+	
+
+		changeFrame.setVisible(true);
+	}
+	
+	
 	public void showScanMainScannerPopup(JFrame parentFrame) {
 		JFrame selectionFrame = new JFrame();
 		selectionFrame.setTitle("Scan Main Scanner");
