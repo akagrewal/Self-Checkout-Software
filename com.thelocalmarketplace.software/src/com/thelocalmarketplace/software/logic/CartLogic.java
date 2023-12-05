@@ -133,6 +133,12 @@ public class CartLogic extends AbstractLogicDependant {
 			this.updateBalance(newPrice);
 			Utilities.modifyCountMapping(cart, product, -(productWeight));
 		}
+		if (product instanceof PLUCodedProduct) {
+			logic.weightLogic.removeExpectedWeight(((PLUCodedProduct) product).getPLUCode());
+		} else {
+			logic.weightLogic.removeExpectedWeight(((BarcodedProduct) product).getBarcode());
+		}
+		logic.weightLogic.handleWeightDiscrepancy();
 		logic.guiLogic.updateCartChanged();
 	}
 
