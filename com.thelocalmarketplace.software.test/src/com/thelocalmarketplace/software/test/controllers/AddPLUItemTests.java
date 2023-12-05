@@ -95,7 +95,7 @@ public class AddPLUItemTests {
 	//When an item has been succesfully added
 	@Test 
 	public void testSuccesfulAddition() {
-		session.weightLogic.updateActualWeight(new Mass(1000000000));
+		station.getScanningArea().addAnItem(pItem);
 		session.addPLUProductController.addPLU(PLU1);
 		assertEquals(session.cartLogic.getCart().size(),1);
 	}

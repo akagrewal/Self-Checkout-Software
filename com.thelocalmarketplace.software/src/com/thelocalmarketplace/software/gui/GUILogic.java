@@ -184,8 +184,7 @@ public class GUILogic {
 	}
 
 	public void addProductPLU(String PLU){
-		boolean productFound = false;
-
+	
 		PriceLookUpCode pluCode = new PriceLookUpCode(PLU);
 
 		PLUCodedProduct product = ProductDatabases.PLU_PRODUCT_DATABASE.get(pluCode);
