@@ -14,7 +14,7 @@ public class PredictionLogic extends AbstractLogicDependant {
 		this.logic = logic;
 	}	
 	
-	public void runPredictions() {		
+	public void runPredictions() {	// should be ran at the start/end of a session.	
 		checkCoinsFullPrediction();
 		checkLowCoinPrediction();
 		PredictFullBanknotes();
@@ -44,7 +44,8 @@ public class PredictionLogic extends AbstractLogicDependant {
 		var capacity = logic.hardware.getCoinStorage().getCapacity();
     	var maxCapacity = capacity * .75;
     	
-      	if (currentCoins <= maxCapacity) {
+
+      	if (currentCoins >= maxCapacity) {
    		
     		//notify attendant and disable customer station
     		predictionAction("Warning: Coin storage is almost full.");
