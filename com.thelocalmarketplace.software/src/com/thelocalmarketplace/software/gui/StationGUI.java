@@ -230,22 +230,46 @@ public class StationGUI extends JFrame {
         ownBagsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	centralStationLogic.addBagsLogic.startAddBags();
-            	//opens dialog to end Add Bags
-            	int choice = JOptionPane.showOptionDialog(ownBagsButton,
-                        "Please press 'DONE' when done adding bags.",
-                        "Add Own Bags",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.INFORMATION_MESSAGE,
-                        null,
-                        new Object[]{"DONE", "Cancel"},
-                        "DONE");
-            	
-            	if (choice == JOptionPane.YES_OPTION) {
-                    centralStationLogic.addBagsLogic.endAddBags();
-                }
+                centralStationLogic.addBagsLogic.startAddBags();
 
-                guiLogicInstance.switchPanels("paymentPanel");
+                // Create a custom dialog
+                JDialog dialog = new JDialog();
+                dialog.setTitle("Add Own Bags");
+                dialog.setModal(false); // This makes the dialog non-modal
+
+                // Create a panel to hold the components
+                JPanel panel = new JPanel();
+
+                // Create the message
+                JLabel messageLabel = new JLabel("Please press 'DONE' when done adding bags.");
+                panel.add(messageLabel);
+
+                // Create the buttons
+                JButton doneButton = new JButton("DONE");
+                JButton cancelButton = new JButton("Cancel");
+
+                // Add action listeners to the buttons
+                doneButton.addActionListener(e2 -> {
+                    centralStationLogic.addBagsLogic.endAddBags();
+                    dialog.dispose();
+                });
+
+                cancelButton.addActionListener(e2 -> dialog.dispose());
+
+                // Add the buttons to the panel
+                panel.add(doneButton);
+                panel.add(cancelButton);
+
+                // Add the panel to the dialog
+                dialog.getContentPane().add(panel);
+
+                // Set the location of the dialog to the location of the button
+                Point location = ((Component) e.getSource()).getLocationOnScreen();
+                dialog.setLocation(location);
+
+                // Display the dialog
+                dialog.pack();
+                dialog.setVisible(true);
             }
         });
         // Attach buttons
