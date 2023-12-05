@@ -14,8 +14,19 @@ public class CreateTestDatabases {
 	
 	public static BarcodedProduct soup;
 	public static BarcodedProduct pickles;
+	
+	public static PLUCodedProduct bagsUnder;
+	public static PLUCodedProduct bagsOver;
 
     public static void createDatabase() {
+    	
+    	PriceLookUpCode bagsUnderPLU = new PriceLookUpCode("9999");
+    	bagsUnder = new PLUCodedProduct(bagsUnderPLU, "Bags", 15);
+    	
+    	PriceLookUpCode bagsOverPLU = new PriceLookUpCode("9998");
+    	bagsOver = new PLUCodedProduct(bagsOverPLU, "Bags", 35);
+    	
+    	
         // Populate PLU-coded products (fruits)
         PriceLookUpCode bananaPLU = new PriceLookUpCode("1001");
         banana = new PLUCodedProduct(bananaPLU, "Banana", 150);
@@ -37,6 +48,8 @@ public class CreateTestDatabases {
         // Add products to the databases
         ProductDatabases.PLU_PRODUCT_DATABASE.put(bananaPLU, banana);
         ProductDatabases.PLU_PRODUCT_DATABASE.put(applePLU, apple);
+        ProductDatabases.PLU_PRODUCT_DATABASE.put(bagsUnderPLU, bagsUnder);
+        ProductDatabases.PLU_PRODUCT_DATABASE.put(bagsOverPLU, bagsOver);
 
         ProductDatabases.BARCODED_PRODUCT_DATABASE.put(soupBarcode, soup);
         ProductDatabases.BARCODED_PRODUCT_DATABASE.put(picklesBarcode, pickles);
@@ -46,5 +59,7 @@ public class CreateTestDatabases {
         ProductDatabases.INVENTORY.put(apple, 150);
         ProductDatabases.INVENTORY.put(soup, 50);
         ProductDatabases.INVENTORY.put(pickles, 75);
+        ProductDatabases.INVENTORY.put(bagsUnder, 1);
+        ProductDatabases.INVENTORY.put(bagsOver, 1);
     }
 }

@@ -44,7 +44,7 @@ import static com.thelocalmarketplace.software.gui.SessionBlockedPopUp.*;
  * @author Anandita Mahika - 30097559
  */
 public class AttendantLogic {
-	private final AttendantGUI attendantGUI;
+	public AttendantGUI attendantGUI;
 	ArrayList<CentralStationLogic> stationLogicsList;
 
 	public AttendantLogic() {
@@ -104,7 +104,7 @@ public class AttendantLogic {
 	 * approveBaggingArea() */
 	public void baggingDiscrepencyDetected(CentralStationLogic logic) {
 		//TODO GUI: display that customer is awaiting approval to attendant
-		discrepancyDetected(attendantGUI.getAttendantFrame());
+		customerDiscrepancyDetected(attendantGUI.getAttendantFrame(), logic.stationNumber);
 
 		this.inBaggingDiscrepency = true;
 		logic.stateLogic.gotoState(States.BLOCKED);
@@ -153,10 +153,10 @@ public class AttendantLogic {
 	/**
 	 * Notify the attendant their aid is needed
 	 */
-	public void callAttendant(GUILogic guiLogic) {
-    	// set visible (or open) NotifyPopUp
-		AttendantPopups notify = new AttendantPopups();
-        notify.notifyPopUp();
+	public void callAttendant(int stationNumber) {
+		System.out.println("Assisstance Required on Station "+stationNumber);
+		AttendantPopups notify = new AttendantPopups(attendantGUI.getAttendantFrame());
+        notify.notifyPopUp(stationNumber);
     }
 
 	/** Method to notify the attendant station that the current session has ended */
@@ -189,9 +189,17 @@ public class AttendantLogic {
 
 
 		//TODO GUI: GUI should go back to normal if it was previously disabled
-		attendantOverride();
+		attendantOverride(logic.stationNumber);
 		
 		logic.stateLogic.gotoState(States.NORMAL);
+	}
+	
+	/** 
+	 *  Attendant being notified of weight discrepancy
+	 */
+	public void weightDiscrepancy(CentralStationLogic logic) {
+		customerDiscrepancyDetected(logic.stationGUI, logic.stationNumber);
+		discrepancyDetected(attendantGUI.getAttendantFrame(), logic.stationNumber);
 	}
 	
 	/** Adds an item for a customer through text search

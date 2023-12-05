@@ -1,5 +1,7 @@
 package com.thelocalmarketplace.software.gui;
 
+import com.thelocalmarketplace.software.logic.AttendantLogic;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -12,18 +14,27 @@ import javax.swing.*;
 public class AttendantPopups {
 	protected JFrame attendantFrame;
 
-	public void notifyPopUp() {
-		JFrame notifyPopUp = new JFrame("Assistance Requested");
+	public AttendantPopups(JFrame attendantFrame) {
+		this.attendantFrame = attendantFrame;
+	}
+
+	public AttendantPopups(AttendantLogic attendantLogic) {
+		this.attendantFrame = attendantLogic.attendantGUI.getAttendantFrame();
+	}
+
+	public void notifyPopUp(int stationNumber) {
+		JFrame notifyPopUp = new JFrame("Assistance Requested: Station" + stationNumber);
 		notifyPopUp.setSize(400, 300);
 		notifyPopUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		JPanel popupPanel = createLabelPanel("A Customer Has Requested Assistance", 40, 50);
+		JPanel popupPanel = createLabelPanel("Assistance Requested: Station " + stationNumber, 40, 50);
 		JPanel buttonPanel = new JPanel();
-		JButton confirmButton1 = new JButton("Confirm");
+		JButton confirmButton1 = new JButton("OK");
 		confirmButton1.addActionListener(e -> notifyPopUp.dispose());
 		buttonPanel.add(confirmButton1);
 		notifyPopUp.add(popupPanel, BorderLayout.NORTH);
 		notifyPopUp.add(buttonPanel, BorderLayout.CENTER);
+		notifyPopUp.setLocationRelativeTo(attendantFrame);
 
 		notifyPopUp.setVisible(true);
 

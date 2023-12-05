@@ -85,6 +85,7 @@ public class AddBarcodedItemController extends AbstractLogicDependant implements
     	this.addBarcode(barcode);
     	
     	System.out.println("Place item in bagging area");
+    	logic.guiLogic.showInfoMessage("Place Item in Bagging Area");
 	}
     
     // ---- Unused ----

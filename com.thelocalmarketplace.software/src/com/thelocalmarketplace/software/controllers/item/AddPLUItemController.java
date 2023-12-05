@@ -79,6 +79,7 @@ public class AddPLUItemController extends AbstractLogicDependant{
         this.logic.weightLogic.addExpectedWeight(plu);
 
         this.logic.stateLogic.gotoState(StateLogic.States.BLOCKED);
+        logic.guiLogic.showInfoMessage("Item added to cart. Please place scanned item in bagging area");
         System.out.println("Item added to cart. Please place scanned item in bagging area");
     }
 

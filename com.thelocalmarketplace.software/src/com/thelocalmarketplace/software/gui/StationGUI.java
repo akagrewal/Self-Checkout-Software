@@ -23,6 +23,8 @@ public class StationGUI extends JFrame {
 
     public GUILogic guiLogicInstance;
     private final CentralStationLogic centralStationLogic;
+    
+    public JPanel blockingPanel;
 
     /** Stores the list of items being displayed on the screen (needs to be updated by GUI logic)**/
 	public DefaultListModel<String> itemListModel = new DefaultListModel<>();
@@ -57,8 +59,8 @@ public class StationGUI extends JFrame {
         cardPanel.add(createVisual(), "visualCatalogue");
         cardPanel.add(createThankYouPanel(), "thankYouPanel");
         cardPanel.add(createPaymentPanel(), "paymentPanel");
-        // cardPanel.add(createCashBillPanel(), "cashBillPanel");
-        // cardPanel.add(createCashCoinPanel(), "cashCoinPanel");
+        cardPanel.add(createPOSPanel(), "POS_Panel");
+        cardPanel.add(createCashPaymentPanel(), "CashPaymentPanel");
 
 //        cardPanel.add(createNumberPad(), "numpadPanel");
         add(cardPanel);
@@ -68,12 +70,23 @@ public class StationGUI extends JFrame {
         //Or use method guiLogicInstance.switchPanels("welcomePanel")
 
         setVisible(true);
+        createBlockingPanel();
     }
 
     private static void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
         Insets insets = new Insets(0, 0, 0, 0);
         GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, gridheight, 1.0, 1.0, anchor, fill, insets, 0, 0);
         container.add(component, gbc);
+    }
+    
+    private void createBlockingPanel() {
+        blockingPanel = new JPanel(new GridBagLayout());
+        blockingPanel.setBackground(Color.GRAY); 
+        JLabel blockingLabel = new JLabel("Blocking");
+        blockingLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        blockingPanel.add(blockingLabel);
+        blockingPanel.setVisible(false); // Initially hidden
+        this.add(blockingPanel, BorderLayout.CENTER);
     }
 
     // Customer Screen 1
@@ -87,28 +100,28 @@ public class StationGUI extends JFrame {
         nextButton.addActionListener(e -> guiLogicInstance.StartSessionButtonPressed());
         nextButton.setBackground(Color.decode("#9DAF99"));  //Maroon
         nextButton.setForeground(Color.decode("#40543D"));
-        nextButton.setFont(new Font("Serif", Font.BOLD, 40));
+        nextButton.setFont(new Font("Serif", Font.BOLD, 42));
         
         JButton bags = new JButton("Have your own bags?");
         bags.setBackground(Color.decode("#B9AFCA"));  //Navy
         bags.setForeground(Color.decode("#4A3D54"));
-        bags.setFont(new Font("Serif", Font.BOLD, 25));
+        bags.setFont(new Font("Sans", Font.BOLD, 24));
         bags.addActionListener(e -> {
             // TODO: Implement
         });
 
-        JButton help = new JButton("call for help");
+        JButton help = new JButton("Call for assisstance");
         help.setBackground(Color.decode("#B9AFCA"));  //Navy
         help.setForeground(Color.decode("#4A3D54"));
-        help.setFont(new Font("Serif", Font.BOLD, 25));
-        nextButton.addActionListener(e -> {
-            //TODO: Implement
+        help.setFont(new Font("Sans", Font.BOLD, 24));
+        help.addActionListener(e -> {
+            centralStationLogic.attendantLogic.callAttendant(centralStationLogic.stationNumber);
         });
 
-        JButton membership = new JButton("Are you a member?");
+        JButton membership = new JButton("Enter Membership No.");
         membership.setBackground(Color.decode("#B9AFCA"));  //Navy
         membership.setForeground(Color.decode("#4A3D54"));
-        membership.setFont(new Font("Serif", Font.BOLD, 25));
+        membership.setFont(new Font("Sans", Font.BOLD, 24));
         membership.addActionListener(e -> {
             Numpad membershipNumpad = new Numpad(StationGUI.this, guiLogicInstance, 0); // this may need changes
             membershipNumpad.openNumPadPanel();
@@ -193,52 +206,70 @@ public class StationGUI extends JFrame {
         removeItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // goto panel to remove an item
+                cardPanel.add(createRemoveItemPanel(), "removeItem");
+                guiLogicInstance.switchPanels("removeItem");
             }
         });
 
         JButton payButton = new JButton("Finish and Pay");
-        payButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        payButton.addActionListener(e -> {
+            System.out.println(centralStationLogic.stateLogic.getState());
+            centralStationLogic.stateLogic.gotoState(StateLogic.States.CHECKOUT);
+            if (centralStationLogic.cartLogic.getBalanceOwed().compareTo(BigDecimal.ZERO) <= 0) {
+                //exception, have not added anything
+            } else {
                 guiLogicInstance.switchPanels("paymentPanel");
             }
         });
 
         JButton buyBagsButton = new JButton("Purchase Bags");
-        buyBagsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	new BagKeypad(StationGUI.this, buyBagsButton, centralStationLogic);
-                guiLogicInstance.switchPanels("paymentPanel");
-            }
+        buyBagsButton.addActionListener(e -> {
+            new BagKeypad(StationGUI.this, buyBagsButton, centralStationLogic);
+            guiLogicInstance.switchPanels("paymentPanel");
         });
 
         JButton ownBagsButton = new JButton("Have your own bags? ");
-        ownBagsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	centralStationLogic.addBagsLogic.startAddBags();
-            	//opens dialog to end Add Bags
-            	int choice = JOptionPane.showOptionDialog(ownBagsButton,
-                        "Please press 'DONE' when done adding bags.",
-                        "Add Own Bags",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.INFORMATION_MESSAGE,
-                        null,
-                        new Object[]{"DONE", "Cancel"},
-                        "DONE");
-            	
-            	if (choice == JOptionPane.YES_OPTION) {
-                    centralStationLogic.addBagsLogic.endAddBags();
-                    
-                    if (centralStationLogic.stateLogic.inState(States.ADDBAGS)) {
-                    	BagsTooHeavyPopUp heavyBagPopUp = new BagsTooHeavyPopUp();
-                    	heavyBagPopUp.notifyBagHeavyPopUp();
-                    	SessionBlockedPopUp.discrepancyDetected(StationGUI.this);
-                    }
-                }
-            }
+        ownBagsButton.addActionListener(e -> {
+            centralStationLogic.addBagsLogic.startAddBags();
+
+            // Create a custom dialog
+            JDialog dialog = new JDialog();
+            dialog.setTitle("Add Own Bags");
+            dialog.setModal(false); // This makes the dialog non-modal
+
+            // Create a panel to hold the components
+            JPanel panel = new JPanel();
+
+            // Create the message
+            JLabel messageLabel = new JLabel("Please press 'DONE' when done adding bags.");
+            panel.add(messageLabel);
+
+            // Create the buttons
+            JButton doneButton = new JButton("DONE");
+            JButton cancelButton = new JButton("Cancel");
+
+            // Add action listeners to the buttons
+            doneButton.addActionListener(e2 -> {
+                centralStationLogic.addBagsLogic.endAddBags();
+                dialog.dispose();
+            });
+
+            cancelButton.addActionListener(e2 -> dialog.dispose());
+
+            // Add the buttons to the panel
+            panel.add(doneButton);
+            panel.add(cancelButton);
+
+            // Add the panel to the dialog
+            dialog.getContentPane().add(panel);
+
+            // Set the location of the dialog to the location of the button
+            Point location = ((Component) e.getSource()).getLocationOnScreen();
+            dialog.setLocation(location);
+
+            // Display the dialog
+            dialog.pack();
+            dialog.setVisible(true);
         });
         // Attach buttons
         buttonsPanel.add(VCButton);
@@ -299,6 +330,35 @@ public class StationGUI extends JFrame {
         return mainPanel;
     }
 
+	private JPanel createRemoveItemPanel() {
+        // create the panel
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+
+        JPanel removeItemPanel = new JPanel();
+        JLabel removeLabel = new JLabel("Please select an item to remove: ");
+        removeLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        JButton backButton = new JButton("Back");
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guiLogicInstance.switchPanels("AddItemsPanel");
+            }
+        });
+        guiLogicInstance.addRemoveButtons(removeItemPanel);
+
+        removeItemPanel.setBorder(BorderFactory.createTitledBorder("SELECT AN ITEM"));
+        JScrollPane RMpanel = new JScrollPane(removeItemPanel);
+        RMpanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        RMpanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        addComponent(mainPanel,removeLabel,0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        addComponent(mainPanel,backButton,0, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.NONE);
+        addComponent(mainPanel,RMpanel,1, 0, 1, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+        return mainPanel;
+    }
+
+	
 
     //Screen 3 Payment Panel
     private JPanel createPaymentPanel() {
@@ -306,15 +366,20 @@ public class StationGUI extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        JButton button_CardPayment = new JButton("Credit/Debit");
+        JButton button_CreditPayment = new JButton("Credit");
+        JButton button_DebitPayment = new JButton("Debit");
+        
         JButton buttonCoinPayment = new JButton("Coins");
         JButton buttonCashPayment = new JButton("Banknotes");
         JButton buttonMixedPayment = new JButton("Mixed");
         JButton buttonLeaveWithoutPaying = new JButton("Leave Without Paying");
         JButton buttonBackToCheckout = new JButton("Back to Checkout");
         gbc.gridx = 1; gbc.gridy = 1;
-        button_CardPayment.setPreferredSize(new Dimension(200,123));
-        PaymentPanel.add(button_CardPayment, gbc);
+        button_CreditPayment.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(button_CreditPayment, gbc);
+        gbc.gridx = 1; gbc.gridy = 3;
+        button_DebitPayment.setPreferredSize(new Dimension(200,123));
+        PaymentPanel.add(button_DebitPayment, gbc);
         gbc.gridx = 2; gbc.gridy = 1;
         buttonCoinPayment.setPreferredSize(new Dimension(200,123));
         PaymentPanel.add(buttonCoinPayment, gbc);
@@ -324,205 +389,89 @@ public class StationGUI extends JFrame {
         gbc.gridx = 4; gbc.gridy = 1;
         buttonMixedPayment.setPreferredSize(new Dimension(200,123));
         PaymentPanel.add(buttonMixedPayment, gbc);
-        gbc.gridx = 1; gbc.gridy = 3;
+        gbc.gridx = 2; gbc.gridy = 3;
         buttonLeaveWithoutPaying.setPreferredSize(new Dimension(200,50));
         PaymentPanel.add(buttonLeaveWithoutPaying, gbc);
         gbc.gridx = 4; gbc.gridy = 3;
         buttonBackToCheckout.setPreferredSize(new Dimension(200,50));
         PaymentPanel.add(buttonBackToCheckout, gbc);
 
-        button_CardPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonCoinPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonCashPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonMixedPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonLeaveWithoutPaying.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonBackToCheckout.addActionListener(e -> guiLogicInstance.switchPanels("AddItemsPanel"));
+        button_CreditPayment.addActionListener(e -> {
+            centralStationLogic.selectPaymentMethod(PaymentMethods.CREDIT);
+            guiLogicInstance.switchPanels("POS_Panel");
+        });
+        button_DebitPayment.addActionListener(e -> {
+            centralStationLogic.selectPaymentMethod(PaymentMethods.DEBIT);
+            guiLogicInstance.switchPanels("POS_Panel");
+        });
+        buttonCoinPayment.addActionListener(e -> {
+            centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
+            guiLogicInstance.switchPanels("CashPaymentPanel");
+        });
+        buttonCashPayment.addActionListener(e -> {
+            centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
+            guiLogicInstance.switchPanels("CashPaymentPanel");
+        });
+        buttonMixedPayment.addActionListener(e -> {
+            centralStationLogic.selectPaymentMethod(PaymentMethods.MIXED);
+            guiLogicInstance.switchPanels("CashPaymentPanel");
+        });
+
+        buttonLeaveWithoutPaying.addActionListener(e -> {
+        });
+        buttonBackToCheckout.addActionListener(e -> {
+            guiLogicInstance.switchPanels("AddItemsPanel");
+        });
+
 
         return PaymentPanel;
     }
 
-
-/*
-    //Screen 3.B Payment Panel (Coin Bill)
-    private JPanel createCashBillPanel() {
-        JPanel CoinBillPanel = new JPanel(new GridBagLayout());
+    private JPanel createPOSPanel()  {
+        JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-
-        JButton payment_button1 = new JButton("$5.00");
-        payment_button1.addActionListener(new ActionListener() {
+        JButton returnButton = new JButton("Cancel");
+        returnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("5.00");
+                guiLogicInstance.switchPanels("paymentPanel");
+                guiLogicInstance.SessionOver();
             }
         });
-        JButton payment_button2 = new JButton("$10.00");
-        payment_button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("10.00");
-            }
-        });
-        JButton payment_button3 = new JButton("$20.00");
-        payment_button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("20.00");
-            }
-        });
-        JButton payment_button4 = new JButton("$50.00");
-        payment_button4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("50.00");
-            }
-        });
-        JButton payment_button5 = new JButton("100.00");
-        payment_button5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("10.00");
-            }
-        });
-        JButton payment_button6 = new JButton("Pay for Order");
-        payment_button6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("thankYouPanel");
-            }
-        });
-        JButton payment_button7 = new JButton("Back to Checkout/Add More Items");
-        payment_button7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("AddItemsPanel");
-            }
-        });
-        gbc.gridx = 0; gbc.gridy = 0;
-        payment_button1.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button1, gbc);
+        JLabel POSLabel = new JLabel("Please complete the payment at the POS");
+        POSLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        gbc.gridy = 0;
+        panel.add(POSLabel, gbc);
+        gbc.gridy = 1;
+        panel.add(returnButton,gbc);
 
-
-        gbc.gridx = 0; gbc.gridy = 1;
-        payment_button2.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button2, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 2;
-        payment_button3.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button3, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 3;
-        payment_button4.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button4, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 4;
-        payment_button5.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button5, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 5;
-        payment_button6.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button6, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 6;
-        payment_button7.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button7, gbc);
-
-        return CoinBillPanel;
+        return panel;
     }
 
- */
-
-    /*
-    //Screen 3 Payment Panel (Coin Coin)
-    private JPanel createCashCoinPanel() {
-        JPanel CoinBillPanel = new JPanel(new GridBagLayout());
+    private JPanel createCashPaymentPanel()  {
+        JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-
-        JButton payment_button1 = new JButton("$0.01");
-        payment_button1.addActionListener(new ActionListener() {
+        JButton returnButton = new JButton("Cancel");
+        returnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("0.01");
+                guiLogicInstance.switchPanels("paymentPanel");
+                guiLogicInstance.SessionOver();
             }
         });
-        JButton payment_button2 = new JButton("$0.05");
-        payment_button2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("0.05");
-            }
-        });
-        JButton payment_button3 = new JButton("$0.10");
-        payment_button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("0.10");
-            }
-        });
-        JButton payment_button4 = new JButton("$0.25");
-        payment_button4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("0.25");
-            }
-        });
-        JButton payment_button5 = new JButton("$1.00");
-        payment_button5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("1.00");
-            }
-        });
-        JButton payment_button6 = new JButton("Pay for Order");
-        payment_button6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("thankYouPanel");
-            }
-        });
-        JButton payment_button7 = new JButton("Back to Checkout/Add More Items");
-        payment_button7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("AddItemsPanel");
-            }
-        });
-        gbc.gridx = 0; gbc.gridy = 0;
-        payment_button1.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button1, gbc);
+        JLabel POSLabel = new JLabel("Balance: " + centralStationLogic.cartLogic.getBalanceOwed());
+        POSLabel.setFont(new Font("Arial", Font.BOLD, 26));
+        gbc.gridy = 0;
+        panel.add(POSLabel, gbc);
+        gbc.gridy = 1;
+        panel.add(returnButton,gbc);
 
-
-        gbc.gridx = 0; gbc.gridy = 1;
-        payment_button2.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button2, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 2;
-        payment_button3.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button3, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 3;
-        payment_button4.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button4, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 4;
-        payment_button5.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button5, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 5;
-        payment_button6.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button6, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 6;
-        payment_button7.setPreferredSize(new Dimension(150,150));
-        CoinBillPanel.add(payment_button7, gbc);
-
-        return CoinBillPanel;
+        return panel;
     }
-
-     */
 
 
     private JPanel createThankYouPanel()  {
