@@ -238,54 +238,67 @@ public class HardwarePopups {
 		swipeReal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				try {
 					centralStationLogic.hardware.getCardReader().swipe(realCreditCard);
 				} catch (IOException e1) {
-					// POPUP FOR ERROR
-				}
+					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
+				} }
 			}
 		});
 		swipeFake.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
+
 				try {
 					centralStationLogic.hardware.getCardReader().swipe(fakeCreditCard);
 				} catch (IOException e1) {
-					// POPUP FOR ERROR
-				}
+					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
+				}}
 			}
 		});
 
 		insertReal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				JDialog pinDialog = createDialog(parentFrame, "pin");
 				JTextField textField = addTextField(pinDialog, "Enter pin:");
 				Consumer<String> onSubmit = inputText -> {
 					try {
 						centralStationLogic.hardware.getCardReader().insert(realCreditCard, inputText);
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
+						centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 						e1.printStackTrace();
 
 					}
 
 				};
 				addSubmitButton(pinDialog, textField, onSubmit);
-				showDialog(pinDialog);
+				showDialog(pinDialog);}
 
 			}
 		});
 		insertFake.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				JDialog pinDialog = createDialog(parentFrame, "pin");
 				JTextField textField = addTextField(pinDialog, "Enter pin:");
 				Consumer<String> onSubmit = inputText -> {
 					try {
 						centralStationLogic.hardware.getCardReader().insert(fakeCreditCard, inputText);
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
+						centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 						e1.printStackTrace();
 
 					}
@@ -293,28 +306,34 @@ public class HardwarePopups {
 					//guiLogic.insertCoin(coinValue);
 				};
 				addSubmitButton(pinDialog, textField, onSubmit);
-				showDialog(pinDialog);
+				showDialog(pinDialog);}
 
 			}
 		});
 		tapReal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				try {
 					centralStationLogic.hardware.getCardReader().tap(realCreditCard);
 				} catch (IOException e1) {
-					// POPUP FOR ERROR
-				}
+					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
+				}}
 			}
 		});
 		tapFake.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				try {
 					centralStationLogic.hardware.getCardReader().tap(fakeCreditCard);
 				} catch (IOException e1) {
-					// POPUP FOR ERROR
-				}
+					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
+				}}
 			}
 		});
 
@@ -342,21 +361,27 @@ public class HardwarePopups {
 		swipeReal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				try {
 					centralStationLogic.hardware.getCardReader().swipe(realDebitCard);
 				} catch (IOException e1) {
-					// POPUP FOR ERROR
-				}
+					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
+				}}
 			}
 		});
 		swipeFake.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				try {
 					centralStationLogic.hardware.getCardReader().swipe(fakeDebitCard);
 				} catch (IOException e1) {
-					// POPUP FOR ERROR
-				}
+					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
+				}}
 			}
 		});
 
@@ -364,33 +389,39 @@ public class HardwarePopups {
 		insertReal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				JDialog pinDialog = createDialog(parentFrame, "pin");
 				JTextField textField = addTextField(pinDialog, "Enter pin:");
 				Consumer<String> onSubmit = inputText -> {
 					try {
 						centralStationLogic.hardware.getCardReader().insert(realDebitCard, inputText);
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
+						centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 						e1.printStackTrace();
 
 					}
 
 				};
 				addSubmitButton(pinDialog, textField, onSubmit);
-				showDialog(pinDialog);
+				showDialog(pinDialog);}
 
 			}
 		});
 		insertFake.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				JDialog pinDialog = createDialog(parentFrame, "pin");
 				JTextField textField = addTextField(pinDialog, "Enter pin:");
 				Consumer<String> onSubmit = inputText -> {
 					try {
 						centralStationLogic.hardware.getCardReader().insert(fakeDebitCard, inputText);
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
+						centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 						e1.printStackTrace();
 
 					}
@@ -398,7 +429,7 @@ public class HardwarePopups {
 					//guiLogic.insertCoin(coinValue);
 				};
 				addSubmitButton(pinDialog, textField, onSubmit);
-				showDialog(pinDialog);
+				showDialog(pinDialog);}
 
 			}
 		});
@@ -406,21 +437,27 @@ public class HardwarePopups {
 		tapReal.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				try {
 					centralStationLogic.hardware.getCardReader().tap(realDebitCard);
 				} catch (IOException e1) {
-					// POPUP FOR ERROR
+					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 				}
-			}
+			}}
 		});
 		tapFake.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!centralStationLogic.isSessionStarted()){
+					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
+				} else {
 				try {
 					centralStationLogic.hardware.getCardReader().tap(fakeDebitCard);
 				} catch (IOException e1) {
-					// POPUP FOR ERROR
-				}
+					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
+				}}
 			}
 		});
 
