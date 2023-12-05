@@ -29,8 +29,13 @@ public class VisualCatalouge {
         VCpanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 
+
         JButton apple = createButtonWithImageAndPLU("com.thelocalmarketplace.software/src/com/thelocalmarketplace/software/pictures/apple.jpg", "1002", 300, 300);
         JButton banana = createButtonWithImageAndPLU("com.thelocalmarketplace.software/src/com/thelocalmarketplace/software/pictures/banana.jpg", "1001", 300, 300);
+        apple.setText("Apple");
+        banana.setText("Banana");
+
+
 
         VisualCataloguePanel.add(apple);
         VisualCataloguePanel.add(banana);
@@ -54,11 +59,11 @@ public class VisualCatalouge {
 
         PriceLookUpCode code = new PriceLookUpCode(PLU);
 
-        PLUCodedProduct product = ProductDatabases.PLU_PRODUCT_DATABASE.get(code);
-
-        String name = product.getDescription();
-
-        button.setText(name);
+//        PLUCodedProduct product = ProductDatabases.PLU_PRODUCT_DATABASE.get(code);
+//
+//        String name = product.getDescription();
+//
+//        button.setText(name);
 
         button.setHorizontalTextPosition(JButton.CENTER);
         button.setVerticalTextPosition(JButton.CENTER);

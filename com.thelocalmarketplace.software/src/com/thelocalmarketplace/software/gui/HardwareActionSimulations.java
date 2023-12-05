@@ -9,7 +9,7 @@ import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
 public class HardwareActionSimulations extends JFrame {
 
-    private static final int WINDOW_WIDTH = 800;
+    private static final int WINDOW_WIDTH = 500;
     private static final int WINDOW_HEIGHT = 500;
     private static final int BUTTON_WIDTH = 225; // 75% of WINDOW_WIDTH
     private static final int BUTTON_HEIGHT = 50;
@@ -44,8 +44,8 @@ public class HardwareActionSimulations extends JFrame {
         payPanel.add(createHeader("Pay"));
         payPanel.add(createButton("Pay with Credit", e -> hardwarePopups.showPayWithCreditPopup(this)));
         payPanel.add(createButton("Pay with Debit", e -> hardwarePopups.showPayWithDebitPopup(this)));
-        payPanel.add(createButton("Insert Coin", e -> HardwarePopups.showInsertCoinPopup(this)));
-        payPanel.add(createButton("Insert Banknote", e -> HardwarePopups.showInsertBanknotePopup(this)));
+        payPanel.add(createButton("Insert Coin", e -> hardwarePopups.showInsertCoinPopup(this)));
+        payPanel.add(createButton("Insert Banknote", e -> hardwarePopups.showInsertBanknotePopup(this)));
         add(payPanel);
 
         setLocationRelativeTo(null); // Center the window on the screen

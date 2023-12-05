@@ -62,8 +62,7 @@ public class CentralStationLogic {
 		NONE, // Default
 		CREDIT,
 		DEBIT,
-		CASH,
-		MIXED
+		CASH
 	}
 
 	/**

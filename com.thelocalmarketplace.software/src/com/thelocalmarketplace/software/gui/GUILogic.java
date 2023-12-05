@@ -3,15 +3,11 @@ package com.thelocalmarketplace.software.gui;
 
 import java.awt.CardLayout;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import com.jjjwelectronics.Mass;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
 import com.thelocalmarketplace.hardware.PLUCodedProduct;
 import com.thelocalmarketplace.hardware.PriceLookUpCode;
@@ -37,9 +33,29 @@ public class GUILogic {
 		this.cardPanel = stationGUI.cardPanel;
 		this.centralLogic = logic;
 	}
+	
 
 	public void switchPanels(String string) {
 		cardLayout.show(cardPanel, string);
+	}
+	
+	public void showExceptionMessage(String message) {
+		JOptionPane.showMessageDialog(guiDisplay, message, "Error", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public void showInfoMessage(String message) {
+	    JOptionPane.showMessageDialog(guiDisplay, message, "Information", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	
+	public void blockGUI() {
+		guiDisplay.blockingPanel.setVisible(true);
+		guiDisplay.cardPanel.setVisible(false);
+	}
+	
+	public void unblockGUI() {
+		guiDisplay.blockingPanel.setVisible(false);
+		guiDisplay.cardPanel.setVisible(true);
 	}
 	
 	/** Call when a change is made to the cart; Will cause the required changes on the GUI side **/

@@ -164,7 +164,9 @@ public class StateLogic extends AbstractLogicDependant {
 			throw new InvalidStateTransitionException();
 		}
 		
+		if (!next.equals(States.BLOCKED) && this.state.equals(States.BLOCKED)) logic.guiLogic.unblockGUI();
 		this.state = next;
+		if (this.state == States.BLOCKED) logic.guiLogic.blockGUI();
 		
 		for (AbstractStateTransitionListener listener : this.events.get(this.state)) {
 			listener.onTransition();
