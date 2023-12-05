@@ -852,7 +852,8 @@ public class HardwarePopups {
 			} catch (CashOverloadException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			} catch (InvalidStateSimulationException invalidStateSimulationException){
+				centralStationLogic.guiLogic.showExceptionMessage("Payment by banknote not selected");}
 			selectionFrame.dispose();}
 		});
 		ten.addActionListener(e -> {
@@ -868,7 +869,8 @@ public class HardwarePopups {
 			} catch (CashOverloadException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			} catch (InvalidStateSimulationException invalidStateSimulationException){
+				centralStationLogic.guiLogic.showExceptionMessage("Payment by banknote not selected");}
 			selectionFrame.dispose();}
 		});
 		twenty.addActionListener(e -> {
@@ -884,7 +886,8 @@ public class HardwarePopups {
 			} catch (CashOverloadException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			} catch (InvalidStateSimulationException invalidStateSimulationException){
+				centralStationLogic.guiLogic.showExceptionMessage("Payment by banknote not selected");}
 			selectionFrame.dispose();}
 		});
 		fifty.addActionListener(e -> {
@@ -900,7 +903,8 @@ public class HardwarePopups {
 			} catch (CashOverloadException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			} catch (InvalidStateSimulationException invalidStateSimulationException){
+				centralStationLogic.guiLogic.showExceptionMessage("Payment by banknote not selected");}
 			selectionFrame.dispose();}
 		});
 		hundred.addActionListener(e -> {
@@ -916,7 +920,8 @@ public class HardwarePopups {
 			} catch (CashOverloadException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			} catch (InvalidStateSimulationException invalidStateSimulationException){
+				centralStationLogic.guiLogic.showExceptionMessage("Payment by banknote not selected");}
 			selectionFrame.dispose();}
 		});
 		
