@@ -9,6 +9,8 @@ import java.math.RoundingMode;
 import javax.swing.*;
 
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
+import com.thelocalmarketplace.software.logic.CentralStationLogic.PaymentMethods;
+import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 
 
@@ -58,6 +60,8 @@ public class StationGUI extends JFrame {
         cardPanel.add(createVisual(), "visualCatalogue");
         cardPanel.add(createThankYouPanel(), "thankYouPanel");
         cardPanel.add(createPaymentPanel(), "paymentPanel");
+        cardPanel.add(createPOSPanel(), "POS_Panel");
+        cardPanel.add(createCashPaymentPanel(), "CashPaymentPanel");
         // cardPanel.add(createCashBillPanel(), "cashBillPanel");
         // cardPanel.add(createCashCoinPanel(), "cashCoinPanel");
 
@@ -213,7 +217,14 @@ public class StationGUI extends JFrame {
         payButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.switchPanels("paymentPanel");
+            	
+            	System.out.println(centralStationLogic.stateLogic.getState());
+            	centralStationLogic.stateLogic.gotoState(States.CHECKOUT);
+            	if (centralStationLogic.cartLogic.getBalanceOwed().compareTo(BigDecimal.ZERO) <= 0) {
+            		guiLogicInstance.switchPanels("thankYouPanel");
+            	}else {
+            		guiLogicInstance.switchPanels("paymentPanel");
+            	}
             }
         });
 
@@ -339,12 +350,28 @@ public class StationGUI extends JFrame {
         buttonBackToCheckout.setPreferredSize(new Dimension(200,50));
         PaymentPanel.add(buttonBackToCheckout, gbc);
 
-        button_CardPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonCoinPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonCashPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonMixedPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonLeaveWithoutPaying.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonBackToCheckout.addActionListener(e -> guiLogicInstance.switchPanels("AddItemsPanel"));
+        button_CardPayment.addActionListener(e -> {
+        	centralStationLogic.selectPaymentMethod(PaymentMethods.CREDIT);
+        	guiLogicInstance.switchPanels("POS_Panel");	
+        });
+        buttonCoinPayment.addActionListener(e -> {
+        	centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
+			guiLogicInstance.switchPanels("CashPaymentPanel");
+		});
+        buttonCashPayment.addActionListener(e -> {
+        	centralStationLogic.selectPaymentMethod(PaymentMethods.CASH);
+			guiLogicInstance.switchPanels("CashPaymentPanel");
+		});
+        buttonMixedPayment.addActionListener(e -> {
+        	centralStationLogic.selectPaymentMethod(PaymentMethods.MIXED);
+			guiLogicInstance.switchPanels("CashPaymentPanel");
+		});
+        
+        buttonLeaveWithoutPaying.addActionListener(e -> {
+		});
+        buttonBackToCheckout.addActionListener(e -> {
+        	guiLogicInstance.switchPanels("AddItemsPanel");
+		});
 
         return PaymentPanel;
     }
