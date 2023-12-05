@@ -103,6 +103,20 @@ public class CartLogic extends AbstractLogicDependant{
 	}
 
 	/**
+	 * Adds purchased bags to the total cost
+	 * not actually added to cart 
+	 * @param int the number of bags to add
+	 */
+	public void addReusableBagToCart(int numOfBags) {
+		double cost = 1.25 * numOfBags;
+		BigDecimal bagPrice = new BigDecimal(cost);
+		BigDecimal newPrice = this.balanceOwed.add(bagPrice);
+		
+		this.updateBalance(newPrice);
+		System.out.println("balance owed:" + balanceOwed);
+	}
+	
+	/**
 	 * Removes a product from customer's cart
 	 * @param product The product to remove
 	 * @throws SimulationException If the product is not in the cart

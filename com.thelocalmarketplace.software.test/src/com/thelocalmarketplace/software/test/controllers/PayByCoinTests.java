@@ -167,7 +167,7 @@ public class PayByCoinTests {
 		this.logic.startSession();
 		this.logic.stateLogic.gotoState(States.CHECKOUT);
 		
-		this.logic.cartLogic.updateBalance(new BigDecimal(6));
+		this.logic.cartLogic.updateBalance(new BigDecimal(6)); 
 		
 		do {
 			try {
