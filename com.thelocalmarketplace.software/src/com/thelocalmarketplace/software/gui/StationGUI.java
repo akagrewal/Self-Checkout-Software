@@ -256,7 +256,7 @@ public class StationGUI extends JFrame {
                 if (centralStationLogic.stateLogic.inState(States.ADDBAGS)) {
                 	BagsTooHeavyPopUp heavyBagPopUp = new BagsTooHeavyPopUp();
                 	heavyBagPopUp.notifyBagHeavyPopUp();
-                	SessionBlockedPopUp.discrepancyDetected(StationGUI.this);
+                	SessionBlockedPopUp.discrepancyDetected(StationGUI.this, centralStationLogic.stationNumber);
                 }
                 dialog.dispose();
             });
