@@ -94,20 +94,20 @@ public class StationGUI extends JFrame {
     // Customer Screen 1
     private JPanel StartSessionPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.decode("#EFF0E5"));
+        panel.setBackground(Color.decode("#EFF0E5")); // beige
         GridBagConstraints gbc = new GridBagConstraints();
 
         JButton nextButton = new JButton("Start adding items to cart");
         nextButton.setFont(new Font("Arial", Font.BOLD, 26));
         nextButton.addActionListener(e -> guiLogicInstance.StartSessionButtonPressed());
-        nextButton.setBackground(Color.decode("#9DAF99"));  //Maroon
-        nextButton.setForeground(Color.decode("#40543D"));
+        nextButton.setBackground(Color.decode("#9DAF99"));  //light green
+        nextButton.setForeground(Color.decode("#40543D"));	// dark green
         nextButton.setFont(new Font("Serif", Font.BOLD, 42));
         
         JButton bags = new JButton("Have your own bags?");
-        bags.setBackground(Color.decode("#B9AFCA"));  //Navy
-        bags.setForeground(Color.decode("#4A3D54"));
-        bags.setFont(new Font("Sans", Font.BOLD, 24));
+        bags.setBackground(Color.decode("#B9AFCA"));  //light purple
+        bags.setForeground(Color.decode("#4A3D54"));	// dark purple
+        bags.setFont(new Font("Serif", Font.BOLD, 24));
         bags.addActionListener(e -> {
             // TODO: Implement
         });
@@ -115,7 +115,7 @@ public class StationGUI extends JFrame {
         JButton help = new JButton("Call for assisstance");
         help.setBackground(Color.decode("#B9AFCA"));  //Navy
         help.setForeground(Color.decode("#4A3D54"));
-        help.setFont(new Font("Sans", Font.BOLD, 24));
+        help.setFont(new Font("Serif", Font.BOLD, 24));
         help.addActionListener(e -> {
             centralStationLogic.attendantLogic.callAttendant(centralStationLogic.stationNumber);
         });
@@ -123,7 +123,7 @@ public class StationGUI extends JFrame {
         JButton membership = new JButton("Enter Membership No.");
         membership.setBackground(Color.decode("#B9AFCA"));  //Navy
         membership.setForeground(Color.decode("#4A3D54"));
-        membership.setFont(new Font("Sans", Font.BOLD, 24));
+        membership.setFont(new Font("Serif", Font.BOLD, 24));
         membership.addActionListener(e -> {
             Numpad membershipNumpad = new Numpad(StationGUI.this, guiLogicInstance, 0); // this may need changes
             membershipNumpad.openNumPadPanel();
@@ -133,7 +133,9 @@ public class StationGUI extends JFrame {
 
         JLabel welcomeLabel = new JLabel("Welcome to the UofC market!");
         welcomeLabel.setHorizontalAlignment(JLabel.CENTER);
-        welcomeLabel.setFont(new Font("Serif", Font.BOLD, 20));
+        welcomeLabel.setFont(new Font("Serif", Font.BOLD, 40));
+        welcomeLabel.setForeground(Color.decode("#4A3D54"));
+
 
 
 
@@ -179,34 +181,47 @@ public class StationGUI extends JFrame {
     private JPanel createAddItemsPanel() {
         // Create main panel with GridBagLayout
         JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBackground(Color.decode("#EFF0E5")); // beige
+
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Buttons panel on left side (all use case buttons)
-        JPanel buttonsPanel = new JPanel(new GridLayout(9,1));
+        JPanel buttonsPanel = new JPanel();
+        GridLayout layout = new GridLayout(8, 1, 10, 10);
+        buttonsPanel.setLayout(layout);
+        buttonsPanel.setBackground(Color.decode("#EFF0E5")); // beige
+
 
         // Create buttons
         JButton VCButton = new JButton("  Add an item using visual catalogue  ");
+        VCButton.setBackground(Color.decode("#9DAF99"));  //light green
+        VCButton.setForeground(Color.decode("#40543D"));	// dark green
+        VCButton.setFont(new Font("Serif", Font.BOLD, 15));
         VCButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                guiLogicInstance.showInfoMessage("Please place items on scale, then select desired item");
                 guiLogicInstance.switchPanels("visualCatalogue");
             }
         });
 
         // Create buttons
         JButton PLUButton = new JButton("Add an item using PLU Code");
+        PLUButton.setBackground(Color.decode("#9DAF99"));  //light green
+        PLUButton.setForeground(Color.decode("#40543D"));	// dark green
+        PLUButton.setFont(new Font("Serif", Font.BOLD, 15));
         PLUButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // goto panel with options to add an item
-                guiLogicInstance.showInfoMessage("Please place items on scale, then select desired item");
                 Numpad pluNumpad = new Numpad(StationGUI.this, guiLogicInstance, 1); // this may need changes
                 pluNumpad.openNumPadPanel();
             }
         });
 
         JButton removeItemButton = new JButton("Remove an Item");
+        removeItemButton.setBackground(Color.decode("#9DAF99"));  //light green
+        removeItemButton.setForeground(Color.decode("#40543D"));	// dark green
+        removeItemButton.setFont(new Font("Serif", Font.BOLD, 15));
         removeItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -216,6 +231,10 @@ public class StationGUI extends JFrame {
         });
 
         JButton payButton = new JButton("Finish and Pay");
+        payButton.setBackground(Color.decode("#4A423E"));  //DARK BROWN
+        payButton.setForeground(Color.decode("#EFF0E5"));	// beige
+        payButton.setFont(new Font("Serif", Font.BOLD, 15)); 
+       
         payButton.addActionListener(e -> {
             System.out.println(centralStationLogic.stateLogic.getState());
             centralStationLogic.stateLogic.gotoState(StateLogic.States.CHECKOUT);
@@ -227,11 +246,17 @@ public class StationGUI extends JFrame {
         });
 
         JButton buyBagsButton = new JButton("Purchase Bags");
+        buyBagsButton.setBackground(Color.decode("#B9AFCA"));  //light purple
+        buyBagsButton.setForeground(Color.decode("#4A3D54"));	// dark purple
+        buyBagsButton.setFont(new Font("Serif", Font.BOLD, 15));
         buyBagsButton.addActionListener(e -> {
             new BagKeypad(StationGUI.this, centralStationLogic);
         });
 
         JButton ownBagsButton = new JButton("Have your own bags? ");
+        ownBagsButton.setBackground(Color.decode("#B9AFCA"));  //light purple
+        ownBagsButton.setForeground(Color.decode("#4A3D54"));	// dark purple
+        ownBagsButton.setFont(new Font("Serif", Font.BOLD, 15));
         
         ownBagsButton.addActionListener(e -> {
             centralStationLogic.addBagsLogic.startAddBags();
@@ -282,12 +307,15 @@ public class StationGUI extends JFrame {
 
         });
         // Attach buttons
+        buttonsPanel.add(new JLabel(""));
         buttonsPanel.add(VCButton);
         buttonsPanel.add(PLUButton);
         buttonsPanel.add(removeItemButton);
         buttonsPanel.add(buyBagsButton);
         buttonsPanel.add(ownBagsButton);
         buttonsPanel.add(payButton);
+        buttonsPanel.add(new JLabel(""));
+
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -301,6 +329,8 @@ public class StationGUI extends JFrame {
 
         // current items panel
         JPanel topMiddlePanel = new JPanel(new BorderLayout());
+        
+        topMiddlePanel.setBackground(Color.decode("#EFF0E5")); // beige
         topMiddlePanel.setBorder(BorderFactory.createTitledBorder("Current Items: "));
         
         itemList.setVisibleRowCount(10); // visible row count
@@ -308,6 +338,10 @@ public class StationGUI extends JFrame {
 
         // setup scroll pane
         JScrollPane scrollPane = new JScrollPane(itemList);
+        itemList.setBackground(Color.decode("#DFDFD1")); //slightly darker beige
+        itemList.setForeground(Color.decode("#4A3D54"));
+        itemList.setFont(new Font("Serif", Font.BOLD, 24));
+
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
@@ -323,8 +357,15 @@ public class StationGUI extends JFrame {
         mainPanel.add(topMiddlePanel, gbc);
 
         JPanel totalPanel = new JPanel();
-        totalPanel.setBorder(BorderFactory.createTitledBorder(" "));
+
+        
         totalLabel = new JLabel("Total: $0.00");
+        totalLabel.setFont(new Font("Serif", Font.BOLD, 25));
+        totalLabel.setForeground(Color.decode("#40543D")); // dark green
+        totalPanel.setBackground(Color.decode("#9DAF99")); //slightly darker beige
+
+
+
         BalanceLabel = new JLabel("");
         addComponent(totalPanel, totalLabel,0, 0, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
 
@@ -426,7 +467,6 @@ public class StationGUI extends JFrame {
             guiLogicInstance.switchPanels("CashPaymentPanel");
         });
         buttonMixedPayment.addActionListener(e -> {
-            guiLogicInstance.showInfoMessage("Please insert desired cash, then use alternative payment");
             centralStationLogic.selectPaymentMethod(PaymentMethods.MIXED);
             BalanceLabel.setText("Balance: " +  centralStationLogic.cartLogic.getBalanceOwed());
             guiLogicInstance.switchPanels("CashPaymentPanel");
