@@ -26,26 +26,26 @@ public class HardwareActionSimulations extends JFrame {
 
         // Add Item Section
         JPanel addItemPanel = new JPanel();
-        addItemPanel.add(createHeader("Add Item"));
-        addItemPanel.add(createButton("Scan Main Scanner", e -> hardwarePopups.showScanMainScannerPopup(this)));
-        addItemPanel.add(createButton("Scan Handheld Scanner", e -> hardwarePopups.showScanHandheldScannerPopup(this)));
+        addItemPanel.add(createHeader("Add item"));
+        addItemPanel.add(createButton("Scan with main scanner", e -> hardwarePopups.showScanMainScannerPopup(this)));
+        addItemPanel.add(createButton("Scan with handheld scanner", e -> hardwarePopups.showScanHandheldScannerPopup(this)));
         add(addItemPanel);
 
         // Scale Section
         JPanel scalePanel = new JPanel();
         scalePanel.add(createHeader("Scale"));
-        scalePanel.add(createButton("Add Item to Scale", e -> hardwarePopups.showAddItemToScalePopup(this)));
-        scalePanel.add(createButton("Remove Item from Scale", e -> hardwarePopups.showRemoveItemFromScalePopup(this)));
-        scalePanel.add(createButton("Place iteams on Scanner Scale", e -> hardwarePopups.showMeasureItemsOnPLUScalePopup(this)));
+        scalePanel.add(createButton("Add item to bagging area", e -> hardwarePopups.showAddItemToScalePopup(this)));
+        scalePanel.add(createButton("Remove item from bagging area", e -> hardwarePopups.showRemoveItemFromScalePopup(this)));
+        scalePanel.add(createButton("Place items on scanner scale", e -> hardwarePopups.showMeasureItemsOnPLUScalePopup(this)));
         add(scalePanel);
 
         // Pay Section
         JPanel payPanel = new JPanel();
         payPanel.add(createHeader("Pay"));
-        payPanel.add(createButton("Pay with Credit", e -> hardwarePopups.showPayWithCreditPopup(this)));
-        payPanel.add(createButton("Pay with Debit", e -> hardwarePopups.showPayWithDebitPopup(this)));
-        payPanel.add(createButton("Insert Coin", e -> hardwarePopups.showInsertCoinPopup(this)));
-        payPanel.add(createButton("Insert Banknote", e -> hardwarePopups.showInsertBanknotePopup(this)));
+        payPanel.add(createButton("Pay with credit", e -> hardwarePopups.showPayWithCreditPopup(this)));
+        payPanel.add(createButton("Pay with debit", e -> hardwarePopups.showPayWithDebitPopup(this)));
+        payPanel.add(createButton("Insert coin", e -> hardwarePopups.showInsertCoinPopup(this)));
+        payPanel.add(createButton("Insert banknote", e -> hardwarePopups.showInsertBanknotePopup(this)));
         add(payPanel);
 
         setLocationRelativeTo(null); // Center the window on the screen
