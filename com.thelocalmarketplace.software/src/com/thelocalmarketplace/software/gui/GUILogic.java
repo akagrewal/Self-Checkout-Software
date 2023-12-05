@@ -167,21 +167,15 @@ public class GUILogic {
 	}
 	
 	public void showCardPaymentInProgress(JFrame parentFrame) {
-		JDialog dialog = new JDialog(parentFrame, "Make card payment", true);
+		JFrame dialog = new JFrame();
 		dialog.setLayout(new BorderLayout());
 		dialog.setSize(new Dimension(300, 200));
 		dialog.setLocationRelativeTo(parentFrame);
 		
-		JButton soupButton = new JButton("Soup");
 		JLabel message = new JLabel("Please use the card reader to make payment.");
 
-		soupButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-
 		dialog.add(message);
+		dialog.setLocationRelativeTo(parentFrame);
 		dialog.setVisible(true);
 	}
 	

@@ -9,6 +9,7 @@ import java.math.RoundingMode;
 import javax.swing.*;
 
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
+import com.thelocalmarketplace.software.logic.StateLogic.States;
 
 
 
@@ -214,6 +215,7 @@ public class StationGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 guiLogicInstance.switchPanels("paymentPanel");
+            	centralStationLogic.stateLogic.gotoState(States.CHECKOUT);
             }
         });
 
@@ -339,14 +341,20 @@ public class StationGUI extends JFrame {
         buttonBackToCheckout.setPreferredSize(new Dimension(200,50));
         PaymentPanel.add(buttonBackToCheckout, gbc);
         
-        buttonCoinPayment.addActionListener(e -> guiLogicInstance.showCardPaymentInProgress(this));
+        button_CardPayment.addActionListener(e -> guiLogicInstance.showCardPaymentInProgress(this));
 
        
         buttonCoinPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
         buttonCashPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
         buttonMixedPayment.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
         buttonLeaveWithoutPaying.addActionListener(e -> guiLogicInstance.switchPanels("thankYouPanel"));
-        buttonBackToCheckout.addActionListener(e -> guiLogicInstance.switchPanels("AddItemsPanel"));
+        buttonBackToCheckout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	centralStationLogic.stateLogic.gotoState(States.NORMAL);
+            	guiLogicInstance.switchPanels("AddItemsPanel");
+            }
+        });
 
         return PaymentPanel;
     }
