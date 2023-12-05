@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import ca.ucalgary.seng300.simulation.InvalidStateSimulationException;
 import com.jjjwelectronics.Mass;
 import com.jjjwelectronics.Numeral;
 import com.jjjwelectronics.OverloadedDevice;
@@ -514,7 +515,10 @@ public class HardwarePopups {
 				} else {
 				try {
 					centralStationLogic.hardware.getCardReader().swipe(realDebitCard);
-				} catch (IOException e1) {
+				} catch (InvalidStateSimulationException invalidStateSimulationException){
+					centralStationLogic.guiLogic.showExceptionMessage("Pay by DEBIT not selected");
+				}
+				catch (IOException e1) {
 					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 				}}
 			}
@@ -529,7 +533,10 @@ public class HardwarePopups {
 				} else {
 				try {
 					centralStationLogic.hardware.getCardReader().swipe(fakeDebitCard);
-				} catch (IOException e1) {
+				}catch (InvalidStateSimulationException invalidStateSimulationException){
+					centralStationLogic.guiLogic.showExceptionMessage("Pay by DEBIT not selected");
+				}
+				catch (IOException e1) {
 					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 				}}
 			}
@@ -542,23 +549,28 @@ public class HardwarePopups {
 				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
-				} else {
-				JDialog pinDialog = createDialog(parentFrame, "pin");
-				JTextField textField = addTextField(pinDialog, "Enter pin:");
-				Consumer<String> onSubmit = inputText -> {
-					try {
-						centralStationLogic.hardware.getCardReader().insert(realDebitCard, inputText);
-					}  catch(InvalidPINException pinException){
-						centralStationLogic.guiLogic.showExceptionMessage("Invalid PIN, please try entering again");}
-					catch (IOException e1) {
-						centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
-						e1.printStackTrace();
+				} else { try {
+					JDialog pinDialog = createDialog(parentFrame, "pin");
+					JTextField textField = addTextField(pinDialog, "Enter pin:");
+					Consumer<String> onSubmit = inputText -> {
+						try {
+							centralStationLogic.hardware.getCardReader().insert(realDebitCard, inputText);
+						} catch (InvalidPINException pinException) {
+							centralStationLogic.guiLogic.showExceptionMessage("Invalid PIN, please try entering again");
+						} catch (IOException e1) {
+							centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
+							e1.printStackTrace();
 
-					}
+						}
 
-				};
-				addSubmitButton(pinDialog, textField, onSubmit);
-				showDialog(pinDialog);}
+					};
+					addSubmitButton(pinDialog, textField, onSubmit);
+					showDialog(pinDialog);
+				} catch (InvalidStateSimulationException invalidStateSimulationException){
+					centralStationLogic.guiLogic.showExceptionMessage("Pay by DEBIT not selected");
+				}
+
+				}
 
 			}
 		});
@@ -568,7 +580,7 @@ public class HardwarePopups {
 				dialog.dispose();
 				if(!centralStationLogic.isSessionStarted()){
 					centralStationLogic.guiLogic.showExceptionMessage("Session not started!");
-				} else {
+				} else { try{
 				JDialog pinDialog = createDialog(parentFrame, "pin");
 				JTextField textField = addTextField(pinDialog, "Enter pin:");
 				Consumer<String> onSubmit = inputText -> {
@@ -576,16 +588,25 @@ public class HardwarePopups {
 						centralStationLogic.hardware.getCardReader().insert(fakeDebitCard, inputText);
 					} catch(InvalidPINException pinException){
 						centralStationLogic.guiLogic.showExceptionMessage("Invalid PIN, please try entering again");
-					} catch (IOException e1) {
+					} catch (InvalidStateSimulationException invalidStateSimulationException){
+						centralStationLogic.guiLogic.showExceptionMessage("Pay by DEBIT not selected");
+					}
+
+					catch (IOException e1) {
 						centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 						e1.printStackTrace();
 
 					}
 
-					//guiLogic.insertCoin(coinValue);
+
 				};
 				addSubmitButton(pinDialog, textField, onSubmit);
 				showDialog(pinDialog);}
+				catch (InvalidStateSimulationException invalidStateSimulationException){
+					centralStationLogic.guiLogic.showExceptionMessage("Pay by DEBIT not selected");
+				}
+
+				}
 
 			}
 		});
@@ -599,7 +620,11 @@ public class HardwarePopups {
 				} else {
 				try {
 					centralStationLogic.hardware.getCardReader().tap(realDebitCard);
-				} catch (IOException e1) {
+				} catch (InvalidStateSimulationException invalidStateSimulationException){
+					centralStationLogic.guiLogic.showExceptionMessage("Pay by DEBIT not selected");
+				}
+
+				catch (IOException e1) {
 					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 				}
 			}}
@@ -614,6 +639,8 @@ public class HardwarePopups {
 				try {
 					centralStationLogic.hardware.getCardReader().tap(fakeDebitCard);
 					centralStationLogic.guiLogic.showExceptionMessage("Invalid tap, please try another form of payment");
+				}catch (InvalidStateSimulationException invalidStateSimulationException){
+					centralStationLogic.guiLogic.showExceptionMessage("Pay by DEBIT not selected");
 				} catch (IOException e1) {
 					centralStationLogic.guiLogic.showExceptionMessage("IOException, Please Request Attendance");
 				}}
