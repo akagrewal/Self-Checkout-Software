@@ -13,7 +13,10 @@ import com.jjjwelectronics.scale.IElectronicScale;
 import com.jjjwelectronics.scanner.Barcode;
 import com.jjjwelectronics.scanner.BarcodedItem;
 import com.jjjwelectronics.scanner.IBarcodeScanner;
+import com.tdc.CashOverloadException;
+import com.tdc.banknote.Banknote;
 import com.tdc.banknote.BanknoteValidator;
+import com.tdc.coin.Coin;
 import com.tdc.coin.CoinValidator;
 import com.thelocalmarketplace.hardware.AbstractSelfCheckoutStation;
 import com.thelocalmarketplace.hardware.BarcodedProduct;
@@ -24,6 +27,7 @@ import com.thelocalmarketplace.software.database.CreateTestDatabases;
 import com.thelocalmarketplace.software.logic.AttendantLogic;
 import com.thelocalmarketplace.software.logic.CentralStationLogic;
 
+import ca.ucalgary.seng300.simulation.SimulationException;
 import powerutility.PowerGrid;
 
 public class DemoHere {
@@ -88,7 +92,17 @@ public class DemoHere {
 
     	CentralStationLogic stationLogic1 = new CentralStationLogic(station1);
     	stationLogic1.setStationNumber(1);
-
+    	
+    	Coin coin = new Coin(currency, BigDecimal.ONE);
+    	Banknote banknote = new Banknote(currency, BigDecimal.ONE);
+    	
+    	// initialize currency in machine.
+    	try {
+			stationLogic1.hardware.getCoinStorage().load(coin, coin, coin, coin, coin, coin);
+			stationLogic1.hardware.getBanknoteStorage().load(banknote, banknote, banknote, banknote, banknote, banknote);
+		} catch (SimulationException | CashOverloadException e) {
+			// ignore!
+		}	
 
 		AttendantLogic attendantLogic = new AttendantLogic();
         attendantLogic.registerStationLogic(stationLogic1);
