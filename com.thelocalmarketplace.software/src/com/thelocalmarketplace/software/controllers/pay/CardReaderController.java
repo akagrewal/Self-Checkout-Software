@@ -81,7 +81,7 @@ public class CardReaderController extends AbstractLogicDependant implements Card
         else if (!this.logic.stateLogic.inState(States.CHECKOUT)) {
             throw new InvalidStateSimulationException("Not ready for checkout");
         }
-        else if (!this.logic.getSelectedPaymentMethod().equals(t)) {
+        else if (!       (  this.logic.getSelectedPaymentMethod().equals(t) || this.logic.getSelectedPaymentMethod().equals(PaymentMethods.MIXED)     ) ) {
         	throw new InvalidStateSimulationException("Pay by " + t.toString() + " not selected");
         }
 
