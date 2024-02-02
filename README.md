@@ -1,7 +1,5 @@
 # Self_Checkout
 
-git clone https://github.com/Bandrailian/Iteration-3.git
-
 Jaimie Marchuk 
 
 Wyatt Deichert 
