@@ -38,6 +38,6 @@ Arthur Huan
 
 Jaden Myers 
 
-Jincheng Li - 30172907
+Jincheng Li
 
-Anandita Mahika - 30097559
+Anandita Mahika 
