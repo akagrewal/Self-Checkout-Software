@@ -1,44 +1,44 @@
-# Iteration-3
+# Self_Checkout
 
 git clone https://github.com/Bandrailian/Iteration-3.git
 
-Jaimie Marchuk - 30112841
+Jaimie Marchuk 
 
-Wyatt Deichert - 30174611
+Wyatt Deichert 
 
-Jane Magai - 30180119
+Jane Magai 
 
-Enzo Mutiso - 30182555
+Enzo Mutiso 
 
-Mauricio Murillo - 30180713
+Mauricio Murillo 
 
-Ahmed Ibrahim Mohamed Seifeldin Hassan - 30174024
+Ahmed Ibrahim Mohamed Seifeldin Hassan 
 
-Aryaman Sandhu - 30017164 
+Aryaman Sandhu 
 
-Nikki Kim - 30189188
+Nikki Kim 
 
-Jayden Ma - 30184996
+Jayden Ma
 
-Braden Beler - 30084941
+Braden Beler
 
-Danish Sharma - 30172600
+Danish Sharma
 
-Angelina Rochon - 30087177
+Angelina Rochon
 
-Amira Wishah - 30182579
+Amira Wishah
 
-Walija Ihsan - 30172565
+Walija Ihsan 
 
-Hannah Pohl - 30173027
+Hannah Pohl
 
-Akashdeep Grewal - 30179657
+Akashdeep Grewal 
 
-Rhett Bramfield - 30170520
+Rhett Bramfield 
 
-Arthur Huan - 30197354
+Arthur Huan 
 
-Jaden Myers - 30152504
+Jaden Myers 
 
 Jincheng Li - 30172907
 
